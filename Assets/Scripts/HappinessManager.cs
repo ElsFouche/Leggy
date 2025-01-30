@@ -31,7 +31,7 @@ public class HappinessManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             speaker.clip = emotes[1];
-            happinessCount += 50;
+            happinessCount += 60;
             speaker.Play();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
