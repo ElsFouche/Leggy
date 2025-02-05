@@ -13,6 +13,8 @@ public class HappinessManager : MonoBehaviour
     public int happinessCount;
     float timer;
 
+    public bool isVisible;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,11 +45,14 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
-        timer += Time.deltaTime;
-        if (timer >= 1)
+        if (isVisible)
         {
-            happinessCount--;
-            timer = 0;
+            timer += Time.deltaTime;
+            if (timer >= 1)
+            {
+                happinessCount--;
+                timer = 0;
+            }
         }
     }
 }
