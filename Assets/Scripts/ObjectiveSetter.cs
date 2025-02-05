@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ObjectiveSetter : MonoBehaviour
 {
-    public TextMeshProUGUI objectiveText;
+    public TMP_Text objectiveText;
 
     // Start is called before the first frame update
     void Start()

@@ -48,6 +48,10 @@ public class TransitionManager : MonoBehaviour
             if (!isTransitioning)
             {
                 isTransitioning = true;
+                if (SceneManager.GetActiveScene().buildIndex > 0)
+                {
+                    happinessManager.GetComponent<HappinessManager>().isVisible = false;
+                }
                 StartCoroutine(fadeToBlack());
             }
         }
@@ -70,8 +74,7 @@ public class TransitionManager : MonoBehaviour
         while (fadeTime > 0)
         {
             fadeTime -= Time.deltaTime;
-            blackScreen.GetComponent<Image>().color = new Color
-                (0, 0, 0, fadeTime);
+            blackScreen.GetComponent<Image>().color = new Color (0, 0, 0, fadeTime);
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -103,20 +106,6 @@ public class TransitionManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(sceneSwitchDelay);
-        SceneManager.LoadScene(1);
-    }
-
-    public IEnumerator fadeTextOut(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-
-        while (fadeTime > 0)
-        {
-            fadeTime -= Time.deltaTime;
-            loreText.color = new Color(fadeTime, fadeTime, fadeTime, 1);
-
-            yield return new WaitForSeconds(0.01f);
-        }
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
