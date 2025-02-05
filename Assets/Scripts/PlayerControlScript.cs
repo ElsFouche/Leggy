@@ -42,22 +42,22 @@ public class PlayerControlScript : MonoBehaviour
     {
         if (Input.GetButtonDown("w"))
         {
-
+            BaseJoint.transform.rotation.
         }
 
         if (Input.GetButtonDown("s"))
         {
-
+            BaseJoint.transform.rotation
         }
 
         if (Input.GetButtonDown("a"))
         {
-
+            BaseJoint.transform.rotation
         }
 
         if (Input.GetButtonDown("d"))
         {
-
+            BaseJoint.transform.rotation
         }
     }
 
@@ -81,8 +81,8 @@ public class PlayerControlScript : MonoBehaviour
 
         //var lookPos = hit.point - transform.position;
         
-        var rotation = Quaternion.LookRotation();
-        BaseJoint.transform.rotation = Quaternion.Slerp(BaseJoint.transform.rotation, rotation, Time.fixedDeltaTime * 30);
+        //var rotation = Quaternion.LookRotation();
+        //BaseJoint.transform.rotation = Quaternion.Slerp(BaseJoint.transform.rotation, rotation, Time.fixedDeltaTime * 30);
         
 
     }
