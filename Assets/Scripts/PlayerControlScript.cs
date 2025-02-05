@@ -34,29 +34,33 @@ public class PlayerControlScript : MonoBehaviour
     // Start is called before the first frame update    
     void Start()
     {
-        ClawLeftPivotClosedRotation = ClawLeftPivot.transform.localRotation;
-        ClawRightPivotClosedRotation = ClawRightPivot.transform.localRotation;
-
-        ClawLeftPivotRigid = ClawLeftPivot.GetComponent<Rigidbody>();
-        ClawRightPivotRigid = ClawRightPivot.GetComponent<Rigidbody>();
+        
 
     }
-
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && available)
+        if (Input.GetButtonDown("w"))
         {
-            Debug.Log("Closing");
-            //StartCoroutine(ClawPinching(true));
+
         }
 
-        if (Input.GetMouseButtonDown(1) && available)
+        if (Input.GetButtonDown("s"))
         {
-            Debug.Log("Opening");
-            //StartCoroutine(ClawPinching(false));
+
+        }
+
+        if (Input.GetButtonDown("a"))
+        {
+
+        }
+
+        if (Input.GetButtonDown("d"))
+        {
+
         }
     }
+
 
     void FixedUpdate()
     {
@@ -72,21 +76,14 @@ public class PlayerControlScript : MonoBehaviour
             tester.transform.position = hit.point;
         }
 
-        //float turn = Input.GetAxis("Horizontal");
-        if (ClawLeftPivot)
-        {
-
-        }
-        ClawLeftPivotRigid.AddTorque(transform.up * torque); // * turn);
-        ClawRightPivotRigid.AddTorque(transform.up * torque); // * turn);
 
 
 
-        /*
-        var lookPos = hit.point - transform.position;
-        var rotation = Quaternion.LookRotation(lookPos);
+        //var lookPos = hit.point - transform.position;
+        
+        var rotation = Quaternion.LookRotation();
         BaseJoint.transform.rotation = Quaternion.Slerp(BaseJoint.transform.rotation, rotation, Time.fixedDeltaTime * 30);
-        */
+        
 
     }
 
