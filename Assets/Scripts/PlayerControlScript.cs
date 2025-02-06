@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerControlScript : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class PlayerControlScript : MonoBehaviour
 
     public GameObject BaseJoint;
 
-
+    public float rotationSpeed = 100f;
+    public float rotationStep = 5f;
+    private Quaternion baseJointRotation;
 
     private Quaternion ClawLeftPivotClosedRotation;
     private Quaternion ClawRightPivotClosedRotation;
@@ -34,57 +37,67 @@ public class PlayerControlScript : MonoBehaviour
     // Start is called before the first frame update    
     void Start()
     {
-        
-
+        baseJointRotation = BaseJoint.transform.rotation;
     }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("w"))
+        bool rotated = false; // Flag to track if any rotation key was pressed
+
+        // Handle rotation input
+        if (Input.GetKey(KeyCode.S))
         {
-            BaseJoint.transform.rotation.
+            BaseJoint.transform.rotation *= Quaternion.Euler(rotationStep * Time.deltaTime, 0f, 0f); // Rotate Up
+            rotated = true;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            BaseJoint.transform.rotation *= Quaternion.Euler(-rotationStep * Time.deltaTime, 0f, 0f); // Rotate Down
+            rotated = true;
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, -rotationStep * Time.deltaTime, 0f); // Rotate Left
+            rotated = true;
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, rotationStep * Time.deltaTime, 0f); // Rotate Right
+            rotated = true;
+        }
+        if (Input.GetKey(KeyCode.Z))
+        {
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, rotationStep * Time.deltaTime); // Rotate Z-axis
+            rotated = true;
+        }
+        if (Input.GetKey(KeyCode.C))
+        {
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, -rotationStep * Time.deltaTime); // Rotate Z-axis (opposite)
+            rotated = true;
         }
 
-        if (Input.GetButtonDown("s"))
+        // Handle movement input
+        if (Input.GetKey(KeyCode.A))
         {
-            BaseJoint.transform.rotation
+            BaseJoint.transform.position += new Vector3(-speed * Time.deltaTime, 0f, 0f); // Move Left on Z-axis
         }
-
-        if (Input.GetButtonDown("a"))
+        if (Input.GetKey(KeyCode.D))
         {
-            BaseJoint.transform.rotation
-        }
-
-        if (Input.GetButtonDown("d"))
-        {
-            BaseJoint.transform.rotation
+            BaseJoint.transform.position += new Vector3(speed * Time.deltaTime, 0f, 0f); // Move Right on Z-axis
         }
     }
 
-
     void FixedUpdate()
     {
-        //Torso Rotation: Raycast to find pos of mouse, then calc dist from mouse to torso, clamps x , z rotation making only y rotation.
+        // Raycast for mouse position tracking
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            //Debug.Log(hit.transform.name);
             Debug.DrawLine(ray.origin, hit.point);
-
             tester.transform.position = hit.point;
         }
-
-
-
-
-        //var lookPos = hit.point - transform.position;
-        
-        //var rotation = Quaternion.LookRotation();
-        //BaseJoint.transform.rotation = Quaternion.Slerp(BaseJoint.transform.rotation, rotation, Time.fixedDeltaTime * 30);
-        
-
     }
 
 
@@ -98,10 +111,6 @@ public class PlayerControlScript : MonoBehaviour
         //if enum runs with state true closes
         if (state)
         {
-
-            
-                
-
             /*
             Debug.Log("1");
 

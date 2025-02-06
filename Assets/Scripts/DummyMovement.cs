@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DummyMovement : MonoBehaviour
 {
+
     public float speed = 2f;
     private bool opened = true;
+    private bool closed = false;
     private bool closing = false;
     private bool opening = false;
 
@@ -17,8 +19,13 @@ public class DummyMovement : MonoBehaviour
     private Vector3 ClawRightOrigin;
     private Rigidbody ClawRightRB;
 
+    public ClawGrabChild LeftClaw;
+    public ClawGrabChild RightClaw;
+    public GameObject clawEmptyParent; 
 
+    public bool TriggerParrent = false;
 
+    public float slipSpeed = 0.1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,66 +39,114 @@ public class DummyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(ClawLeftRB.velocity + " : " + ClawRightRB.velocity);
+        HandleClawMovement();
+        EnforceSymmetricClawMovement();
+        ClampClawPosition();
+        //Debug.Log(ClawLeftRB.velocity + "a");
+    }
 
+
+
+    private void HandleClawMovement()
+    {
         if (ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
         {
-            opened = true;
-            opening = false;
-            closing = false;
-
-            ClawRight.transform.localPosition = ClawRightOrigin;
-            ClawLeft.transform.localPosition = ClawLeftOrigin;
-
-            VelocityReset();
+            ResetClawPosition();
         }
 
-        
-        if (Input.GetMouseButtonDown(1) && !opened || opening && !opened)
+        if (Input.GetMouseButtonDown(1) && !opened || opening)
         {
-            opening = true;
-            closing = false;
-            ClawLeftRB.AddForce(-transform.right * speed);
-            ClawRightRB.AddForce(transform.right * speed);
+            OpenClaw();
         }
 
-        
         if (Input.GetMouseButtonDown(0) || closing)
         {
-            opened = false;
-            opening = false;
-            closing = true;
-            ClawLeftRB.AddForce(transform.right * speed);
-            ClawRightRB.AddForce(-transform.right * speed);
-        }
-
-        
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        
-        if (collision.collider != null && collision.collider.tag == "LeggyClaw")
-        {
-            VelocityReset();
-        }
-
-        foreach (ContactPoint contact in collision.contacts)
-        {
-            print(contact.thisCollider.name + " hit " + contact.otherCollider.name);
-            // Visualize the contact point
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            CloseClaw();
         }
     }
 
-    public void VelocityReset() 
+    private void ClampClawPosition()
     {
+        ClawLeft.transform.localPosition = new Vector3(ClawLeft.transform.localPosition.x, 0f, 0f);
+        ClawRight.transform.localPosition = new Vector3(ClawRight.transform.localPosition.x, 0f, 0f);
+    }
+
+    private void ResetClawPosition()
+    {
+        opened = true;
+        opening = false;
+        closed = false;
+        closing = false;
+
+        ClawRight.transform.localPosition = ClawRightOrigin;
+        ClawLeft.transform.localPosition = ClawLeftOrigin;
+
+        VelocityReset();
+    }
+
+    private void OpenClaw()
+    {
+        opening = true;
+        closing = false;
+        opened = false;
+        closed = false;
+
+        ClawLeftRB.AddForce(-transform.right * speed);
+        ClawRightRB.AddForce(transform.right * speed);
+    }
+
+    private void CloseClaw()
+    {
+        opened = false;
+        opening = false;
+        closing = true;
+        Debug.Log("closing claw: " + closing);
+
+        ClawLeftRB.AddForce(transform.right * speed);
+        ClawRightRB.AddForce(-transform.right * speed);
+        if (ClawLeftRB.velocity.x < -1 || ClawLeftRB.velocity.x > 1)
+        {
+            closed = true;
+        }
+
+    }
+
+    
+    public void VelocityReset()
+    {
+        opened = true;
+        opening = false;
+        closing = false;
         ClawLeftRB.velocity = Vector3.zero;
         ClawRightRB.velocity = Vector3.zero;
 
-
         ClawLeftRB.angularVelocity = Vector3.zero;
         ClawRightRB.angularVelocity = Vector3.zero;
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
+
+        Debug.Log("contact: " + closing);
+        if (other.CompareTag("Grabbable") && closing)
+        {
+            TriggerParrent = true;
+            Debug.Log("entered");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Grabbable"))
+        {
+            TriggerParrent = false;
+            Debug.Log("exited");
+        }
+    }
+
+    void EnforceSymmetricClawMovement()
+    {
+        float leftOffset = ClawLeft.transform.localPosition.x - ClawLeftOrigin.x;
+        ClawRight.transform.localPosition = new Vector3(ClawRightOrigin.x - leftOffset, ClawRight.transform.localPosition.y, ClawRight.transform.localPosition.z);
     }
 }
