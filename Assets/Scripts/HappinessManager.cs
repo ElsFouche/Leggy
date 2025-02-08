@@ -11,6 +11,8 @@ public class HappinessManager : MonoBehaviour
     public AudioSource speaker;
     public TextMeshProUGUI happinessDisplay;
     public int happinessCount;
+    public int maxDepressor;
+    public float depressorMultiplier;
     float timer;
 
     public bool isVisible;
@@ -50,7 +52,7 @@ public class HappinessManager : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= 1)
             {
-                happinessCount--;
+                happinessCount -= Mathf.RoundToInt(maxDepressor * depressorMultiplier);
                 timer = 0;
             }
         }
