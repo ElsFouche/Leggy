@@ -8,8 +8,11 @@ public class ClawGrabManager : MonoBehaviour
     [SerializeField] private ClawGrabChild LeggyLeftClaw;
     [SerializeField] private ClawGrabChild LeggyRightClaw;
 
-    private GameObject heldObject = null; // Object currently held
-    private Rigidbody heldObjectRb = null; // Rigidbody of the held object
+    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private float moveSpeed = 1f;
+
+    private GameObject heldObject = null;
+    private Rigidbody heldObjectRb = null;
 
     public bool grabParrent = false;
 
@@ -24,18 +27,59 @@ public class ClawGrabManager : MonoBehaviour
         CheckGrabbing();
         CheckIfBothClawsAreTouching();
         CheckObjectSlipping();
+
+        if (heldObject == null)  // Checks for no held obj
+        {
+            GameObject closestObject = GetClosestObjectInBoxCollider();
+            if (closestObject != null)
+            {
+                // Moves obj to center of claw mouth when closing
+                if (IsClawsClosing())
+                {
+                    MoveObjectToCenter(closestObject);
+                }
+            }
+        }
+    }
+
+    private void MoveObjectToCenter(GameObject obj)
+    {
+        // Move the object towards the center of the BoxCollider
+        Vector3 center = boxCollider.transform.position;
+        obj.transform.position = Vector3.MoveTowards(obj.transform.position, center, moveSpeed * Time.deltaTime);
+    }
+
+    private GameObject GetClosestObjectInBoxCollider()
+    {
+        Collider[] colliders = Physics.OverlapBox(boxCollider.transform.position, boxCollider.size / 2, Quaternion.identity); // Get all colliders in the BoxCollider
+        GameObject closestObject = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Collider col in colliders)
+        {
+            if (col.CompareTag("Grabbable"))  // Only consider grabbable objects
+            {
+                float distance = Vector3.Distance(col.transform.position, boxCollider.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestObject = col.gameObject;
+                    closestDistance = distance;
+                }
+            }
+        }
+        return closestObject;
     }
 
     private void CheckGrabbing()
     {
         // Check if either both claws are grabbing the object or TriggerParrent is true
-        if ((LeggyLeftClaw.isGrabbing && LeggyRightClaw.isGrabbing) || LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
+        if ((LeggyLeftClaw.isGrabbing && LeggyRightClaw.isGrabbing) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact))
         {
             GameObject obj1 = GetGrabbableInClaw(LeggyLeftClaw);
             GameObject obj2 = GetGrabbableInClaw(LeggyRightClaw);
 
             // If both claws grab the same object and it's not already held
-            if (((obj1 != null && obj1 == obj2) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact && heldObject)) && heldObject== null)
+            if (((obj1 != null && obj1 == obj2) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact && heldObject)) && heldObject == null)
             {
                 ParentObject(obj1);
             }
@@ -74,6 +118,12 @@ public class ClawGrabManager : MonoBehaviour
         return false; // Claw is no longer touching the object
     }
 
+    private bool IsClawsClosing()
+    {
+        // Check if either claw is closing (i.e., moving towards the object)
+        return LeggyLeftClaw.isGrabbing || LeggyRightClaw.isGrabbing;
+    }
+
     private void CheckObjectSlipping()
     {
         if (heldObject != null && heldObjectRb != null && heldObjectRb.velocity.magnitude > 0.1f)
@@ -110,12 +160,15 @@ public class ClawGrabManager : MonoBehaviour
     {
         if (heldObject != null)
         {
-            heldObject.transform.SetParent(null); // Unparent the object
+            // Unparrents and enables gravity again
+            heldObject.transform.SetParent(null);
             if (heldObjectRb != null)
             {
-                heldObjectRb.useGravity = true; // Re-enable gravity
+                heldObjectRb.useGravity = true;
                 heldObjectRb = null;
             }
+
+            
             Debug.Log("Object released: " + heldObject.name);
             heldObject = null;
             grabParrent = false;

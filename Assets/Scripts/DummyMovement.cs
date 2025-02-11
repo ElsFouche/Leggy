@@ -23,8 +23,8 @@ public class DummyMovement : MonoBehaviour
 
     public GameObject clawEmptyParent;
 
-    public GameObject clawLeftClip;
-    public GameObject clawRightClip;
+    //public GameObject clawLeftClip;
+    //public GameObject clawRightClip;
 
     public bool TriggerParrent = false;
 
@@ -47,6 +47,8 @@ public class DummyMovement : MonoBehaviour
         ClampClawPosition();
         //Debug.Log(ClawLeftRB.velocity + "a");
 
+
+        // Resets claws if they manage to go past each other and
         if (ClawRight.transform.localPosition.x < -0.1 || ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x > 0.1 || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
         {
             ResetClawPosition();
@@ -63,11 +65,13 @@ public class DummyMovement : MonoBehaviour
             ResetClawPosition();
         }*/
 
+        // Left click opens claw
         if (Input.GetMouseButtonDown(1) && !opened || opening)
         {
             OpenClaw();
         }
 
+        // Right click closes claw
         if (Input.GetMouseButtonDown(0) || closing)
         {
             CloseClaw();
@@ -76,6 +80,7 @@ public class DummyMovement : MonoBehaviour
 
     private void ClampClawPosition()
     {
+        // Prevents parrenting from affecting claw Z & Y
         ClawLeft.transform.localPosition = new Vector3(ClawLeft.transform.localPosition.x, 0f, 0f);
         ClawRight.transform.localPosition = new Vector3(ClawRight.transform.localPosition.x, 0f, 0f);
     }
@@ -98,11 +103,12 @@ public class DummyMovement : MonoBehaviour
         closing = false;
         opened = false;
 
+        // Prevents RB from getting affected from seperate Obj
         ClawLeftRB.isKinematic = false;
         ClawRightRB.isKinematic = false;
 
-        ClawLeftRB.AddForce(-transform.right * speed, ForceMode.Impulse);
-        ClawRightRB.AddForce(transform.right * speed, ForceMode.Impulse);
+        ClawLeftRB.AddForce(-transform.right * speed, ForceMode.Acceleration);
+        ClawRightRB.AddForce(transform.right * speed, ForceMode.Acceleration);
     }
 
     private void CloseClaw()
@@ -111,12 +117,13 @@ public class DummyMovement : MonoBehaviour
         opening = false;
         closing = true;
 
+        // Allows for closing to work using RB based movement
         ClawLeftRB.isKinematic = false;
         ClawRightRB.isKinematic = false;
-        Debug.Log("closing claw: " + closing);
+        //Debug.Log("closing claw: " + closing);
 
-        ClawLeftRB.AddForce(transform.right * speed, ForceMode.Impulse);
-        ClawRightRB.AddForce(-transform.right * speed, ForceMode.Impulse);
+        ClawLeftRB.AddForce(transform.right * speed, ForceMode.Acceleration);
+        ClawRightRB.AddForce(-transform.right * speed, ForceMode.Acceleration);
 
         if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
         {

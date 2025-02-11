@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UIElements;
 
 public class PlayerControlScript : MonoBehaviour
 {
+    public TextMeshProUGUI WristInput;
+    public GameObject WristCCSprite;
+    public GameObject WristCSprite;
+    private float WristRotation;
+
     public GameObject tester;
 
     public GameObject ClawLeftPivot;
@@ -32,42 +38,65 @@ public class PlayerControlScript : MonoBehaviour
     void Start()
     {
         baseJointRotation = BaseJoint.transform.rotation;
+
+        WristCCSprite.gameObject.SetActive(false);
+        WristCSprite.gameObject.SetActive(false);
     }
+
     // Update is called once per frame
     void Update()
     {
-        bool rotated = false; // Flag to track if any rotation key was pressed
+        //bool rotated = false; // Flag to track if any rotation key was pressed
 
         // Handle rotation input
         if (Input.GetKey(KeyCode.S))
         {
             BaseJoint.transform.rotation *= Quaternion.Euler(rotationStep * Time.deltaTime, 0f, 0f); // Rotate Up
-            rotated = true;
+            //rotated = true;
         }
         if (Input.GetKey(KeyCode.W))
         {
             BaseJoint.transform.rotation *= Quaternion.Euler(-rotationStep * Time.deltaTime, 0f, 0f); // Rotate Down
-            rotated = true;
+            //rotated = true;
         }
         if (Input.GetKey(KeyCode.Q))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, -rotationStep * Time.deltaTime, 0f); // Rotate Left
-            rotated = true;
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, rotationStep * Time.deltaTime); // Rotate CounterClockwise
+            WristCSprite.gameObject.SetActive(false);
+            WristCCSprite.gameObject.SetActive(true);
+
+            WristInput.text = "Q";
+
+            Vector3 newRotation = WristCCSprite.transform.eulerAngles;
+            newRotation.z += rotationSpeed * Time.deltaTime;
+            WristCCSprite.transform.eulerAngles = newRotation;
+            //rotated = true;
         }
+
         if (Input.GetKey(KeyCode.E))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, rotationStep * Time.deltaTime, 0f); // Rotate Right
-            rotated = true;
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, -rotationStep * Time.deltaTime); // Rotate Clockwise
+            WristCSprite.gameObject.SetActive(true);
+            WristCCSprite.gameObject.SetActive(false);
+
+            WristInput.text = "E";
+
+            Vector3 newRotation = WristCSprite.transform.eulerAngles;
+            newRotation.z -= rotationSpeed * Time.deltaTime;
+            WristCSprite.transform.eulerAngles = newRotation;
+            //rotated = true;
         }
+
         if (Input.GetKey(KeyCode.Z))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, rotationStep * Time.deltaTime); // Rotate Z-axis
-            rotated = true;
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, -rotationStep * Time.deltaTime, 0f); // Rotate Left on X-axis
+            //rotated = true;
         }
+
         if (Input.GetKey(KeyCode.C))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, -rotationStep * Time.deltaTime); // Rotate Z-axis (opposite)
-            rotated = true;
+            BaseJoint.transform.rotation *= Quaternion.Euler(0f, rotationStep * Time.deltaTime, 0f); // Rotate Right on X-axis
+            //rotated = true;
         }
 
         // Handle movement input
@@ -78,6 +107,11 @@ public class PlayerControlScript : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             BaseJoint.transform.position += new Vector3(speed * Time.deltaTime, 0f, 0f); // Move Right on Z-axis
+        }
+
+        if (!Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E))
+        {
+            WristInput.text = " ";
         }
     }
 
