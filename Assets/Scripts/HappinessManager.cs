@@ -8,6 +8,9 @@ public class HappinessManager : MonoBehaviour
 {
     //The higher the position, the worse the state
     public List<AudioClip> emotes;
+    public int extraHappy;
+    public int happy;
+    public int sad;
     public AudioSource speaker;
     public TextMeshProUGUI happinessDisplay;
     public int happinessCount;
@@ -33,21 +36,21 @@ public class HappinessManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             speaker.clip = emotes[0];
-            happinessCount += 100;
+            happinessCount += extraHappy;
             speaker.Play();
             updateThousands();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             speaker.clip = emotes[1];
-            happinessCount += 55;
+            happinessCount += happy;
             speaker.Play();
             updateThousands();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             speaker.clip = emotes[2];
-            happinessCount -= 50;
+            happinessCount += sad;
             speaker.Play();
             updateThousands();
         }
