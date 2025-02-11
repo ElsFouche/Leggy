@@ -5,13 +5,19 @@ using UnityEngine;
 public class ClawGrabManager : MonoBehaviour
 {
     [SerializeField] private DummyMovement dummyMovement;
+    [SerializeField] private ClawGrabChild LeggyLeftClaw;
+    [SerializeField] private ClawGrabChild LeggyRightClaw;
 
-    public ClawGrabChild claw1; // Reference to first claw
-    public ClawGrabChild claw2; // Reference to second claw
     private GameObject heldObject = null; // Object currently held
     private Rigidbody heldObjectRb = null; // Rigidbody of the held object
 
     public bool grabParrent = false;
+
+    private Rigidbody selfRB;
+    private void Start()
+    {
+        selfRB = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
@@ -23,25 +29,15 @@ public class ClawGrabManager : MonoBehaviour
     private void CheckGrabbing()
     {
         // Check if either both claws are grabbing the object or TriggerParrent is true
-        if ((claw1.isGrabbing && claw2.isGrabbing) || dummyMovement.TriggerParrent)
+        if ((LeggyLeftClaw.isGrabbing && LeggyRightClaw.isGrabbing) || LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
         {
-            GameObject obj1 = GetGrabbableInClaw(claw1);
-            GameObject obj2 = GetGrabbableInClaw(claw2);
+            GameObject obj1 = GetGrabbableInClaw(LeggyLeftClaw);
+            GameObject obj2 = GetGrabbableInClaw(LeggyRightClaw);
 
             // If both claws grab the same object and it's not already held
-            if (obj1 != null && obj1 == obj2 && heldObject == null)
+            if (((obj1 != null && obj1 == obj2) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact && heldObject)) && heldObject== null)
             {
                 ParentObject(obj1);
-            }
-            // Or if TriggerParrent is true and the object is not already held
-            else if (dummyMovement.TriggerParrent && heldObject == null)
-            {
-                // Parent the object when TriggerParrent is true (checking claw1 for example)
-                GameObject obj = obj1 != null ? obj1 : obj2;
-                if (obj != null)
-                {
-                    ParentObject(obj);
-                }
             }
         }
         else if (heldObject != null)
@@ -55,10 +51,10 @@ public class ClawGrabManager : MonoBehaviour
         // If the object is held and either claw stops touching the object, release it
         if (heldObject != null)
         {
-            bool claw1Touching = IsClawTouchingObject(claw1);
-            bool claw2Touching = IsClawTouchingObject(claw2);
+            bool LeggyLeftClawTouching = IsClawTouchingObject(LeggyLeftClaw);
+            bool LeggyRightClawTouching = IsClawTouchingObject(LeggyRightClaw);
 
-            if (!claw1Touching || !claw2Touching && !dummyMovement.TriggerParrent)
+            if (!LeggyLeftClawTouching || !LeggyRightClawTouching && !dummyMovement.TriggerParrent)
             {
                 ReleaseObject();
             }

@@ -18,12 +18,6 @@ public class PlayerControlScript : MonoBehaviour
     public float rotationStep = 5f;
     private Quaternion baseJointRotation;
 
-    private Quaternion ClawLeftPivotClosedRotation;
-    private Quaternion ClawRightPivotClosedRotation;
-    private Rigidbody ClawLeftPivotRigid;
-    private Rigidbody ClawRightPivotRigid;
-
-
     private bool available = true;
     private float timer;
     public float torque;

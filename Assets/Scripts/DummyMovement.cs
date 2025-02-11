@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class DummyMovement : MonoBehaviour
 {
+    [SerializeField] private ClawGrabChild LeggyLeftClaw;
+    [SerializeField] private ClawGrabChild LeggyRightClaw;
 
     public float speed = 2f;
     private bool opened = true;
-    private bool closed = false;
     private bool closing = false;
     private bool opening = false;
 
@@ -15,13 +16,15 @@ public class DummyMovement : MonoBehaviour
     private Vector3 ClawLeftOrigin;
     private Rigidbody ClawLeftRB;
 
+
     public GameObject ClawRight;
     private Vector3 ClawRightOrigin;
     private Rigidbody ClawRightRB;
 
-    public ClawGrabChild LeftClaw;
-    public ClawGrabChild RightClaw;
-    public GameObject clawEmptyParent; 
+    public GameObject clawEmptyParent;
+
+    public GameObject clawLeftClip;
+    public GameObject clawRightClip;
 
     public bool TriggerParrent = false;
 
@@ -43,16 +46,22 @@ public class DummyMovement : MonoBehaviour
         EnforceSymmetricClawMovement();
         ClampClawPosition();
         //Debug.Log(ClawLeftRB.velocity + "a");
+
+        if (ClawRight.transform.localPosition.x < -0.1 || ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x > 0.1 || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
+        {
+            ResetClawPosition();
+        }
     }
 
 
 
     private void HandleClawMovement()
     {
+        /*
         if (ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
         {
             ResetClawPosition();
-        }
+        }*/
 
         if (Input.GetMouseButtonDown(1) && !opened || opening)
         {
@@ -75,7 +84,6 @@ public class DummyMovement : MonoBehaviour
     {
         opened = true;
         opening = false;
-        closed = false;
         closing = false;
 
         ClawRight.transform.localPosition = ClawRightOrigin;
@@ -89,10 +97,12 @@ public class DummyMovement : MonoBehaviour
         opening = true;
         closing = false;
         opened = false;
-        closed = false;
 
-        ClawLeftRB.AddForce(-transform.right * speed);
-        ClawRightRB.AddForce(transform.right * speed);
+        ClawLeftRB.isKinematic = false;
+        ClawRightRB.isKinematic = false;
+
+        ClawLeftRB.AddForce(-transform.right * speed, ForceMode.Impulse);
+        ClawRightRB.AddForce(transform.right * speed, ForceMode.Impulse);
     }
 
     private void CloseClaw()
@@ -100,15 +110,23 @@ public class DummyMovement : MonoBehaviour
         opened = false;
         opening = false;
         closing = true;
+
+        ClawLeftRB.isKinematic = false;
+        ClawRightRB.isKinematic = false;
         Debug.Log("closing claw: " + closing);
 
-        ClawLeftRB.AddForce(transform.right * speed);
-        ClawRightRB.AddForce(-transform.right * speed);
-        if (ClawLeftRB.velocity.x < -1 || ClawLeftRB.velocity.x > 1)
-        {
-            closed = true;
-        }
+        ClawLeftRB.AddForce(transform.right * speed, ForceMode.Impulse);
+        ClawRightRB.AddForce(-transform.right * speed, ForceMode.Impulse);
 
+        if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
+        {
+            ClawLeftRB.AddForce(transform.right * speed);
+        }
+        if(!LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
+        {
+
+            ClawRightRB.AddForce(-transform.right * speed);
+        }
     }
 
     
@@ -117,13 +135,19 @@ public class DummyMovement : MonoBehaviour
         opened = true;
         opening = false;
         closing = false;
+
+        ClawLeftRB.isKinematic = true;
+        ClawRightRB.isKinematic = true;
+        /*
         ClawLeftRB.velocity = Vector3.zero;
         ClawRightRB.velocity = Vector3.zero;
 
         ClawLeftRB.angularVelocity = Vector3.zero;
         ClawRightRB.angularVelocity = Vector3.zero;
+        */
     }
 
+    /* old version of trigger enter parrenting system which would kick in if the rigidbodies didnt register objects | Unreliable ):
     private void OnTriggerStay(Collider other)
     {
 
@@ -143,10 +167,13 @@ public class DummyMovement : MonoBehaviour
             Debug.Log("exited");
         }
     }
+    */
 
     void EnforceSymmetricClawMovement()
     {
+        
         float leftOffset = ClawLeft.transform.localPosition.x - ClawLeftOrigin.x;
         ClawRight.transform.localPosition = new Vector3(ClawRightOrigin.x - leftOffset, ClawRight.transform.localPosition.y, ClawRight.transform.localPosition.z);
+        
     }
 }
