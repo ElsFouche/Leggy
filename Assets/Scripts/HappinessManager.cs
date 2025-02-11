@@ -17,6 +17,10 @@ public class HappinessManager : MonoBehaviour
 
     public bool isVisible;
 
+    public Image backgroundBar;
+    public TextMeshProUGUI thousandTracker;
+    int thousands;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,18 +35,21 @@ public class HappinessManager : MonoBehaviour
             speaker.clip = emotes[0];
             happinessCount += 100;
             speaker.Play();
+            updateThousands();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             speaker.clip = emotes[1];
             happinessCount += 55;
             speaker.Play();
+            updateThousands();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             speaker.clip = emotes[2];
             happinessCount -= 50;
             speaker.Play();
+            updateThousands();
         }
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
@@ -54,7 +61,23 @@ public class HappinessManager : MonoBehaviour
             {
                 happinessCount -= Mathf.RoundToInt(maxDepressor * depressorMultiplier);
                 timer = 0;
+
+                thousands = (happinessCount - (happinessCount % 1000)) / 1000;
+
+                updateThousands();
             }
+        }
+
+        backgroundBar.GetComponent<Image>().fillAmount = (happinessCount % 1000f) / 1000f;
+    }
+
+    public void updateThousands()
+    {
+        thousands = (happinessCount - (happinessCount % 1000)) / 1000;
+        thousandTracker.text = "";
+        for (int i = 0; i < thousands; i++)
+        {
+            thousandTracker.text += "•";
         }
     }
 }
