@@ -71,7 +71,8 @@ public class HappinessManager : MonoBehaviour
             }
         }
 
-        backgroundBar.GetComponent<Image>().fillAmount = (happinessCount % 1000f) / 1000f;
+        //backgroundBar.GetComponent<Image>().fillAmount = (happinessCount % 1000f) / 1000f;
+        backgroundBar.GetComponent<Image>().fillAmount = Mathf.Lerp(0, 1000, happinessCount) / 1000f;
     }
 
     public void updateThousands()
