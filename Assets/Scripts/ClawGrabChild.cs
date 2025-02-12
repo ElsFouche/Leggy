@@ -12,12 +12,11 @@ public class ClawGrabChild : MonoBehaviour
     public LayerMask grabbableLayer;
     public bool rightClaw;
 
-    private void Update()
+    private void FixedUpdate()
     {
         //Raycasts for the raycast version of grab
         Vector3 rayDirection = rightClaw ? -transform.right : transform.right;
         Debug.DrawRay(transform.position, rayDirection * raycastDistance, Color.green);
-
         // Perform a BoxCast to detect objects within the claw range
         RaycastHit hit;
         if (Physics.BoxCast(transform.position, boxSize / 2, rayDirection, out hit, transform.rotation, raycastDistance, grabbableLayer))
@@ -31,6 +30,7 @@ public class ClawGrabChild : MonoBehaviour
         else
         {
             clawTriggerContact = false;
+            //Debug.Log("No Object");
         }
     }
 

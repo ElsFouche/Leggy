@@ -8,9 +8,10 @@ public class DummyMovement : MonoBehaviour
     [SerializeField] private ClawGrabChild LeggyRightClaw;
 
     public float speed = 2f;
-    private bool opened = true;
-    private bool closing = false;
-    private bool opening = false;
+    public bool opened = true;
+    public bool closing = false;
+    public bool opening = false;
+    public bool closed = false;
 
     public GameObject ClawLeft;
     private Vector3 ClawLeftOrigin;
@@ -47,6 +48,13 @@ public class DummyMovement : MonoBehaviour
         ClampClawPosition();
         //Debug.Log(ClawLeftRB.velocity + "a");
 
+        if (closing && (ClawLeftRB.velocity.magnitude < .01f || ClawRightRB.velocity.magnitude < .01f))
+        {
+            //Debug.Log(ClawLeftRB.velocity.magnitude + " : " + ClawRightRB.velocity.magnitude);
+            closed = true;
+            //.isKinematic = true;
+            //ClawRightRB.isKinematic = true;
+        }
 
         // Resets claws if they manage to go past each other and
         if (ClawRight.transform.localPosition.x < -0.1 || ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x > 0.1 || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
@@ -128,6 +136,7 @@ public class DummyMovement : MonoBehaviour
         if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
         {
             ClawLeftRB.AddForce(transform.right * speed);
+            
         }
         if(!LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
         {
@@ -142,6 +151,7 @@ public class DummyMovement : MonoBehaviour
         opened = true;
         opening = false;
         closing = false;
+        closed = false;
 
         ClawLeftRB.isKinematic = true;
         ClawRightRB.isKinematic = true;

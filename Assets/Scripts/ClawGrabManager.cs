@@ -28,7 +28,7 @@ public class ClawGrabManager : MonoBehaviour
         CheckIfBothClawsAreTouching();
         CheckObjectSlipping();
 
-        if (heldObject == null)  // Checks for no held obj
+        if (heldObject == null && dummyMovement.closing)  // Checks for no held obj
         {
             GameObject closestObject = GetClosestObjectInBoxCollider();
             if (closestObject != null)
@@ -46,7 +46,7 @@ public class ClawGrabManager : MonoBehaviour
     {
         // Move the object towards the center of the BoxCollider
         Vector3 center = boxCollider.transform.position;
-        obj.transform.position = Vector3.MoveTowards(obj.transform.position, center, moveSpeed * Time.deltaTime);
+        obj.transform.position = Vector3.MoveTowards(obj.transform.position, center, moveSpeed * Time.fixedDeltaTime);
     }
 
     private GameObject GetClosestObjectInBoxCollider()
@@ -79,14 +79,15 @@ public class ClawGrabManager : MonoBehaviour
             GameObject obj2 = GetGrabbableInClaw(LeggyRightClaw);
 
             // If both claws grab the same object and it's not already held
-            if (((obj1 != null && obj1 == obj2) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact && heldObject)) && heldObject == null)
+            //if (((obj1 != null && obj1 == obj2) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact && heldObject)) && heldObject == null)
+            if ((obj1 != null && obj1 == obj2) && heldObject == null)
             {
                 ParentObject(obj1);
             }
         }
         else if (heldObject != null)
         {
-            ReleaseObject();
+            //ReleaseObject();
         }
     }
 
@@ -138,7 +139,13 @@ public class ClawGrabManager : MonoBehaviour
         heldObject = obj;
         heldObjectRb = heldObject.GetComponent<Rigidbody>(); // Get Rigidbody
         heldObject.transform.SetParent(transform); // Parent to the arm or main object
+
+        GameObject closestObject = GetClosestObjectInBoxCollider();
+        MoveObjectToCenter(closestObject);
+
         heldObjectRb.useGravity = false; // Disable gravity while holding
+        
+
         Debug.Log("Object grasped: " + heldObject.name);
         grabParrent = true;
     }
