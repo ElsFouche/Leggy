@@ -21,13 +21,16 @@ public class HappinessManager : MonoBehaviour
     public bool isVisible;
 
     public Image backgroundBar;
+    public Image backgroundDepressLayer;
+    bool isDecreasing;
     public TextMeshProUGUI thousandTracker;
     int thousands;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        isDecreasing = false;
+        backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
     }
 
     // Update is called once per frame
@@ -70,6 +73,8 @@ public class HappinessManager : MonoBehaviour
                 thousands = (happinessCount - (happinessCount % 1000)) / 1000;
 
                 updateThousands();
+
+                if (!isDecreasing) StartCoroutine(decreaseSecondLayer());
             }
         }
 
@@ -88,6 +93,20 @@ public class HappinessManager : MonoBehaviour
         for (int i = 0; i < thousands; i++)
         {
             thousandTracker.text += "•";
+        }
+    }
+
+    public IEnumerator decreaseSecondLayer()
+    {
+        yield return new WaitForSeconds(1f);
+
+        float test = 0f;
+        isDecreasing = true;
+        while (backgroundDepressLayer.GetComponent<Image>().fillAmount != backgroundBar.GetComponent<Image>().fillAmount)
+        {
+            backgroundDepressLayer.GetComponent<Image>().fillAmount = Mathf.SmoothDamp
+            (backgroundDepressLayer.GetComponent<Image>().fillAmount, backgroundBar.GetComponent<Image>().fillAmount,
+            ref test, 0.05f);
         }
     }
 }
