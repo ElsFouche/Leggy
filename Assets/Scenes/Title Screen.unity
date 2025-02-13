@@ -321,6 +321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 319346884}
+  - component: {fileID: 319346885}
   m_Layer: 0
   m_Name: Title Manager
   m_TagString: Untagged
@@ -343,6 +344,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &319346885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319346883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554b207643cc1e742bece997fe6559bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionManager: {fileID: 307978474}
 --- !u!1 &608856414
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +439,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 608856417}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 319346885}
+        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
+        m_MethodName: startGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &608856417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638,7 +664,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1002366133}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 319346885}
+        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
+        m_MethodName: quitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1002366133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1410,11 +1448,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1539456241}
+  - {fileID: 1002366131}
+  - {fileID: 608856415}
   - {fileID: 1079735105}
   - {fileID: 311508419}
-  - {fileID: 608856415}
-  - {fileID: 1002366131}
-  - {fileID: 1539456241}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
