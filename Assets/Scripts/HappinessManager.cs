@@ -22,15 +22,17 @@ public class HappinessManager : MonoBehaviour
 
     public Image backgroundBar;
     public Image backgroundDepressLayer;
-    bool isDecreasing;
     public TextMeshProUGUI thousandTracker;
     int thousands;
+
+    bool decreasing;
+    public bool buffering;
 
     // Start is called before the first frame update
     void Start()
     {
-        isDecreasing = false;
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
+        updateThousands();
     }
 
     // Update is called once per frame
@@ -73,8 +75,7 @@ public class HappinessManager : MonoBehaviour
                 thousands = (happinessCount - (happinessCount % 1000)) / 1000;
 
                 updateThousands();
-
-                if (!isDecreasing) StartCoroutine(decreaseSecondLayer());
+                StartCoroutine(testing());
             }
         }
 
@@ -84,6 +85,21 @@ public class HappinessManager : MonoBehaviour
         //backgroundBar.GetComponent<Image>().fillAmount = Mathf.Lerp((happinessCount % 1000) / 1000f, 1, Time.deltaTime);
         backgroundBar.GetComponent<Image>().fillAmount = Mathf.SmoothDamp
             (backgroundBar.GetComponent<Image>().fillAmount, (happinessCount % 1000) / 1000f, ref test, 0.03f);
+
+        if (backgroundBar.GetComponent<Image>().fillAmount > backgroundDepressLayer.GetComponent<Image>().fillAmount)
+        {
+            backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
+            decreasing = false;
+            StartCoroutine(buffer());
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (decreasing)
+        {
+            backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
+        }
     }
 
     public void updateThousands()
@@ -96,17 +112,16 @@ public class HappinessManager : MonoBehaviour
         }
     }
 
-    public IEnumerator decreaseSecondLayer()
+    public IEnumerator testing()
     {
         yield return new WaitForSeconds(1f);
+        if (!decreasing && !buffering) decreasing = true;
+    }
 
-        float test = 0f;
-        isDecreasing = true;
-        while (backgroundDepressLayer.GetComponent<Image>().fillAmount != backgroundBar.GetComponent<Image>().fillAmount)
-        {
-            backgroundDepressLayer.GetComponent<Image>().fillAmount = Mathf.SmoothDamp
-            (backgroundDepressLayer.GetComponent<Image>().fillAmount, backgroundBar.GetComponent<Image>().fillAmount,
-            ref test, 0.05f);
-        }
+    public IEnumerator buffer()
+    {
+        buffering = true;
+        yield return new WaitForSeconds(0.78695f);
+        buffering = false;
     }
 }
