@@ -57,12 +57,14 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
+        int depression = Mathf.RoundToInt(maxDepressor * depressorMultiplier);
+
         if (isVisible)
         {
             timer += Time.deltaTime;
             if (timer >= 1)
             {
-                happinessCount -= Mathf.RoundToInt(maxDepressor * depressorMultiplier);
+                happinessCount -= depression;
                 timer = 0;
 
                 thousands = (happinessCount - (happinessCount % 1000)) / 1000;
@@ -71,8 +73,12 @@ public class HappinessManager : MonoBehaviour
             }
         }
 
+        float test = 0f;
+
         //backgroundBar.GetComponent<Image>().fillAmount = (happinessCount % 1000f) / 1000f;
-        backgroundBar.GetComponent<Image>().fillAmount = Mathf.Lerp(0, 1000, happinessCount) / 1000f;
+        //backgroundBar.GetComponent<Image>().fillAmount = Mathf.Lerp((happinessCount % 1000) / 1000f, 1, Time.deltaTime);
+        backgroundBar.GetComponent<Image>().fillAmount = Mathf.SmoothDamp
+            (backgroundBar.GetComponent<Image>().fillAmount, (happinessCount % 1000) / 1000f, ref test, 0.03f);
     }
 
     public void updateThousands()
