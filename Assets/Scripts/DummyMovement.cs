@@ -129,9 +129,9 @@ public class DummyMovement : MonoBehaviour
         ClawLeftRB.isKinematic = false;
         ClawRightRB.isKinematic = false;
         //Debug.Log("closing claw: " + closing);
-
-        ClawLeftRB.AddForce(transform.right * speed, ForceMode.Acceleration);
-        ClawRightRB.AddForce(-transform.right * speed, ForceMode.Acceleration);
+        Vector3 clawClosingDirection = clawEmptyParent.transform.right;
+        ClawLeftRB.AddForce(clawClosingDirection * speed, ForceMode.Acceleration);
+        ClawRightRB.AddForce(-clawClosingDirection * speed, ForceMode.Acceleration);
 
         if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
         {
