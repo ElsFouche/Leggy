@@ -21,6 +21,8 @@ public class TransitionManager : MonoBehaviour
 
     public GameObject happinessManager;
 
+    public int sceneToChangeTo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,6 +108,17 @@ public class TransitionManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(sceneSwitchDelay);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(sceneToChangeTo);
+    }
+
+    public void PressToStart()
+    {
+        isTransitioning = true;
+        if (SceneManager.GetActiveScene().buildIndex > 0)
+        {
+            happinessManager.GetComponent<HappinessManager>().isVisible = false;
+        }
+        StartCoroutine(fadeToBlack());
     }
 }
