@@ -36,6 +36,11 @@ public class TransitionManager : MonoBehaviour
             StartCoroutine(blackFadeOut());
             happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
         }
+        else
+        {
+            blackScreen.gameObject.SetActive(false);
+            loreText.gameObject.SetActive(false);
+        }
     }
 
     
@@ -59,6 +64,8 @@ public class TransitionManager : MonoBehaviour
 
     public IEnumerator fadeToBlack()
     {
+        blackScreen.gameObject.SetActive(true);
+        loreText.gameObject.SetActive(true);
         while (blackScreen.GetComponent<Image>().color.a < 1.0f)
         {
             blackScreen.GetComponent<Image>().color = new Color
