@@ -298,53 +298,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1791152686092841272, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
   m_PrefabInstance: {fileID: 1741705198}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &577455390
-MonoBehaviour:
+--- !u!1818360609 &577455390
+RotationConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 577455388}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdb90b913935e644baaa86c076d788e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 2
   m_Weight: 1
-  m_Data:
-    m_ConstrainedObject: {fileID: 0}
-    m_SourceObjects:
-      m_Length: 0
-      m_Item0:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item1:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item2:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item3:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item4:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item5:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item6:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item7:
-        transform: {fileID: 0}
-        weight: 0
-    m_Offset: {x: 0, y: 0, z: 0}
-    m_ConstrainedAxes:
-      x: 0
-      y: 1
-      z: 1
-    m_MaintainOffset: 0
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: -15.500011, y: 0, z: 0}
+  m_AffectRotationX: 0
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 45539581}
+    weight: 1
 --- !u!1 &663166978
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,6 +708,22 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
       propertyPath: m_Name
       value: Leggy FBX
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791152686092841272, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791152686092841272, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791152686092841272, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791152686092841272, guid: edac0dc87384d1e418be6edd06f89e5e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
