@@ -48,18 +48,7 @@ public class TransitionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (!isTransitioning)
-            {
-                isTransitioning = true;
-                if (SceneManager.GetActiveScene().buildIndex > 0)
-                {
-                    happinessManager.GetComponent<HappinessManager>().isVisible = false;
-                }
-                StartCoroutine(fadeToBlack());
-            }
-        }
+        
     }
 
     public IEnumerator fadeToBlack()
