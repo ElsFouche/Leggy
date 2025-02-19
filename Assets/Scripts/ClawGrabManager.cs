@@ -15,6 +15,7 @@ public class ClawGrabManager : MonoBehaviour
     private Rigidbody heldObjectRb = null;
 
     public bool grabParrent = false;
+    public bool grabbing = false;
 
     private Rigidbody selfRB;
     private void Start()
@@ -46,6 +47,8 @@ public class ClawGrabManager : MonoBehaviour
     {
         // Move the object towards the center of the BoxCollider
         Vector3 center = boxCollider.transform.position;
+        Rigidbody objRB = obj.GetComponent<Rigidbody>();
+        objRB.isKinematic = true;
         obj.transform.position = Vector3.MoveTowards(obj.transform.position, center, moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -137,13 +140,18 @@ public class ClawGrabManager : MonoBehaviour
     private void ParentObject(GameObject obj)
     {
         heldObject = obj;
-        heldObjectRb = heldObject.GetComponent<Rigidbody>(); // Get Rigidbody
-        heldObject.transform.SetParent(transform); // Parent to the arm or main object
+        heldObjectRb = heldObject.GetComponent<Rigidbody>();
+        
+        //heldObject.transform.SetParent(transform);
+        heldObject.transform.position = transform.position;
+        heldObject.transform.rotation = Quaternion.Euler(
+            transform.localRotation.x + heldObject.transform.localRotation.x,
+            transform.localRotation.y + heldObject.transform.localRotation.y,
+            transform.localRotation.z + heldObject.transform.localRotation.z);
 
         GameObject closestObject = GetClosestObjectInBoxCollider();
         MoveObjectToCenter(closestObject);
-
-        heldObjectRb.useGravity = false; // Disable gravity while holding
+        heldObjectRb.useGravity = false;
         
 
         Debug.Log("Object grasped: " + heldObject.name);

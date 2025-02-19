@@ -12,14 +12,17 @@ public class ClawGrabChild : MonoBehaviour
     public LayerMask grabbableLayer;
     public bool rightClaw;
 
+
+    public bool clawsTouchingEachOther = false;
+
     private void FixedUpdate()
     {
         //Raycasts for the raycast version of grab
         Vector3 rayDirection = rightClaw ? -transform.right : transform.right;
-        Debug.DrawRay(transform.position, rayDirection * raycastDistance, Color.green);
+        Debug.DrawRay(transform.position, rayDirection * raycastDistance, Color.green); 
         // Perform a BoxCast to detect objects within the claw range
         RaycastHit hit;
-        if (Physics.BoxCast(transform.position, boxSize / 2, rayDirection, out hit, transform.rotation, raycastDistance, grabbableLayer))
+        if (Physics.BoxCast(transform.position, boxSize / 2, rayDirection, out hit, transform.rotation, raycastDistance))
         {
             if (hit.collider.CompareTag("Grabbable"))
             {
@@ -50,6 +53,17 @@ public class ClawGrabChild : MonoBehaviour
             isGrabbing = false;
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LeggyClaw"))
+        {
+            clawsTouchingEachOther = true;
+        }
+        if (other.CompareTag("Grabbable"))
+        {
+            clawTriggerContact = true;
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -64,6 +78,10 @@ public class ClawGrabChild : MonoBehaviour
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = false;
+        }
+        if (other.CompareTag("LeggyClaw"))
+        {
+            clawsTouchingEachOther = false;
         }
     }
 }

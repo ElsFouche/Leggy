@@ -80,7 +80,7 @@ public class DummyMovement : MonoBehaviour
         }
 
         // Right click closes claw
-        if (Input.GetMouseButtonDown(0) || closing)
+        if (Input.GetMouseButtonDown(0) || closing && !LeggyLeftClaw.clawsTouchingEachOther && !LeggyRightClaw.clawsTouchingEachOther)
         {
             CloseClaw();
         }
@@ -114,9 +114,14 @@ public class DummyMovement : MonoBehaviour
         // Prevents RB from getting affected from seperate Obj
         ClawLeftRB.isKinematic = false;
         ClawRightRB.isKinematic = false;
-
+        /*
         ClawLeftRB.AddForce(-transform.right * speed, ForceMode.Acceleration);
         ClawRightRB.AddForce(transform.right * speed, ForceMode.Acceleration);
+        */
+
+        ClawLeft.transform.localPosition += transform.right * speed;
+        ClawRight.transform.localPosition += -transform.right * speed;
+
     }
 
     private void CloseClaw()
@@ -130,18 +135,25 @@ public class DummyMovement : MonoBehaviour
         ClawRightRB.isKinematic = false;
         //Debug.Log("closing claw: " + closing);
         Vector3 clawClosingDirection = clawEmptyParent.transform.right;
+        /*
         ClawLeftRB.AddForce(clawClosingDirection * speed, ForceMode.Acceleration);
         ClawRightRB.AddForce(-clawClosingDirection * speed, ForceMode.Acceleration);
+        */
+
+        ClawLeft.transform.localPosition += -transform.right * speed;
+        ClawRight.transform.localPosition += transform.right *   speed;
+
+        Debug.Log("boop " + ClawLeft.transform.localPosition + " : " + ClawRight.transform.localPosition);
 
         if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
         {
-            ClawLeftRB.AddForce(transform.right * speed);
-            
+            //ClawLeftRB.AddForce(transform.right * speed);
+            ClawLeft.transform.localPosition += -transform.right * speed;
         }
         if(!LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
         {
-
-            ClawRightRB.AddForce(-transform.right * speed);
+            //ClawRightRB.AddForce(-transform.right * speed);
+            ClawRight.transform.localPosition += transform.right * speed;
         }
     }
 
