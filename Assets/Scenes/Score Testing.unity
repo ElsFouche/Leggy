@@ -2258,8 +2258,10 @@ GameObject:
   - component: {fileID: 1651023915}
   - component: {fileID: 1651023914}
   - component: {fileID: 1651023913}
+  - component: {fileID: 1651023919}
   - component: {fileID: 1651023912}
   - component: {fileID: 1651023917}
+  - component: {fileID: 1651023918}
   m_Layer: 0
   m_Name: Goal Block Quick
   m_TagString: Untagged
@@ -2300,7 +2302,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2386,6 +2388,43 @@ MonoBehaviour:
   mainTag: 3
   locationTag: 1
   objectTag: 0
+--- !u!114 &1651023918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651023911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c51d8e2cacd33a478d91b99f288d53c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagManager: {fileID: 0}
+  collisionNumber: 0
+  happinessManager: {fileID: 91127742}
+  objectiveSetter: {fileID: 382254865}
+--- !u!65 &1651023919
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651023911}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1750693275
 GameObject:
   m_ObjectHideFlags: 0
