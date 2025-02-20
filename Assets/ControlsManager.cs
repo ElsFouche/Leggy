@@ -31,23 +31,9 @@ public class ControlsManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            changeFloatValue();
-
+            if (isLow) amountOnLow = 0;
+            else amountOnLow = 1;
             isLow = !isLow;
         }
-    }
-
-    public void changeFloatValue()
-    {
-        if (isLow) while (!Mathf.Approximately(amountOnLow, 0f))
-            {
-                amountOnLow = Mathf.Lerp(amountOnLow, 0f, Time.deltaTime);
-            }
-
-        else while (!Mathf.Approximately(amountOnLow, 1f))
-            {
-                amountOnLow = Mathf.Lerp(amountOnLow, 1f, Time.deltaTime);
-            }
-
     }
 }
