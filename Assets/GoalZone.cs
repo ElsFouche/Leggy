@@ -6,7 +6,8 @@ public class GoalZone : MonoBehaviour
 {
     public TagManager tagManager;
 
-    public int collisionNumber;
+    public int matchingCollisionNumber;
+    public int generalCollisionNumber;
 
     public GameObject happinessManager;
     public GameObject objectiveSetter;
@@ -30,12 +31,16 @@ public class GoalZone : MonoBehaviour
         if(collision.gameObject.GetComponent<TagManager>().objectTag.ToString()
             == tagManager.locationTag.ToString())
         {
-            collisionNumber++;
+            matchingCollisionNumber++;
         }
+        if (collision.gameObject.GetComponent<TagManager>().objectTag.ToString() != "None")
+            generalCollisionNumber++;
 
-        if (collisionNumber == 3)
+        if (generalCollisionNumber == 3)
         {
-            happinessManager.GetComponent<HappinessManager>().maxHappy();
+            if (generalCollisionNumber == matchingCollisionNumber)
+                happinessManager.GetComponent<HappinessManager>().maxHappy();
+            else happinessManager.GetComponent<HappinessManager>().normalHappy();
         }
     }
 
@@ -44,10 +49,12 @@ public class GoalZone : MonoBehaviour
         if (collision.gameObject.GetComponent<TagManager>().objectTag.ToString()
             == tagManager.locationTag.ToString())
         {
-            collisionNumber--;
+            matchingCollisionNumber--;
         }
+        if (collision.gameObject.GetComponent<TagManager>().objectTag.ToString() != "None")
+            generalCollisionNumber--;
 
-        if (collisionNumber < 3)
+        if (generalCollisionNumber < 3)
         {
             happinessManager.GetComponent<HappinessManager>().getDepressed();
         }
