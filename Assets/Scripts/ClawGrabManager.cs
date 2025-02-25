@@ -7,6 +7,7 @@ public class ClawGrabManager : MonoBehaviour
     [SerializeField] private DummyMovement dummyMovement;
     [SerializeField] private ClawGrabChild LeggyLeftClaw;
     [SerializeField] private ClawGrabChild LeggyRightClaw;
+    [SerializeField] private GameObject leggyWrist;
 
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private float moveSpeed = 1f;
@@ -142,17 +143,16 @@ public class ClawGrabManager : MonoBehaviour
         heldObject = obj;
         heldObjectRb = heldObject.GetComponent<Rigidbody>();
         
-        //heldObject.transform.SetParent(transform);
-        heldObject.transform.position = transform.position;
-        heldObject.transform.rotation = Quaternion.Euler(
-            transform.localRotation.x + heldObject.transform.localRotation.x,
-            transform.localRotation.y + heldObject.transform.localRotation.y,
-            transform.localRotation.z + heldObject.transform.localRotation.z);
-
         GameObject closestObject = GetClosestObjectInBoxCollider();
         MoveObjectToCenter(closestObject);
         heldObjectRb.useGravity = false;
-        
+
+        closestObject.transform.position = transform.position;
+        closestObject.transform.rotation = Quaternion.Euler(
+            leggyWrist.transform.localRotation.x, //+ heldObject.transform.localRotation.x,
+            leggyWrist.transform.localRotation.y, //+ heldObject.transform.localRotation.y,
+            leggyWrist.transform.localRotation.z); //+ heldObject.transform.localRotation.z);
+
 
         Debug.Log("Object grasped: " + heldObject.name);
         grabParrent = true;

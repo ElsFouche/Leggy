@@ -14,6 +14,8 @@ public class ClawGrabChild : MonoBehaviour
 
 
     public bool clawsTouchingEachOther = false;
+    public GameObject touchingObject;
+
 
     private void FixedUpdate()
     {
@@ -27,7 +29,7 @@ public class ClawGrabChild : MonoBehaviour
             if (hit.collider.CompareTag("Grabbable"))
             {
                 clawTriggerContact = true;
-                Debug.Log("Object in center of claw: " + hit.collider.gameObject.name);
+                //Debug.Log("Object in center of claw: " + hit.collider.gameObject.name);
             }
         }
         else
@@ -62,6 +64,7 @@ public class ClawGrabChild : MonoBehaviour
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = true;
+            touchingObject = other.gameObject;
         }
     }
 
@@ -70,6 +73,7 @@ public class ClawGrabChild : MonoBehaviour
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = true;
+            touchingObject = other.gameObject;
         }
     }
 
@@ -78,6 +82,7 @@ public class ClawGrabChild : MonoBehaviour
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = false;
+            touchingObject = null;
         }
         if (other.CompareTag("LeggyClaw"))
         {
