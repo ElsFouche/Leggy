@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 
 public class ClawMovementKinematic : MonoBehaviour
 {
+    public BoxCollider Wrist_Kinematic_Collider;
     public float moveSpeed = 1.0f;
 
     private bool canClose = true;
@@ -22,6 +23,9 @@ public class ClawMovementKinematic : MonoBehaviour
     private float distanceToCenter;
     private GameObject hitObject;
 
+    public bool playerMovement = false;
+    private bool negativeDirection = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,13 @@ public class ClawMovementKinematic : MonoBehaviour
         position = transform.localPosition;
         castDistance = clawParent.castDistance;
         successfulGrabRange = clawParent.maxGrabRange;
+        GameObject WristKinematic = GameObject.Find("Wrist_Kinematic");
+        Wrist_Kinematic_Collider = WristKinematic.GetComponent<BoxCollider>();
+
+        if (transform.localPosition.x < 0)
+        {
+            negativeDirection = true;
+        }
     }
 
     // Update is called once per frame
@@ -41,11 +52,22 @@ public class ClawMovementKinematic : MonoBehaviour
             position = transform.localPosition;
             position.x += (moveSpeed * Time.deltaTime) * transform.right.x;
             transform.localPosition = position;
+            playerMovement = true;
+
+
         } else if (Input.GetKey(KeyCode.Q))
         {
             position = transform.localPosition;
-            position.x += (-moveSpeed * Time.deltaTime) * transform.right.x;
+            position.x -= (moveSpeed * Time.deltaTime) * transform.right.x;
             transform.localPosition = position;
+
+            if
+
+            playerMovement = true;
+        }
+        else
+        {
+            playerMovement = false;        
         }
 
         // Begin box cast
@@ -57,7 +79,7 @@ public class ClawMovementKinematic : MonoBehaviour
                                   castDistance);
         
 
-        if (castHit)
+        if (castHit && hitResult.transform.CompareTag("Grabbable"))
         {
             hitObject = hitResult.transform.gameObject;
             distanceToCenter = Vector3.Distance(hitObject.GetComponent<Rigidbody>().centerOfMass, clawCollider.bounds.center);

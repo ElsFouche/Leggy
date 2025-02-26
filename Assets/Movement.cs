@@ -63,5 +63,6 @@ public class Movement : MonoBehaviour
             rotation.z += (moveSpeed * 10 * Time.deltaTime);
             transform.localEulerAngles = rotation;
         }
+
     }
 }
