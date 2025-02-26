@@ -21,6 +21,7 @@ public class GoalZone : MonoBehaviour
     void Start()
     {
         happinessManager = FindObjectOfType<HappinessManager>();
+        tagManager = this.GetComponent<TagManager>();
 
         Debug.Log(tagManager.locationTag);
     }
@@ -51,7 +52,7 @@ public class GoalZone : MonoBehaviour
             //Store the number of matching objects for later.
             matchingCollisionNumber++;
 
-            if (matchingCollisionNumber > minNumMatchingObjects)
+            if (matchingCollisionNumber >= minNumMatchingObjects)
             {
                 //Call function to gain happiness
                 gainHappiness(matchingObjectHappiness);
@@ -66,7 +67,7 @@ public class GoalZone : MonoBehaviour
             generalCollisionNumber++;
 
             //Check if the minimum number of general objects has been reached. If so, add happiness.
-            if (generalCollisionNumber > minNumGeneralObjects)
+            if (generalCollisionNumber >= minNumGeneralObjects)
             {
                 //Call function to gain happiness
                 gainHappiness(generalObjectHappiness);
