@@ -124,7 +124,7 @@ public class HappinessManager : MonoBehaviour
 
         if (happinessToGain <= 0)
         {
-            speaker.clip = emotes[2];
+            return;
         }
         else if (happinessToGain >= extraExcitedThreshold)
         {
@@ -138,6 +138,16 @@ public class HappinessManager : MonoBehaviour
         speaker.Play();
         updateThousands();
     }
+
+    public void loseHappiness(int happinessToLose)
+    {
+        speaker.clip = emotes[2];
+        happinessCount -= happinessToLose;
+        speaker.Play();
+        updateThousands();
+    }
+
+
 
     public void maxHappy()
     {
