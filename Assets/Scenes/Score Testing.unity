@@ -312,6 +312,7 @@ MonoBehaviour:
   backgroundDepressLayer: {fileID: 295886042}
   thousandTracker: {fileID: 1167690062}
   buffering: 0
+  extraExcitedThreshold: 60
 --- !u!1 &103097867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2401,9 +2402,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagManager: {fileID: 0}
-  collisionNumber: 0
+  matchingCollisionNumber: 0
+  generalCollisionNumber: 0
   happinessManager: {fileID: 91127742}
   objectiveSetter: {fileID: 382254865}
+  matchingObjectHappiness: 0
+  generalObjectHappiness: 0
+  minNumMatchingObjects: 0
+  minNumGeneralObjects: 0
 --- !u!65 &1651023919
 BoxCollider:
   m_ObjectHideFlags: 0

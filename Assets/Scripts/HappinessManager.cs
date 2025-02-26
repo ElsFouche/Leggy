@@ -28,6 +28,8 @@ public class HappinessManager : MonoBehaviour
     bool decreasing;
     public bool buffering;
 
+    public int extraExcitedThreshold;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -114,6 +116,27 @@ public class HappinessManager : MonoBehaviour
         buffering = true;
         yield return new WaitForSeconds(0.78695f);
         buffering = false;
+    }
+
+    public void gainHappiness(int happinessToGain)
+    {
+        happinessCount += happinessToGain;
+
+        if (happinessToGain <= 0)
+        {
+            speaker.clip = emotes[2];
+        }
+        else if (happinessToGain >= extraExcitedThreshold)
+        {
+            speaker.clip = emotes[0];
+        }
+        else
+        {
+            speaker.clip = emotes[1];
+        }
+
+        speaker.Play();
+        updateThousands();
     }
 
     public void maxHappy()
