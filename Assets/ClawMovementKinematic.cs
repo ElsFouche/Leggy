@@ -10,6 +10,7 @@ public class ClawMovementKinematic : MonoBehaviour
 {
     public BoxCollider Wrist_Kinematic_Collider;
     public float moveSpeed = 1.0f;
+    public float stopDistance = 0.5f;
 
     private bool canClose = true;
     private Vector3 position;
@@ -26,6 +27,10 @@ public class ClawMovementKinematic : MonoBehaviour
     public bool playerMovement = false;
     private bool negativeDirection = false;
 
+    private GameObject clawL;
+    private GameObject clawR;
+    private float clawWidth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,37 +42,46 @@ public class ClawMovementKinematic : MonoBehaviour
         GameObject WristKinematic = GameObject.Find("Wrist_Kinematic");
         Wrist_Kinematic_Collider = WristKinematic.GetComponent<BoxCollider>();
 
+        clawL = GameObject.Find("Claw_L");
+        clawR = GameObject.Find("Claw_R");
+
+        clawWidth = clawL.transform.localScale.x;
+
         if (transform.localPosition.x < 0)
         {
             negativeDirection = true;
+            stopDistance =  gameObject.transform.localScale.x / 2f;
+        }
+        else
+        {
+            stopDistance = -gameObject.transform.localScale.x / 2f;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if (canClose && Input.GetKey(KeyCode.E))
+
+        if (Input.GetKey(KeyCode.E))
         {
-            position = transform.localPosition;
-            position.x += (moveSpeed * Time.deltaTime) * transform.right.x;
+            position = transform.localPosition; position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), -stopDistance, 2);
             transform.localPosition = position;
             playerMovement = true;
-
-
-        } else if (Input.GetKey(KeyCode.Q))
+        }
+        else if (canClose && Input.GetKey(KeyCode.Q))
         {
-            position = transform.localPosition;
-            position.x -= (moveSpeed * Time.deltaTime) * transform.right.x;
+            position = transform.localPosition;position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), -stopDistance, 2);
             transform.localPosition = position;
-
-            if
-
             playerMovement = true;
         }
         else
-        {
+        { 
             playerMovement = false;        
+        }
+
+        if (Mathf.Abs(clawL.transform.localPosition.x) != Mathf.Abs(clawR.transform.localPosition.x))
+        {
+            clawL.transform.localPosition = new Vector3(-clawR.transform.localPosition.x, 0, 0);
         }
 
         // Begin box cast
@@ -125,5 +139,18 @@ public class ClawMovementKinematic : MonoBehaviour
         {
             Gizmos.DrawWireCube(transform.position + transform.right * castDistance, transform.localScale);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Grabbable")
+        {
+            canClose = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        canClose = true;
     }
 }
