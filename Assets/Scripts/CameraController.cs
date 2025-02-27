@@ -37,8 +37,8 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        leftShoulder.transform.position = movementAnchor.transform.position + (Vector3.left * 3);
-        rightShoulder.transform.position = movementAnchor.transform.position + (Vector3.right * 3);
+        leftShoulder.transform.position = movementAnchor.transform.position + (Vector3.left * 3) + Vector3.back + (Vector3.up * 0.5f);
+        rightShoulder.transform.position = movementAnchor.transform.position + (Vector3.right * 3) + Vector3.back + (Vector3.up * 0.5f);
 
         if (Input.GetKeyDown(KeyCode.Keypad8)) switchCamera("up");
         if (Input.GetKeyDown(KeyCode.Keypad2)) switchCamera("down");
@@ -58,6 +58,7 @@ public class CameraController : MonoBehaviour
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
 
+            onLeftShoulder = false;
             onLeftView = false;
         }
 
@@ -71,6 +72,7 @@ public class CameraController : MonoBehaviour
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
 
+            onLeftShoulder = false;
             onLeftView = false;
         }
 
@@ -93,11 +95,29 @@ public class CameraController : MonoBehaviour
             }
 
             onLeftView = !onLeftView;
+            onLeftShoulder = false;
         }
 
         if (directionPressed == "right")
         {
+            topDown.enabled = false;
+            firstPerson.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
+            leftShoulder.enabled = false;
+            rightShoulder.enabled = false;
 
+            if (!onLeftShoulder)
+            {
+                leftShoulder.enabled = true;
+            }
+            else
+            {
+                rightShoulder.enabled = true;
+            }
+
+            onLeftShoulder = !onLeftShoulder;
+            onLeftView = false;
         }
     }
     
