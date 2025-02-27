@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public BackAndForth movementAnchor;
+
     public Camera topDown;
     public Camera firstPerson;
     public Camera leftView;
@@ -13,10 +15,15 @@ public class CameraController : MonoBehaviour
 
     public bool onLeftView;
     public bool onLeftShoulder;
+    
 
+    
     // Start is called before the first frame update
     void Start()
     {
+        movementAnchor = FindObjectOfType<BackAndForth>();
+
+        /*
         firstPerson.enabled = true;
 
         topDown.enabled = false;
@@ -24,11 +31,15 @@ public class CameraController : MonoBehaviour
         rightView.enabled = false;
         leftShoulder.enabled = false;
         rightShoulder.enabled = false;
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
+        leftShoulder.transform.position = movementAnchor.transform.position + (Vector3.left * 3);
+        rightShoulder.transform.position = movementAnchor.transform.position + (Vector3.right * 3);
+
         if (Input.GetKeyDown(KeyCode.Keypad8)) switchCamera("up");
         if (Input.GetKeyDown(KeyCode.Keypad2)) switchCamera("down");
     }
@@ -57,4 +68,5 @@ public class CameraController : MonoBehaviour
             rightShoulder.enabled = false;
         }
     }
+    
 }
