@@ -20,7 +20,6 @@ public class ClawParent : MonoBehaviour
     private bool clawGrabbing = false;
     private GameObject grabbedObject = null;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -37,11 +36,24 @@ public class ClawParent : MonoBehaviour
                 Claw_L_CS.gameObject.transform.localScale.y,
                 Claw_L_CS.gameObject.transform.localScale.z);
         }
+
+        if (!Claw_L_CS.canClose && !Claw_R_CS.canClose)
+        {
+            if (Claw_L_CS.hitObject == Claw_R_CS.hitObject && objectsInClaw.Contains(Claw_L_CS.hitObject))
+            {
+                clawIsGrabbing(Claw_L_CS.hitObject);
+            }
+        }
+
+        if (Claw_L_CS.canClose && Claw_R_CS.canClose && objectsInClaw.Contains(grabbedObject))
+        {
+            UnparentObject(grabbedObject);
+        }
     }
 
     public void clawIsGrabbing(GameObject objectToGrab = null)
     {
-        if (clawGrabbing == false && objectToGrab == null)
+        if ((clawGrabbing == false && objectToGrab == null || objectsInClaw.Contains(objectToGrab)) && Claw_L_CS.canClose && Claw_R_CS.canClose) 
         {
             UnparentObject(grabbedObject);
             // Debug.Log("clawGrabbing = false & objectToGrab = null.");
@@ -50,14 +62,13 @@ public class ClawParent : MonoBehaviour
         {
             clawGrabbing = true;
             // Debug.Log("clawGrabbing = false & objectToGrab exists.");
-        } else if (clawGrabbing == true && objectToGrab == null)
+        } else if (clawGrabbing == true && objectToGrab == null || Claw_L_CS.canClose && Claw_R_CS.canClose)
         {
             clawGrabbing = false; 
             // Debug.Log("clawGrabbing = true & objectToGrab = null.");
         } else 
         { 
             ParentGrabbedObject(objectToGrab);
-            grabbedObject = objectToGrab;
             // Debug.Log("clawGrabbing = true & objectToGrab exists."); 
         }
     }
@@ -69,6 +80,7 @@ public class ClawParent : MonoBehaviour
             newChild.transform.parent = gameObject.transform;
             newChild.GetComponent<Rigidbody>().useGravity = false;
             newChild.GetComponent<Rigidbody>().isKinematic = true;
+            grabbedObject = newChild;
         }
     }
 

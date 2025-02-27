@@ -7,7 +7,7 @@ public class ClawGrabManager : MonoBehaviour
     [SerializeField] private DummyMovement dummyMovement;
     [SerializeField] private ClawGrabChild LeggyLeftClaw;
     [SerializeField] private ClawGrabChild LeggyRightClaw;
-    [SerializeField] private GameObject leggyWrist;
+    [SerializeField] private GameObject leggyWrist; 
 
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private float moveSpeed = 1f;

@@ -4,15 +4,16 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ClawMovementKinematic : MonoBehaviour
 {
+    public GameObject hitobjectFlag;
+
     public BoxCollider Wrist_Kinematic_Collider;
     public float moveSpeed = 1.0f;
-    public float stopDistance = 0.5f;
+    private float stopDistance = 0.5f;
 
-    private bool canClose = true;
+    public bool canClose = true;
     private Vector3 position;
     private Collider clawCollider;
     private ClawParent clawParent;
@@ -22,7 +23,7 @@ public class ClawMovementKinematic : MonoBehaviour
     private float successfulGrabRange = 0.5f;
 
     private float distanceToCenter;
-    private GameObject hitObject;
+    public GameObject hitObject;
 
     public bool playerMovement = false;
     private bool negativeDirection = false;
@@ -98,6 +99,7 @@ public class ClawMovementKinematic : MonoBehaviour
             hitObject = hitResult.transform.gameObject;
             distanceToCenter = Vector3.Distance(hitObject.GetComponent<Rigidbody>().centerOfMass, clawCollider.bounds.center);
             
+
             // Prevent intersections
             if (!gameObject.CompareTag(hitObject.tag))
             {
@@ -107,6 +109,8 @@ public class ClawMovementKinematic : MonoBehaviour
             // Do this if the box cast is not hitting a claw
             if (!(hitObject.CompareTag("ClawL") || hitObject.CompareTag("ClawR")))
             {
+                hitobjectFlag.transform.position = hitObject.transform.position;
+                
                 if (Input.GetKey(KeyCode.E))
                 {
                     if (distanceToCenter < successfulGrabRange)
@@ -114,6 +118,7 @@ public class ClawMovementKinematic : MonoBehaviour
                         clawParent.clawIsGrabbing(hitObject.gameObject);
                         // Debug.Log("Notify ClawParent that claw is touching " + hitObject.name);
                     }
+                   
                 }
             }
 
@@ -133,10 +138,12 @@ public class ClawMovementKinematic : MonoBehaviour
 
         if (castHit && hitResult.transform != null && !(gameObject.CompareTag(hitResult.transform.gameObject.tag)))
         {
+            //Gizmos.matrix = Matrix4x4.TRS(new Vector3(0,0,0), transform.rotation, transform.localScale);
             Gizmos.DrawWireCube(transform.position + transform.right * hitResult.distance, transform.localScale);
         }
         else
         {
+            //Gizmos.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), transform.rotation, transform.localScale);
             Gizmos.DrawWireCube(transform.position + transform.right * castDistance, transform.localScale);
         }
     }
