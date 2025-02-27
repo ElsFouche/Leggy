@@ -22,8 +22,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         movementAnchor = FindObjectOfType<BackAndForth>();
-
-        /*
+        
         firstPerson.enabled = true;
 
         topDown.enabled = false;
@@ -31,7 +30,8 @@ public class CameraController : MonoBehaviour
         rightView.enabled = false;
         leftShoulder.enabled = false;
         rightShoulder.enabled = false;
-        */
+
+        onLeftView = false;
     }
 
     // Update is called once per frame
@@ -42,6 +42,8 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Keypad8)) switchCamera("up");
         if (Input.GetKeyDown(KeyCode.Keypad2)) switchCamera("down");
+        if (Input.GetKeyDown(KeyCode.Keypad4)) switchCamera("left");
+        if (Input.GetKeyDown(KeyCode.Keypad6)) switchCamera("right");
     }
 
     public void switchCamera(string directionPressed)
@@ -55,6 +57,8 @@ public class CameraController : MonoBehaviour
             rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
+
+            onLeftView = false;
         }
 
         if (directionPressed == "down")
@@ -66,6 +70,34 @@ public class CameraController : MonoBehaviour
             rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
+
+            onLeftView = false;
+        }
+
+        if (directionPressed == "left")
+        {
+            topDown.enabled = false;
+            firstPerson.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
+            leftShoulder.enabled = false;
+            rightShoulder.enabled = false;
+
+            if (!onLeftView)
+            {
+                leftView.enabled = true;
+            }
+            else
+            {
+                rightView.enabled = true;
+            }
+
+            onLeftView = !onLeftView;
+        }
+
+        if (directionPressed == "right")
+        {
+
         }
     }
     
