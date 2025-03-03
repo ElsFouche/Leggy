@@ -40,10 +40,10 @@ public class CameraController : MonoBehaviour
         leftShoulder.transform.position = movementAnchor.transform.position + (Vector3.left * 3) + Vector3.back + (Vector3.up * 0.5f);
         rightShoulder.transform.position = movementAnchor.transform.position + (Vector3.right * 3) + Vector3.back + (Vector3.up * 0.5f);
 
-        if (Input.GetKeyDown(KeyCode.Keypad8)) switchCamera("up");
-        if (Input.GetKeyDown(KeyCode.Keypad2)) switchCamera("down");
-        if (Input.GetKeyDown(KeyCode.Keypad4)) switchCamera("left");
-        if (Input.GetKeyDown(KeyCode.Keypad6)) switchCamera("right");
+        if (Input.GetKeyDown(KeyCode.UpArrow)) switchCamera("up");
+        if (Input.GetKeyDown(KeyCode.DownArrow)) switchCamera("down");
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) switchCamera("left");
+        if (Input.GetKeyDown(KeyCode.RightArrow)) switchCamera("right");
     }
 
     public void switchCamera(string directionPressed)
