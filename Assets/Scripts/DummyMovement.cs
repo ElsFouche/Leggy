@@ -46,32 +46,39 @@ public class DummyMovement : MonoBehaviour
         HandleClawMovement();
         EnforceSymmetricClawMovement();
         ClampClawPosition();
-        //Debug.Log(ClawLeftRB.velocity + "a");
 
-        if (closing && (ClawLeftRB.velocity.magnitude < .01f || ClawRightRB.velocity.magnitude < .01f))
+        //if (closing && (ClawLeftRB.velocity.magnitude < .01f || ClawRightRB.velocity.magnitude < .01f) || (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact))
+        if (closing && (LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact))
         {
-            //Debug.Log(ClawLeftRB.velocity.magnitude + " : " + ClawRightRB.velocity.magnitude);
             closed = true;
-            //.isKinematic = true;
-            //ClawRightRB.isKinematic = true;
+        }
+        // Resets claws if they manage to go past each other and
+        if (ClawRight.transform.localPosition.x < -0.1 || ClawLeft.transform.localPosition.x > 0.1 )
+        {
+            ClawRight.transform.localPosition = new Vector3(-0.1f, 0,0);
+            ClawLeft.transform.localPosition = new Vector3(0.1f, 0, 0);
+
+            closed = true;
+            closing = false;
         }
 
-        // Resets claws if they manage to go past each other and
-        if (ClawRight.transform.localPosition.x < -0.1 || ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x > 0.1 || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
+        if (opening && !opened && ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
         {
-            ResetClawPosition();
+            ClawRight.transform.localPosition = ClawRightOrigin;
+            ClawLeft.transform.localPosition = ClawLeftOrigin;
+
+            opened = true;
+            opening = false;
         }
     }
 
-
-
     private void HandleClawMovement()
     {
-        /*
+        
         if (ClawRight.transform.localPosition.x > ClawRightOrigin.x || ClawLeft.transform.localPosition.x < ClawLeftOrigin.x)
         {
-            ResetClawPosition();
-        }*/
+            //ResetClawPosition();
+        }
 
         // Left click opens claw
         if (Input.GetMouseButtonDown(1) && !opened || opening)
@@ -80,7 +87,7 @@ public class DummyMovement : MonoBehaviour
         }
 
         // Right click closes claw
-        if (Input.GetMouseButtonDown(0) || closing)
+        if (Input.GetMouseButtonDown(0) || closing && !LeggyLeftClaw.clawsTouchingEachOther && !LeggyRightClaw.clawsTouchingEachOther)
         {
             CloseClaw();
         }
@@ -111,12 +118,9 @@ public class DummyMovement : MonoBehaviour
         closing = false;
         opened = false;
 
-        // Prevents RB from getting affected from seperate Obj
-        ClawLeftRB.isKinematic = false;
-        ClawRightRB.isKinematic = false;
+        ClawLeft.transform.localPosition += transform.right * speed;
+        ClawRight.transform.localPosition += -transform.right * speed;
 
-        ClawLeftRB.AddForce(-transform.right * speed, ForceMode.Acceleration);
-        ClawRightRB.AddForce(transform.right * speed, ForceMode.Acceleration);
     }
 
     private void CloseClaw()
@@ -130,18 +134,25 @@ public class DummyMovement : MonoBehaviour
         ClawRightRB.isKinematic = false;
         //Debug.Log("closing claw: " + closing);
         Vector3 clawClosingDirection = clawEmptyParent.transform.right;
-        ClawLeftRB.AddForce(clawClosingDirection * speed, ForceMode.Acceleration);
-        ClawRightRB.AddForce(-clawClosingDirection * speed, ForceMode.Acceleration);
+        ClawLeft.transform.localPosition += -transform.right * speed;
+        ClawRight.transform.localPosition += transform.right *   speed;
 
+        //Debug.Log("boop " + ClawLeft.transform.localPosition + " : " + ClawRight.transform.localPosition);
         if (LeggyLeftClaw.clawTriggerContact && !LeggyRightClaw.clawTriggerContact) 
         {
-            ClawLeftRB.AddForce(transform.right * speed);
-            
+            ClawLeft.transform.localPosition -= transform.right * speed;
+            if (LeggyLeftClaw.touchingObject != null)
+            {
+                LeggyLeftClaw.touchingObject.transform.localPosition -= new Vector3(Time.deltaTime * speed, 0, 0);
+            }
         }
         if(!LeggyLeftClaw.clawTriggerContact && LeggyRightClaw.clawTriggerContact)
         {
-
-            ClawRightRB.AddForce(-transform.right * speed);
+            ClawRight.transform.localPosition += transform.right * speed;
+            if (LeggyRightClaw.touchingObject != null)
+            {
+                LeggyRightClaw.touchingObject.transform.localPosition += new Vector3(Time.deltaTime * speed, 0, 0);
+            }
         }
     }
 
@@ -155,37 +166,7 @@ public class DummyMovement : MonoBehaviour
 
         ClawLeftRB.isKinematic = true;
         ClawRightRB.isKinematic = true;
-        /*
-        ClawLeftRB.velocity = Vector3.zero;
-        ClawRightRB.velocity = Vector3.zero;
-
-        ClawLeftRB.angularVelocity = Vector3.zero;
-        ClawRightRB.angularVelocity = Vector3.zero;
-        */
     }
-
-    /* old version of trigger enter parrenting system which would kick in if the rigidbodies didnt register objects | Unreliable ):
-    private void OnTriggerStay(Collider other)
-    {
-
-        Debug.Log("contact: " + closing);
-        if (other.CompareTag("Grabbable") && closing)
-        {
-            TriggerParrent = true;
-            Debug.Log("entered");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Grabbable"))
-        {
-            TriggerParrent = false;
-            Debug.Log("exited");
-        }
-    }
-    */
-
     void EnforceSymmetricClawMovement()
     {
         
