@@ -80,6 +80,7 @@ public class ClawMovementKinematic : MonoBehaviour
             playerMovement = false;        
         }
 
+        
         if (Mathf.Abs(clawL.transform.localPosition.x) != Mathf.Abs(clawR.transform.localPosition.x))
         {
             clawL.transform.localPosition = new Vector3(-clawR.transform.localPosition.x, 0, 0);
@@ -160,4 +161,21 @@ public class ClawMovementKinematic : MonoBehaviour
     {
         canClose = true;
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Grabbable"))
+        {
+            canClose = false;
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Grabbable"))
+        {
+            canClose = true;
+        }
+    }
+
 }
