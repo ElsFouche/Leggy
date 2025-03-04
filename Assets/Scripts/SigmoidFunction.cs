@@ -7,7 +7,11 @@ public class SigmoidFunction : MonoBehaviour
     public int minSigmoid;
     public int maxSigmoid;
 
+    [Tooltip("Amount of seconds before happiness starts depleting.")]
     public int buffer;
+
+    [Tooltip("Amount of seconds to reach the highest point in the sigmoid curve.")]
+    public int timeFrame;
 
     public AnimationCurve sigmoidCurve;
 

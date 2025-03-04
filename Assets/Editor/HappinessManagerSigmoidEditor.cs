@@ -22,7 +22,7 @@ public class HappinessManagerSigmoidEditor : Editor
 
         var curveField = new CurveField("Sigmoid Curve");
         curveField.value = new AnimationCurve(new Keyframe (0 + sigmoidFunction.buffer, 0, 0, 0),
-            new Keyframe(1 + sigmoidFunction.buffer, 1, 0, 0));
+            new Keyframe(sigmoidFunction.timeFrame + sigmoidFunction.buffer, 1, 0, 0));
 
         curveField.RegisterValueChangedCallback(evt =>
         {
