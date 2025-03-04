@@ -15,7 +15,9 @@ public class HappinessManager : MonoBehaviour
     public TextMeshProUGUI happinessDisplay;
     public int happinessCount;
     public int maxDepressor;
-    public float depressorMultiplier;
+    public int minSigmoid;
+    public int maxSigmoid;
+    //public float depressorMultiplier;
     float timer;
 
     public bool isVisible;
@@ -55,7 +57,7 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
-        int depression = Mathf.RoundToInt(maxDepressor * depressorMultiplier);
+        int depression = maxDepressor;
 
         if (isVisible)
         {

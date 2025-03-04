@@ -171,7 +171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &91127743
 Transform:
   m_ObjectHideFlags: 0
@@ -306,7 +306,8 @@ MonoBehaviour:
   happinessDisplay: {fileID: 1957512097}
   happinessCount: 9500
   maxDepressor: 50
-  depressorMultiplier: 1
+  minSigmoid: 0
+  maxSigmoid: 0
   isVisible: 0
   backgroundBar: {fileID: 750553180}
   backgroundDepressLayer: {fileID: 295886042}
@@ -1393,7 +1394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &555276520
 RectTransform:
   m_ObjectHideFlags: 0
