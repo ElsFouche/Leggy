@@ -38,6 +38,11 @@ public class TransitionManager : MonoBehaviour
             StartCoroutine(blackFadeOut());
             happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
         }
+        else
+        {
+            blackScreen.gameObject.SetActive(false);
+            loreText.gameObject.SetActive(false);
+        }
     }
 
     
@@ -45,22 +50,13 @@ public class TransitionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (!isTransitioning)
-            {
-                isTransitioning = true;
-                if (SceneManager.GetActiveScene().buildIndex > 0)
-                {
-                    happinessManager.GetComponent<HappinessManager>().isVisible = false;
-                }
-                StartCoroutine(fadeToBlack());
-            }
-        }
+        
     }
 
     public IEnumerator fadeToBlack()
     {
+        blackScreen.gameObject.SetActive(true);
+        loreText.gameObject.SetActive(true);
         while (blackScreen.GetComponent<Image>().color.a < 1.0f)
         {
             blackScreen.GetComponent<Image>().color = new Color
