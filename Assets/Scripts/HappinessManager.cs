@@ -15,8 +15,6 @@ public class HappinessManager : MonoBehaviour
     public TextMeshProUGUI happinessDisplay;
     public int happinessCount;
     public int maxDepressor;
-    public int minSigmoid;
-    public int maxSigmoid;
     //public float depressorMultiplier;
     float timer;
 
@@ -32,9 +30,13 @@ public class HappinessManager : MonoBehaviour
 
     public int extraExcitedThreshold;
 
+    public SigmoidFunction sigmoidFunction;
+
     // Start is called before the first frame update
     void Start()
     {
+        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
     }

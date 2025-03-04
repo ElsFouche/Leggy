@@ -5,11 +5,17 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-[CustomEditor(typeof(HappinessManager))]
+[CustomEditor(typeof(SigmoidFunction))]
 public class HappinessManagerSigmoidEditor : Editor
 {
+    public VisualTreeAsset visualTree;
+
     public override VisualElement CreateInspectorGUI()
     {
-        return base.CreateInspectorGUI();
+        VisualElement root = new VisualElement();
+
+        visualTree.CloneTree(root);
+
+        return root;
     }
 }
