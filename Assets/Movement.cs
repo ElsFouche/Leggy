@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
@@ -13,56 +11,77 @@ public class Movement : MonoBehaviour
     public float minY = 0f, maxY = 5f;
     public float minZ = -5f, maxZ = 5f;
 
-    private void Start()
+    private Vector2 moveInput;
+    private float rotateInput;
+
+    private ClawControls controls;
+
+    public float holdTime = 2.0f;
+    private float timeHeld = 0f;
+
+    private bool isResetting = false;
+
+    private void Awake()
     {
-        position = transform.position;
+        controls = new ClawControls();
+
+        controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+
+        controls.Player.RotateLeft.performed += ctx => rotateInput = 1;
+        controls.Player.RotateLeft.canceled += ctx => rotateInput = 0;
+        controls.Player.RotateRight.performed += ctx => rotateInput = -1;
+        controls.Player.RotateRight.canceled += ctx => rotateInput = 0;
+
+        controls.Player.ResetLevel.performed += ctx => StartHoldReset();
+        controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
     }
 
-    // Update is called once per frame
+    private void OnEnable() => controls.Enable();
+    private void OnDisable() => controls.Disable();
+
+    void Start() => position = transform.position;
+
     void Update()
     {
-        position = transform.position;
-
-        // Movement
-        if (Input.GetKey(KeyCode.A))
-        {
-            position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), minX, maxX);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), minX, maxX);
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            position.z = Mathf.Clamp(position.z + (moveSpeed * Time.deltaTime), minZ, maxZ);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            position.z = Mathf.Clamp(position.z - (moveSpeed * Time.deltaTime), minZ, maxZ);
-        }
-
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            position.y = Mathf.Clamp(position.y + (moveSpeed * Time.deltaTime), minY, maxY);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            position.y = Mathf.Clamp(position.y - (moveSpeed * Time.deltaTime), minY, maxY);
-        }
-
+        position.x = Mathf.Clamp(position.x + (moveInput.x * moveSpeed * Time.deltaTime), minX, maxX);
+        position.z = Mathf.Clamp(position.z + (moveInput.y * moveSpeed * Time.deltaTime), minZ, maxZ);
         transform.position = position;
 
-        // Rotation
         rotation = transform.localEulerAngles;
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rotation.z -= moveSpeed * 10 * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rotation.z += moveSpeed * 10 * Time.deltaTime;
-        }
+        rotation.z += rotateInput * moveSpeed * 10 * Time.deltaTime;
         transform.localEulerAngles = rotation;
+
+        if (isResetting)
+        {
+            timeHeld += Time.deltaTime;
+            if (timeHeld >= holdTime)
+            {
+                ResetLevel();
+                timeHeld = 0f;
+            }
+        }
+
+        float rightStickY = controls.Player.MoveRightStick.ReadValue<Vector2>().y;
+        position.y = Mathf.Clamp(position.y + (rightStickY * moveSpeed * Time.deltaTime), minY, maxY);
+        transform.position = position;
+    }
+
+    private void StartHoldReset()
+    {
+        isResetting = true;
+        timeHeld = 0f;
+    }
+
+    private void StopHoldReset()
+    {
+        isResetting = false;
+        timeHeld = 0f;
+    }
+
+    private void ResetLevel()
+    {
+        Debug.Log("Resetting the level...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }
