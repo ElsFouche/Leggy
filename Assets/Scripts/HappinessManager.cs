@@ -28,6 +28,8 @@ public class HappinessManager : MonoBehaviour
     bool decreasing;
     public bool buffering;
 
+    public int extraExcitedThreshold;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,24 +42,15 @@ public class HappinessManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            speaker.clip = emotes[0];
-            happinessCount += extraHappy;
-            speaker.Play();
-            updateThousands();
+            maxHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            speaker.clip = emotes[1];
-            happinessCount += happy;
-            speaker.Play();
-            updateThousands();
+            normalHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            speaker.clip = emotes[2];
-            happinessCount += sad;
-            speaker.Play();
-            updateThousands();
+            getDepressed();
         }
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
@@ -123,5 +116,60 @@ public class HappinessManager : MonoBehaviour
         buffering = true;
         yield return new WaitForSeconds(0.78695f);
         buffering = false;
+    }
+
+    public void gainHappiness(int happinessToGain)
+    {
+        happinessCount += happinessToGain;
+
+        if (happinessToGain <= 0)
+        {
+            return;
+        }
+        else if (happinessToGain >= extraExcitedThreshold)
+        {
+            speaker.clip = emotes[0];
+        }
+        else
+        {
+            speaker.clip = emotes[1];
+        }
+
+        speaker.Play();
+        updateThousands();
+    }
+
+    public void loseHappiness(int happinessToLose)
+    {
+        speaker.clip = emotes[2];
+        happinessCount -= happinessToLose;
+        speaker.Play();
+        updateThousands();
+    }
+
+
+
+    public void maxHappy()
+    {
+        speaker.clip = emotes[0];
+        happinessCount += extraHappy;
+        speaker.Play();
+        updateThousands();
+    }
+
+    public void normalHappy()
+    {
+        speaker.clip = emotes[1];
+        happinessCount += happy;
+        speaker.Play();
+        updateThousands();
+    }
+
+    public void getDepressed()
+    {
+        speaker.clip = emotes[2];
+        happinessCount += sad;
+        speaker.Play();
+        updateThousands();
     }
 }
