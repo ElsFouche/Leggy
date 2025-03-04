@@ -1102,8 +1102,6 @@ Transform:
   - {fileID: 757328287}
   - {fileID: 1784648233}
   - {fileID: 2081911567}
-  - {fileID: 1905140101}
-  - {fileID: 684596143}
   - {fileID: 1437374559}
   - {fileID: 1432435367}
   - {fileID: 1364385057}
@@ -4770,7 +4768,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &299685613
 Transform:
   m_ObjectHideFlags: 0
@@ -4780,7 +4778,7 @@ Transform:
   m_GameObject: {fileID: 299685612}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.142, y: 1.4760008, z: 28.644}
+  m_LocalPosition: {x: 11.142, y: 1.4760008, z: 29.835}
   m_LocalScale: {x: 2.4496, y: 2.4496, z: 2.4496}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4817,6 +4815,8 @@ Transform:
   - {fileID: 969123741}
   - {fileID: 1731045979}
   - {fileID: 1855966648}
+  - {fileID: 1905140101}
+  - {fileID: 684596143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &310814740
@@ -5850,7 +5850,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1.0000002, z: 0}
   m_Axis: {x: 1, y: -90, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.51441, y: -0.49569112, z: 0.25660035}
+  m_ConnectedAnchor: {x: -0.5144247, y: -0.49569112, z: 0.25659892}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -9729,7 +9729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &651150081
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14947,12 +14947,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684596142}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.6161, y: 0.3262063, z: 0.003645666}
-  m_LocalScale: {x: 0.24180005, y: 0.032711096, z: 0.2489242}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.14569812, y: 0.32620624, z: 0.003645577}
+  m_LocalScale: {x: 0.24180005, y: 0.032711092, z: 0.24892418}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 51129378}
+  m_Father: {fileID: 299685613}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!65 &684596144
 BoxCollider:
@@ -16417,7 +16417,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &784922632
 Transform:
   m_ObjectHideFlags: 0
@@ -20657,6 +20657,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 262432129509266264, guid: a792556ab0ae5014bb7695d941b0bc80, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1231312569285687381, guid: a792556ab0ae5014bb7695d941b0bc80, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.139
@@ -21527,7 +21531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1044277191
 Transform:
   m_ObjectHideFlags: 0
@@ -23327,7 +23331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1166134902
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28626,7 +28630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &1578529436
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -38583,12 +38587,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1905140100}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.6161, y: 0.0884766, z: 0.003645666}
-  m_LocalScale: {x: 0.24180005, y: 0.15472463, z: 0.2489242}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.14569812, y: 0.08847659, z: 0.003645577}
+  m_LocalScale: {x: 0.24180005, y: 0.15472461, z: 0.24892418}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 51129378}
+  m_Father: {fileID: 299685613}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!65 &1905140102
 BoxCollider:
