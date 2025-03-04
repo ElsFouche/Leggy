@@ -10,15 +10,19 @@ public class HappinessManagerSigmoidEditor : Editor
 {
     public VisualTreeAsset visualTree;
 
+    SigmoidFunction sigmoidFunction;
+
     public override VisualElement CreateInspectorGUI()
     {
         VisualElement root = new VisualElement();
 
+        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+
         visualTree.CloneTree(root);
 
         var curveField = new CurveField("Sigmoid Curve");
-        //curveField.value = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(0.5f, 0.5f, 1, 1),
-         //   new Keyframe(1, 1, 0, 0));
+        curveField.value = new AnimationCurve(new Keyframe (0 + sigmoidFunction.buffer, 0, 0, 0),
+            new Keyframe(1 + sigmoidFunction.buffer, 1, 0, 0));
 
         curveField.RegisterValueChangedCallback(evt =>
         {
