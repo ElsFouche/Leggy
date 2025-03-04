@@ -174,7 +174,6 @@ public class ClawGrabManager : MonoBehaviour
                 heldObjectRb.useGravity = true;
                 heldObjectRb = null;
             }
-
             
             Debug.Log("Object released: " + heldObject.name);
             heldObject = null;

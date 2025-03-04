@@ -6,7 +6,6 @@ public class ClawMovementKinematic : MonoBehaviour
     public GameObject hitobjectFlag;
     public BoxCollider Wrist_Kinematic_Collider;
     public float moveSpeed = 1.0f;
-    private float stopDistance = 0.5f;
     public bool canClose = true;
 
     private Vector3 position;
@@ -22,7 +21,6 @@ public class ClawMovementKinematic : MonoBehaviour
     private bool negativeDirection = false;
     private GameObject clawL;
     private GameObject clawR;
-    private float clawWidth;
 
     // Input System
     private InputAction moveClawAction;
@@ -32,6 +30,7 @@ public class ClawMovementKinematic : MonoBehaviour
     private float moveInput;
     private bool openClawInput;
     private bool closeClawInput;
+    private float stopMin, stopMax;
 
     private void Awake()
     {
@@ -61,35 +60,36 @@ public class ClawMovementKinematic : MonoBehaviour
     void Start()
     {
         clawParent = transform.parent.GetComponent<ClawParent>();
-        clawCollider = transform.GetComponent<Collider>();
-        position = transform.localPosition;
+        clawCollider = GetComponent<Collider>();
         castDistance = clawParent.castDistance;
         successfulGrabRange = clawParent.maxGrabRange;
-        GameObject WristKinematic = GameObject.Find("Wrist_Kinematic");
-        Wrist_Kinematic_Collider = WristKinematic.GetComponent<BoxCollider>();
 
         clawL = GameObject.Find("Claw_L");
         clawR = GameObject.Find("Claw_R");
-        clawWidth = clawL.transform.localScale.x;
 
-        if (transform.localPosition.x < 0)
+        // Set correct stop limits and movement direction
+        if (transform.localPosition.x < 0) // Left Claw
         {
             negativeDirection = true;
-            stopDistance = gameObject.transform.localScale.x / 2f;
+            stopMin = -2f;
+            stopMax = -0.05f;
         }
-        else
+        else // Right Claw
         {
-            stopDistance = -gameObject.transform.localScale.x / 2f;
+            negativeDirection = false;
+            stopMin = 0.05f;
+            stopMax = 2f;
         }
     }
 
     void Update()
     {
+        position = transform.localPosition;
+
         // Move claw with Left/Right Stick or Q/E keys
         if (moveInput != 0)
         {
-            position = transform.localPosition;
-            position.x = Mathf.Clamp(position.x + (moveInput * moveSpeed * Time.deltaTime), -stopDistance, 2);
+            position.x = Mathf.Clamp(position.x + (moveInput * moveSpeed * Time.deltaTime), stopMin, stopMax);
             transform.localPosition = position;
             playerMovement = true;
         }
@@ -98,27 +98,27 @@ public class ClawMovementKinematic : MonoBehaviour
             playerMovement = false;
         }
 
-        // Opening and closing the claw with bumpers
-        if (openClawInput)
+        // **Opening & Closing Logic (Left/Right Claw Differentiation)**
+        if (closeClawInput && canClose) // **Right Trigger - CLOSE Claw**
         {
-            position = transform.localPosition;
-            position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), -stopDistance, 2);
+            if (negativeDirection) // **Left Claw - Move Right to Close**
+                position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
+            else // **Right Claw - Move Left to Close**
+                position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
+
             transform.localPosition = position;
         }
-        else if (closeClawInput && canClose)
+        else if (openClawInput) // **Left Trigger - OPEN Claw**
         {
-            position = transform.localPosition;
-            position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), -stopDistance, 2);
+            if (negativeDirection) // **Left Claw - Move Left to Open**
+                position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
+            else // **Right Claw - Move Right to Open**
+                position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
+
             transform.localPosition = position;
         }
 
-        //perhaps issue with this having positional bias?
-        if (Mathf.Abs(clawL.transform.localPosition.x) != Mathf.Abs(clawR.transform.localPosition.x))
-        {
-            clawL.transform.localPosition = new Vector3(-clawR.transform.localPosition.x, 0, 0);
-        }
-
-        // Begin box cast
+        // BoxCast for detecting objects
         castHit = Physics.BoxCast(clawCollider.bounds.center,
                                   transform.localScale * 0.5f,
                                   transform.right,
@@ -158,4 +158,35 @@ public class ClawMovementKinematic : MonoBehaviour
             hitObject = null;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the object is grabbable
+        if (other.CompareTag("Grabbable"))
+        {
+            hitObject = other.gameObject; // Store the grabbable object
+            hitobjectFlag.transform.position = hitObject.transform.position; // Move hitobjectFlag
+
+            // Optional: If you're doing something specific on grab
+            if (openClawInput && Vector3.Distance(hitObject.transform.position, transform.position) < successfulGrabRange)
+            {
+                clawParent.clawIsGrabbing(hitObject); // Trigger the grab action
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Grabbable"))
+        {
+            // When an object exits the trigger zone, reset the hitObject
+            if (hitObject == other.gameObject)
+            {
+                hitObject = null;
+                canClose = true;
+            }
+        }
+    }
+
+
 }

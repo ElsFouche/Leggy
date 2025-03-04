@@ -26,23 +26,22 @@ public class ClawParent : MonoBehaviour
 
     }
 
-    private void Update()
+    void Update()
     {
-        //dynamic sizing of the trigger for things in claw
+        // Dynamically adjust trigger size based on claw positions
         if (Claw_L_CS.playerMovement || Claw_R_CS.playerMovement)
         {
-            GetComponent<BoxCollider>().size = new Vector3 (
-                MathF.Abs(Claw_L_CS.gameObject.transform.localPosition.x * 2) - Claw_L_CS.transform.localScale.x, 
-                Claw_L_CS.gameObject.transform.localScale.y,
-                Claw_L_CS.gameObject.transform.localScale.z);
+            // Adjust the box collider size of the trigger area (assuming box collider is on ClawParent)
+            GetComponent<BoxCollider>().size = new Vector3(
+                Mathf.Abs(Claw_L_CS.gameObject.transform.localPosition.x - Claw_R_CS.gameObject.transform.localPosition.x),
+                GetComponent<BoxCollider>().size.y,
+                GetComponent<BoxCollider>().size.z);
         }
 
-        if (!Claw_L_CS.canClose && !Claw_R_CS.canClose)
+        // Perform grab check
+        if (!Claw_L_CS.canClose && !Claw_R_CS.canClose && Claw_L_CS.hitObject == Claw_R_CS.hitObject && objectsInClaw.Contains(Claw_L_CS.hitObject))
         {
-            if (Claw_L_CS.hitObject == Claw_R_CS.hitObject && objectsInClaw.Contains(Claw_L_CS.hitObject))
-            {
-                clawIsGrabbing(Claw_L_CS.hitObject);
-            }
+            clawIsGrabbing(Claw_L_CS.hitObject);
         }
 
         if (Claw_L_CS.canClose && Claw_R_CS.canClose && objectsInClaw.Contains(grabbedObject))
@@ -51,27 +50,34 @@ public class ClawParent : MonoBehaviour
         }
     }
 
+
     public void clawIsGrabbing(GameObject objectToGrab = null)
     {
-        if ((clawGrabbing == false && objectToGrab == null || objectsInClaw.Contains(objectToGrab)) && Claw_L_CS.canClose && Claw_R_CS.canClose) 
+        // If neither claw is closing or we're trying to grab an object that's already being grabbed
+        if (clawGrabbing == false && objectToGrab == null && Claw_L_CS.canClose && Claw_R_CS.canClose)
         {
+            // If the claws are open and we don't have anything grabbed, stop grabbing
             UnparentObject(grabbedObject);
-            // Debug.Log("clawGrabbing = false & objectToGrab = null.");
         }
         else if (clawGrabbing == false && objectToGrab != null)
         {
+            // If we are not grabbing anything and the object exists, grab it
             clawGrabbing = true;
-            // Debug.Log("clawGrabbing = false & objectToGrab exists.");
-        } else if (clawGrabbing == true && objectToGrab == null || Claw_L_CS.canClose && Claw_R_CS.canClose)
-        {
-            clawGrabbing = false; 
-            // Debug.Log("clawGrabbing = true & objectToGrab = null.");
-        } else 
-        { 
             ParentGrabbedObject(objectToGrab);
-            // Debug.Log("clawGrabbing = true & objectToGrab exists."); 
+        }
+        else if (clawGrabbing == true && objectToGrab == null && Claw_L_CS.canClose && Claw_R_CS.canClose)
+        {
+            // If both claws are closing and nothing is grabbed, stop grabbing
+            clawGrabbing = false;
+            UnparentObject(grabbedObject);
+        }
+        else
+        {
+            // If we are grabbing something and both claws are open, release it
+            ParentGrabbedObject(objectToGrab);
         }
     }
+
 
     private void ParentGrabbedObject(GameObject newChild)
     {
@@ -104,6 +110,23 @@ public class ClawParent : MonoBehaviour
             objectsInClaw.Add(other.gameObject);
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Grabbable"))
+        {
+            // If the object is in range and the claws are fully open, unparent the object
+            if (Claw_L_CS.canClose && Claw_R_CS.canClose && !objectsInClaw.Contains(other.gameObject))
+            {
+                objectsInClaw.Add(other.gameObject);
+            }
+            else if (!Claw_L_CS.canClose && !Claw_R_CS.canClose)
+            {
+                // If the claws are fully open and the object is no longer in the area, unparent it
+                UnparentObject(other.gameObject);
+            }
+        }
+    }
+
 
     private void OnTriggerExit(Collider other)
     {

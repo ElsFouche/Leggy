@@ -70,8 +70,8 @@ public class LeggyCarrotOnStick : MonoBehaviour
         // Get the wrist Z rotation directly from PlayerControlScript
         float wristZRotation = playerControl.GetWristZRotation();
 
-        // Clamp wrist Z rotation to avoid excessive rotation
-        //wristZRotation = Mathf.Clamp(wristZRotation, -90f, 90f); // Example limits, adjust as needed
+        // Clamp wrist Z rotation to avoid excessive rotation if needed (you can adjust the limits)
+        wristZRotation = Mathf.Clamp(wristZRotation, -90f, 90f); // Example limits, adjust as needed
 
         // Calculate the look-at rotation for the wrist, ignoring Z rotation
         Quaternion lookAtRotation = Quaternion.LookRotation(directionToCarrot);
@@ -79,10 +79,16 @@ public class LeggyCarrotOnStick : MonoBehaviour
         // Extract the current Euler angles of the look-at rotation
         Vector3 lookAtEuler = lookAtRotation.eulerAngles;
 
-        // Combine the Z rotation of the LookAt and the player's input
-        float combinedZRotation = Mathf.LerpAngle(lookAtEuler.z, wristZRotation, 0.5f); 
-        lookAtEuler.z = combinedZRotation;
+        // Smooth the interpolation between the current Z rotation and the target wristZRotation
+        float smoothZRotation = Mathf.MoveTowardsAngle(lookAtEuler.z, wristZRotation, moveSpeed * Time.deltaTime);
+
+        // Set the smoothed Z rotation to the look-at rotation
+        lookAtEuler.z = smoothZRotation;
+
+        // Reapply the updated Euler angles back to the look-at rotation
         lookAtRotation = Quaternion.Euler(lookAtEuler);
+
+        // Set the final local rotation to the wrist pivot
         LeggyWristPivot.transform.localRotation = lookAtRotation;
     }
 

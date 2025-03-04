@@ -98,6 +98,15 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Dpad"",
+                    ""type"": ""Value"",
+                    ""id"": ""5b7aaeb7-dd71-4d7a-b9a3-c170b045ca3b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -340,6 +349,17 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MoveRightStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a3247f6-f636-4e8e-8051-395c04dd84f1"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dpad"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -935,6 +955,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         m_Player_RotateRight = m_Player.FindAction("RotateRight", throwIfNotFound: true);
         m_Player_ResetLevel = m_Player.FindAction("ResetLevel", throwIfNotFound: true);
         m_Player_MoveRightStick = m_Player.FindAction("MoveRightStick", throwIfNotFound: true);
+        m_Player_Dpad = m_Player.FindAction("Dpad", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1016,6 +1037,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateRight;
     private readonly InputAction m_Player_ResetLevel;
     private readonly InputAction m_Player_MoveRightStick;
+    private readonly InputAction m_Player_Dpad;
     public struct PlayerActions
     {
         private @ClawControls m_Wrapper;
@@ -1028,6 +1050,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         public InputAction @RotateRight => m_Wrapper.m_Player_RotateRight;
         public InputAction @ResetLevel => m_Wrapper.m_Player_ResetLevel;
         public InputAction @MoveRightStick => m_Wrapper.m_Player_MoveRightStick;
+        public InputAction @Dpad => m_Wrapper.m_Player_Dpad;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1061,6 +1084,9 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @MoveRightStick.started += instance.OnMoveRightStick;
             @MoveRightStick.performed += instance.OnMoveRightStick;
             @MoveRightStick.canceled += instance.OnMoveRightStick;
+            @Dpad.started += instance.OnDpad;
+            @Dpad.performed += instance.OnDpad;
+            @Dpad.canceled += instance.OnDpad;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1089,6 +1115,9 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @MoveRightStick.started -= instance.OnMoveRightStick;
             @MoveRightStick.performed -= instance.OnMoveRightStick;
             @MoveRightStick.canceled -= instance.OnMoveRightStick;
+            @Dpad.started -= instance.OnDpad;
+            @Dpad.performed -= instance.OnDpad;
+            @Dpad.canceled -= instance.OnDpad;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1279,6 +1308,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         void OnRotateRight(InputAction.CallbackContext context);
         void OnResetLevel(InputAction.CallbackContext context);
         void OnMoveRightStick(InputAction.CallbackContext context);
+        void OnDpad(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
