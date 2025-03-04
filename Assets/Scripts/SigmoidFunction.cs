@@ -7,6 +7,10 @@ public class SigmoidFunction : MonoBehaviour
     public int minSigmoid;
     public int maxSigmoid;
 
+    public int buffer;
+
+    public AnimationCurve sigmoidCurve;
+
     // Start is called before the first frame update
     void Start()
     {
