@@ -71,7 +71,7 @@ public class LeggyCarrotOnStick : MonoBehaviour
         float wristZRotation = playerControl.GetWristZRotation();
 
         // Clamp wrist Z rotation to avoid excessive rotation
-        //wristZRotation = Mathf.Clamp(wristZRotation, -90f, 90f);
+        //wristZRotation = Mathf.Clamp(wristZRotation, -90f, 90f); // Example limits, adjust as needed
 
         // Calculate the look-at rotation for the wrist, ignoring Z rotation
         Quaternion lookAtRotation = Quaternion.LookRotation(directionToCarrot);

@@ -112,6 +112,7 @@ public class ClawMovementKinematic : MonoBehaviour
             transform.localPosition = position;
         }
 
+        //perhaps issue with this having positional bias?
         if (Mathf.Abs(clawL.transform.localPosition.x) != Mathf.Abs(clawR.transform.localPosition.x))
         {
             clawL.transform.localPosition = new Vector3(-clawR.transform.localPosition.x, 0, 0);

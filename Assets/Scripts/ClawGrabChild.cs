@@ -12,24 +12,19 @@ public class ClawGrabChild : MonoBehaviour
     public LayerMask grabbableLayer;
     public bool rightClaw;
 
-
-    public bool clawsTouchingEachOther = false;
-    public GameObject touchingObject;
-
-
     private void FixedUpdate()
     {
         //Raycasts for the raycast version of grab
         Vector3 rayDirection = rightClaw ? -transform.right : transform.right;
-        Debug.DrawRay(transform.position, rayDirection * raycastDistance, Color.green); 
+        Debug.DrawRay(transform.position, rayDirection * raycastDistance, Color.green);
         // Perform a BoxCast to detect objects within the claw range
         RaycastHit hit;
-        if (Physics.BoxCast(transform.position, boxSize / 2, rayDirection, out hit, transform.rotation, raycastDistance))
+        if (Physics.BoxCast(transform.position, boxSize / 2, rayDirection, out hit, transform.rotation, raycastDistance, grabbableLayer))
         {
             if (hit.collider.CompareTag("Grabbable"))
             {
                 clawTriggerContact = true;
-                //Debug.Log("Object in center of claw: " + hit.collider.gameObject.name);
+                Debug.Log("Object in center of claw: " + hit.collider.gameObject.name);
             }
         }
         else
@@ -55,25 +50,12 @@ public class ClawGrabChild : MonoBehaviour
             isGrabbing = false;
         }
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("LeggyClaw"))
-        {
-            clawsTouchingEachOther = true;
-        }
-        if (other.CompareTag("Grabbable"))
-        {
-            clawTriggerContact = true;
-            touchingObject = other.gameObject;
-        }
-    }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = true;
-            touchingObject = other.gameObject;
         }
     }
 
@@ -82,11 +64,6 @@ public class ClawGrabChild : MonoBehaviour
         if (other.CompareTag("Grabbable"))
         {
             clawTriggerContact = false;
-            touchingObject = null;
-        }
-        if (other.CompareTag("LeggyClaw"))
-        {
-            clawsTouchingEachOther = false;
         }
     }
 }

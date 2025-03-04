@@ -7,7 +7,6 @@ public class ClawGrabManager : MonoBehaviour
     [SerializeField] private DummyMovement dummyMovement;
     [SerializeField] private ClawGrabChild LeggyLeftClaw;
     [SerializeField] private ClawGrabChild LeggyRightClaw;
-    [SerializeField] private GameObject leggyWrist; 
 
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private float moveSpeed = 1f;
@@ -16,7 +15,6 @@ public class ClawGrabManager : MonoBehaviour
     private Rigidbody heldObjectRb = null;
 
     public bool grabParrent = false;
-    public bool grabbing = false;
 
     private Rigidbody selfRB;
     private void Start()
@@ -48,8 +46,6 @@ public class ClawGrabManager : MonoBehaviour
     {
         // Move the object towards the center of the BoxCollider
         Vector3 center = boxCollider.transform.position;
-        Rigidbody objRB = obj.GetComponent<Rigidbody>();
-        objRB.isKinematic = true;
         obj.transform.position = Vector3.MoveTowards(obj.transform.position, center, moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -141,18 +137,14 @@ public class ClawGrabManager : MonoBehaviour
     private void ParentObject(GameObject obj)
     {
         heldObject = obj;
-        heldObjectRb = heldObject.GetComponent<Rigidbody>();
-        
+        heldObjectRb = heldObject.GetComponent<Rigidbody>(); // Get Rigidbody
+        heldObject.transform.SetParent(transform); // Parent to the arm or main object
+
         GameObject closestObject = GetClosestObjectInBoxCollider();
         MoveObjectToCenter(closestObject);
-        heldObjectRb.useGravity = false;
 
-        closestObject.transform.position = transform.position;
-        closestObject.transform.rotation = Quaternion.Euler(
-            leggyWrist.transform.localRotation.x, //+ heldObject.transform.localRotation.x,
-            leggyWrist.transform.localRotation.y, //+ heldObject.transform.localRotation.y,
-            leggyWrist.transform.localRotation.z); //+ heldObject.transform.localRotation.z);
-
+        heldObjectRb.useGravity = false; // Disable gravity while holding
+        
 
         Debug.Log("Object grasped: " + heldObject.name);
         grabParrent = true;
