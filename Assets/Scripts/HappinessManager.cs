@@ -59,7 +59,7 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
-        int depression = maxDepressor;
+        //int depression = maxDepressor;
 
         if (isVisible)
         {
