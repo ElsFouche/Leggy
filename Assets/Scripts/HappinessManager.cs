@@ -63,6 +63,7 @@ public class HappinessManager : MonoBehaviour
 
         if (isVisible)
         {
+            /*
             timer += Time.deltaTime;
             if (timer >= 1)
             {
@@ -74,6 +75,7 @@ public class HappinessManager : MonoBehaviour
                 updateThousands();
                 StartCoroutine(testing());
             }
+            */
         }
 
         float test = 0f;
