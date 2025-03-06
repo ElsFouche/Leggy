@@ -41,6 +41,9 @@ public class HappinessManager : MonoBehaviour
         updateThousands();
     }
 
+    private float depressionFactor;
+    private float depressionTime;
+
     // Update is called once per frame
     void Update()
     {
@@ -100,6 +103,10 @@ public class HappinessManager : MonoBehaviour
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
     }
+
+    
+
+    
 
     public void updateThousands()
     {
