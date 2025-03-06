@@ -18,7 +18,7 @@ public class ClawParent : MonoBehaviour
 
     // private List<GameObject> objectsToGrab;
     private bool clawGrabbing = false;
-    private GameObject grabbedObject = null;
+    public GameObject grabbedObject = null;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +29,9 @@ public class ClawParent : MonoBehaviour
     void Update()
     {
         // Dynamically adjust trigger size based on claw positions
-        if (Claw_L_CS.playerMovement || Claw_R_CS.playerMovement)
+        //if (Claw_L_CS.playerMovement || Claw_R_CS.playerMovement)
         {
+            Debug.Log("claws moving");
             // Adjust the box collider size of the trigger area (assuming box collider is on ClawParent)
             GetComponent<BoxCollider>().size = new Vector3(
                 Mathf.Abs(Claw_L_CS.gameObject.transform.localPosition.x - Claw_R_CS.gameObject.transform.localPosition.x),
@@ -42,19 +43,33 @@ public class ClawParent : MonoBehaviour
         if (!Claw_L_CS.canClose && !Claw_R_CS.canClose && Claw_L_CS.hitObject == Claw_R_CS.hitObject && objectsInClaw.Contains(Claw_L_CS.hitObject))
         {
             clawIsGrabbing(Claw_L_CS.hitObject);
+            clawGrabbing = true;
         }
 
-        if (Claw_L_CS.canClose && Claw_R_CS.canClose && objectsInClaw.Contains(grabbedObject))
+        if (Claw_L_CS.canClose || Claw_R_CS.canClose)
         {
-            UnparentObject(grabbedObject);
+            if (grabbedObject != null)
+            {
+                UnparentObject(grabbedObject);
+            }
+            else
+            {
+                CheckForFloater();
+            }
         }
+
+    }
+
+    private void FixedUpdate()
+    {
+        CheckForFloater();
     }
 
 
     public void clawIsGrabbing(GameObject objectToGrab = null)
     {
         // If neither claw is closing or we're trying to grab an object that's already being grabbed
-        if (clawGrabbing == false && objectToGrab == null && Claw_L_CS.canClose && Claw_R_CS.canClose)
+        if (clawGrabbing == false && objectToGrab == null && (Claw_L_CS.canClose || Claw_R_CS.canClose))
         {
             // If the claws are open and we don't have anything grabbed, stop grabbing
             UnparentObject(grabbedObject);
@@ -63,6 +78,7 @@ public class ClawParent : MonoBehaviour
         {
             // If we are not grabbing anything and the object exists, grab it
             clawGrabbing = true;
+            Debug.Log("Grabbing: " + objectToGrab);
             ParentGrabbedObject(objectToGrab);
         }
         else if (clawGrabbing == true && objectToGrab == null && Claw_L_CS.canClose && Claw_R_CS.canClose)
@@ -110,29 +126,28 @@ public class ClawParent : MonoBehaviour
             objectsInClaw.Add(other.gameObject);
         }
     }
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Grabbable"))
-        {
-            // If the object is in range and the claws are fully open, unparent the object
-            if (Claw_L_CS.canClose && Claw_R_CS.canClose && !objectsInClaw.Contains(other.gameObject))
-            {
-                objectsInClaw.Add(other.gameObject);
-            }
-            else if (!Claw_L_CS.canClose && !Claw_R_CS.canClose)
-            {
-                // If the claws are fully open and the object is no longer in the area, unparent it
-                UnparentObject(other.gameObject);
-            }
-        }
-    }
-
 
     private void OnTriggerExit(Collider other)
     {
         if (other.name != "Claw_L" && other.name != "Claw_R")
         {
             objectsInClaw.Remove(other.gameObject);
+        }
+    }
+
+    private void CheckForFloater()
+    {
+        foreach (Transform child in this.transform)
+        {
+            if (child.gameObject.tag == "Grabbable" && !objectsInClaw.Contains(child.gameObject))
+            {
+                UnparentObject(child.gameObject);
+            }
+            else if (grabbedObject != null && grabbedObject != child.gameObject && child.gameObject.tag == "Grabbable")
+            {
+                UnparentObject(child.gameObject);
+                grabbedObject = null;
+            }
         }
     }
 }

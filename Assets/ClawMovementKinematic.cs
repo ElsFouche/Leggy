@@ -1,192 +1,210 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
+    using UnityEngine;
+    using UnityEngine.InputSystem;
 
-public class ClawMovementKinematic : MonoBehaviour
-{
-    public GameObject hitobjectFlag;
-    public BoxCollider Wrist_Kinematic_Collider;
-    public float moveSpeed = 1.0f;
-    public bool canClose = true;
-
-    private Vector3 position;
-    private Collider clawCollider;
-    private ClawParent clawParent;
-    private float castDistance;
-    private RaycastHit hitResult;
-    private bool castHit = false;
-    private float successfulGrabRange = 0.5f;
-    private float distanceToCenter;
-    public GameObject hitObject;
-    public bool playerMovement = false;
-    private bool negativeDirection = false;
-    private GameObject clawL;
-    private GameObject clawR;
-
-    // Input System
-    private InputAction moveClawAction;
-    private InputAction openClawAction;
-    private InputAction closeClawAction;
-
-    private float moveInput;
-    private bool openClawInput;
-    private bool closeClawInput;
-    private float stopMin, stopMax;
-
-    private void Awake()
+    public class ClawMovementKinematic : MonoBehaviour
     {
-        var controls = new ClawControls();
-        openClawAction = controls.Player.OpenClaw;
-        closeClawAction = controls.Player.CloseClaw;
+        public GameObject hitobjectFlag;
+        public BoxCollider Wrist_Kinematic_Collider;
+        public float moveSpeed = 1.0f;
+        public bool canClose = true;
 
-        openClawAction.performed += ctx => openClawInput = true;
-        openClawAction.canceled += ctx => openClawInput = false;
+        private Vector3 position;
+        private Collider clawCollider;
+        private ClawParent clawParent;
+        private float castDistance;
+        private RaycastHit hitResult;
+        private bool castHit = false;
+        private float successfulGrabRange = 0.5f;
+        private float distanceToCenter;
+        public GameObject hitObject;
+        public bool playerMovement = false;
+        private bool negativeDirection = false;
+        private GameObject clawL;
+        private GameObject clawR;
 
-        closeClawAction.performed += ctx => closeClawInput = true;
-        closeClawAction.canceled += ctx => closeClawInput = false;
-    }
+        // Input System
+        private InputAction moveClawAction;
+        private InputAction openClawAction;
+        private InputAction closeClawAction;
 
-    private void OnEnable()
-    {
-        openClawAction.Enable();
-        closeClawAction.Enable();
-    }
+        private float moveInput;
+        private bool openClawInput;
+        private bool closeClawInput;
+        private float stopMin, stopMax;
 
-    private void OnDisable()
-    {
-        openClawAction.Disable();
-        closeClawAction.Disable();
-    }
-
-    void Start()
-    {
-        clawParent = transform.parent.GetComponent<ClawParent>();
-        clawCollider = GetComponent<Collider>();
-        castDistance = clawParent.castDistance;
-        successfulGrabRange = clawParent.maxGrabRange;
-
-        clawL = GameObject.Find("Claw_L");
-        clawR = GameObject.Find("Claw_R");
-
-        // Set correct stop limits and movement direction
-        if (transform.localPosition.x < 0) // Left Claw
+        private void Awake()
         {
-            negativeDirection = true;
-            stopMin = -2f;
-            stopMax = -0.05f;
-        }
-        else // Right Claw
-        {
-            negativeDirection = false;
-            stopMin = 0.05f;
-            stopMax = 2f;
-        }
-    }
+            var controls = new ClawControls();
+            openClawAction = controls.Player.OpenClaw;
+            closeClawAction = controls.Player.CloseClaw;
 
-    void Update()
-    {
-        position = transform.localPosition;
+            openClawAction.performed += ctx => openClawInput = true;
+            openClawAction.canceled += ctx => openClawInput = false;
 
-        // Move claw with Left/Right Stick or Q/E keys
-        if (moveInput != 0)
-        {
-            position.x = Mathf.Clamp(position.x + (moveInput * moveSpeed * Time.deltaTime), stopMin, stopMax);
-            transform.localPosition = position;
-            playerMovement = true;
-        }
-        else
-        {
-            playerMovement = false;
+            closeClawAction.performed += ctx => closeClawInput = true;
+            closeClawAction.canceled += ctx => closeClawInput = false;
         }
 
-        // **Opening & Closing Logic (Left/Right Claw Differentiation)**
-        if (closeClawInput && canClose) // **Right Trigger - CLOSE Claw**
+        private void OnEnable()
         {
-            if (negativeDirection) // **Left Claw - Move Right to Close**
-                position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
-            else // **Right Claw - Move Left to Close**
-                position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
-
-            transform.localPosition = position;
-        }
-        else if (openClawInput) // **Left Trigger - OPEN Claw**
-        {
-            if (negativeDirection) // **Left Claw - Move Left to Open**
-                position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
-            else // **Right Claw - Move Right to Open**
-                position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
-
-            transform.localPosition = position;
+            openClawAction.Enable();
+            closeClawAction.Enable();
         }
 
-        // BoxCast for detecting objects
-        castHit = Physics.BoxCast(clawCollider.bounds.center,
-                                  transform.localScale * 0.5f,
-                                  transform.right,
-                                  out hitResult,
-                                  transform.localRotation,
-                                  castDistance);
-
-        if (castHit && hitResult.transform.CompareTag("Grabbable"))
+        private void OnDisable()
         {
-            hitObject = hitResult.transform.gameObject;
-            distanceToCenter = Vector3.Distance(hitObject.GetComponent<Rigidbody>().centerOfMass, clawCollider.bounds.center);
+            openClawAction.Disable();
+            closeClawAction.Disable();
+        }
 
-            if (!gameObject.CompareTag(hitObject.tag))
+        void Start()
+        {
+            clawParent = transform.parent.GetComponent<ClawParent>();
+            clawCollider = GetComponent<Collider>();
+            castDistance = clawParent.castDistance;
+            successfulGrabRange = clawParent.maxGrabRange;
+
+            clawL = GameObject.Find("Claw_L");
+            clawR = GameObject.Find("Claw_R");
+
+            // Set correct stop limits and movement direction
+            if (transform.localPosition.x < 0) // Left Claw
             {
-                canClose = false;
+                negativeDirection = true;
+                stopMin = -2f;
+                stopMax = -0.05f;
+            }
+            else // Right Claw
+            {
+                negativeDirection = false;
+                stopMin = 0.05f;
+                stopMax = 2f;
+            }
+        }
+
+        void Update()
+        {
+            position = transform.localPosition;
+
+            // Move claw with Left/Right Stick or Q/E keys
+            if (moveInput != 0)
+            {
+                position.x = Mathf.Clamp(position.x + (moveInput * moveSpeed * Time.deltaTime), stopMin, stopMax);
+                transform.localPosition = position;
+                playerMovement = true;
+            }
+            else
+            {
+                playerMovement = false;
             }
 
-            if (!(hitObject.CompareTag("ClawL") || hitObject.CompareTag("ClawR")))
+        
+            if (closeClawInput && canClose) 
             {
-                hitobjectFlag.transform.position = hitObject.transform.position;
+                if (negativeDirection) 
+                    position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
+                else 
+                    position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
 
-                if (openClawInput && distanceToCenter < successfulGrabRange)
+                playerMovement = true;
+                transform.localPosition = position;
+            }
+            else if (openClawInput)
+            {
+                if (negativeDirection)
+                    position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
+                else
+                    position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
+                playerMovement = true;
+                transform.localPosition = position;
+                //clawParent.clawIsGrabbing();
+            
+            }
+
+            // BoxCast for detecting objects
+            castHit = Physics.BoxCast(clawCollider.bounds.center,
+                                      transform.localScale * 0.5f,
+                                      transform.right,
+                                      out hitResult,
+                                      transform.localRotation,
+                                      castDistance);
+
+            if (castHit && hitResult.transform.CompareTag("Grabbable"))
+            {
+                hitObject = hitResult.transform.gameObject;
+                distanceToCenter = Vector3.Distance(hitObject.GetComponent<Rigidbody>().centerOfMass, clawCollider.bounds.center);
+
+                if (!gameObject.CompareTag(hitObject.tag))
                 {
-                    clawParent.clawIsGrabbing(hitObject.gameObject);
+                    canClose = false;
+                }
+
+                if (!(hitObject.CompareTag("ClawL") || hitObject.CompareTag("ClawR")))
+                {
+                    hitobjectFlag.transform.position = hitObject.transform.position;
+
+                    if (openClawInput && distanceToCenter < successfulGrabRange)
+                    {
+                        clawParent.clawIsGrabbing(hitObject.gameObject);
+                    }
+                }
+
+                
+                if (distanceToCenter > successfulGrabRange)
+                {
+                    Debug.Log("Too far from target.");
+                    clawParent.clawIsGrabbing();
                 }
             }
-
-            if (distanceToCenter > successfulGrabRange)
+            else
             {
-                Debug.Log("Too far from target.");
-                clawParent.clawIsGrabbing();
+                canClose = true;
+                hitObject = null;
             }
         }
-        else
-        {
-            canClose = true;
-            hitObject = null;
-        }
-    }
 
-    private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
+        {
+            // Check if the object is grabbable
+            if (other.CompareTag("Grabbable"))
+            {
+                hitObject = other.gameObject;
+                hitobjectFlag.transform.position = hitObject.transform.position;
+
+                if (openClawInput && Vector3.Distance(hitObject.transform.position, transform.position) < successfulGrabRange)
+                {
+                    clawParent.clawIsGrabbing(hitObject); 
+                }
+            }
+        }
+
+        private void OnTriggerStary(Collider other)
     {
         // Check if the object is grabbable
         if (other.CompareTag("Grabbable"))
         {
-            hitObject = other.gameObject; // Store the grabbable object
-            hitobjectFlag.transform.position = hitObject.transform.position; // Move hitobjectFlag
+            hitObject = other.gameObject;
+            hitobjectFlag.transform.position = hitObject.transform.position;
 
-            // Optional: If you're doing something specific on grab
             if (openClawInput && Vector3.Distance(hitObject.transform.position, transform.position) < successfulGrabRange)
             {
-                clawParent.clawIsGrabbing(hitObject); // Trigger the grab action
+                clawParent.clawIsGrabbing(hitObject);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Grabbable"))
         {
-            // When an object exits the trigger zone, reset the hitObject
-            if (hitObject == other.gameObject)
+            if (other.CompareTag("Grabbable"))
             {
-                hitObject = null;
-                canClose = true;
+            
+                if (hitObject == other.gameObject)
+                {
+                    hitObject = null;
+                    canClose = true;
+                }
             }
         }
+
+
     }
-
-
-}
