@@ -32,6 +32,8 @@ public class HappinessManager : MonoBehaviour
 
     public SigmoidFunction sigmoidFunction;
 
+    bool startedFunction = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,9 +65,13 @@ public class HappinessManager : MonoBehaviour
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
         //int depression = maxDepressor;
-
-        if (isVisible)
+        
+        if (isVisible && !startedFunction)
         {
+            callCoroutine();
+
+
+
             /*
             timer += Time.deltaTime;
             if (timer >= 1)
@@ -103,11 +109,30 @@ public class HappinessManager : MonoBehaviour
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
     }
+    
+    public void callCoroutine()
+    {
+        StartCoroutine(artificialDelay());
+        startedFunction = true;
+    }
+
+    public IEnumerator artificialDelay()
+    {
+        yield return new WaitForSeconds(sigmoidFunction.buffer);
+        StartCoroutine(startSigmoid());
+    }
+
+    float sigmoidTime = 0;
 
     private IEnumerator startSigmoid()
     {
+        sigmoidTime += Time.deltaTime;
+        sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
 
-        yield return null;
+        yield return new WaitForSeconds(Time.deltaTime * (sigmoidFunction.timeFrame / 2));
+
+        if (sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime) < 1) StartCoroutine(startSigmoid());
     }
 
     
