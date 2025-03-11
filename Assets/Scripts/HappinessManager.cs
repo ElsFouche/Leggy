@@ -104,7 +104,11 @@ public class HappinessManager : MonoBehaviour
         }
     }
 
-    
+    private IEnumerator startSigmoid()
+    {
+
+        yield return null;
+    }
 
     
 
