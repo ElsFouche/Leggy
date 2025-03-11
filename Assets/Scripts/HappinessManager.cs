@@ -112,15 +112,19 @@ public class HappinessManager : MonoBehaviour
     
     public void callCoroutine()
     {
-        StartCoroutine(artificialDelay());
+        StartCoroutine(startSigmoid());
         startedFunction = true;
     }
 
+    /*
     public IEnumerator artificialDelay()
     {
         yield return new WaitForSeconds(sigmoidFunction.buffer);
         StartCoroutine(startSigmoid());
+
+        yield return null;
     }
+    */
 
     float sigmoidTime = 0;
 
@@ -130,9 +134,9 @@ public class HappinessManager : MonoBehaviour
         sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
         Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
 
-        yield return new WaitForSeconds(Time.deltaTime * (sigmoidFunction.timeFrame / 2));
+        yield return new WaitForSeconds(Time.deltaTime);
 
-        if (sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime) < 1) StartCoroutine(startSigmoid());
+        if (sigmoidTime < sigmoidFunction.buffer + sigmoidFunction.timeFrame) StartCoroutine(startSigmoid());
     }
 
     

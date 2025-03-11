@@ -6,6 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 [CustomEditor(typeof(SigmoidFunction))]
+[ExecuteInEditMode]
 public class HappinessManagerSigmoidEditor : Editor
 {
     public VisualTreeAsset visualTree;
@@ -34,5 +35,12 @@ public class HappinessManagerSigmoidEditor : Editor
         root.Add(curveField);
 
         return root;
+    }
+
+
+    private void OnValidate()
+    {
+        CreateInspectorGUI();
+        //UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
     }
 }
