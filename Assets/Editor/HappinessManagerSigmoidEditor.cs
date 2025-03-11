@@ -22,7 +22,7 @@ public class HappinessManagerSigmoidEditor : Editor
         visualTree.CloneTree(root);
 
         var curveField = new CurveField("Sigmoid Curve");
-        curveField.value = new AnimationCurve(new Keyframe (0 + sigmoidFunction.buffer, 0, 0, 0),
+        curveField.value = new AnimationCurve(new Keyframe (sigmoidFunction.buffer, 0, 0, 0),
             new Keyframe(sigmoidFunction.timeFrame + sigmoidFunction.buffer, 1, 0, 0));
 
         curveField.RegisterValueChangedCallback(evt =>
@@ -40,7 +40,7 @@ public class HappinessManagerSigmoidEditor : Editor
 
     private void OnValidate()
     {
-        CreateInspectorGUI();
+        //CreateInspectorGUI();
         //UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
     }
 }
