@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class RigClawParrent : MonoBehaviour
 {
+    [SerializeField] WristMouth WristMouth;
+
     public Collider wristCollider; // Collider that detects objects
     public RigClawController clawController; // Reference to claw controller for grip pressure
 
@@ -12,24 +14,6 @@ public class RigClawParrent : MonoBehaviour
 
     private BasketData detectedBasket;
     private Transform grabbedObject;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        BasketData basket = other.GetComponentInParent<BasketData>();
-        if (basket != null)
-        {
-            detectedBasket = basket;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        BasketData basket = other.GetComponentInParent<BasketData>();
-        if (basket != null && basket == detectedBasket)
-        {
-            detectedBasket = null;
-        }
-    }
 
     private void Update()
     {
@@ -52,7 +36,7 @@ public class RigClawParrent : MonoBehaviour
 
     private void GrabObject(BasketData basket)
     {
-        if (grabbedObject == null)
+        if (grabbedObject == null && WristMouth.ObjectInClawMouth)
         {
             grabbedObject = basket.transform;
             grabbedObject.SetParent(heldItemParent); // Parent to the empty GameObject
