@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class SigmoidFunction : MonoBehaviour
@@ -15,7 +16,11 @@ public class SigmoidFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        /*
+        var curveField = new CurveField("Sigmoid Curve");
+        curveField.value = new AnimationCurve(new Keyframe(0, 0, 0, 0),
+            new Keyframe(timeFrame, 1, 0, 0));
+        */
     }
 
     // Update is called once per frame
