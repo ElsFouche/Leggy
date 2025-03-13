@@ -80,15 +80,19 @@ public class RigClawController : MonoBehaviour
 
     void Start()
     {
-        InitialBottomPos = B_ClawIK_target.gameObject.transform.localPosition;
-        InitialTopPos = T_ClawIK_target.gameObject.transform.localPosition;
-        botYRatio= InitialBottomPos.y / BottomTargetMin.y;
-        topYRatio = InitialTopPos.y / TopTargetMin.y;
+        InitialBottomPos = B_ClawIK_target.transform.localPosition;
+        InitialTopPos = T_ClawIK_target.transform.localPosition;
 
-        gripPreassure = (botYRatio + topYRatio) / 2;
+        // Normalize gripPreassure based on initial position
+        float bottomGrip = Mathf.InverseLerp(BottomTargetMin.y, BottomTargetMax.y, InitialBottomPos.y);
+        float topGrip = Mathf.InverseLerp(TopTargetMin.y, TopTargetMax.y, InitialTopPos.y);
 
-        Debug.Log("bot Grip %: " + botYRatio + " : top Grip % " + topYRatio);
+        // Average both to get initial grip strength
+        gripPreassure = (bottomGrip + topGrip) / 2f;
+
+        Debug.Log($"Initial Grip Pressure: {gripPreassure}");
     }
+
 
     void Update()
     {
@@ -96,36 +100,39 @@ public class RigClawController : MonoBehaviour
 
         if (closeClawInput && canClose)
         {
-            if (gripPreassure > 0.001)
+            if (gripPreassure > 0.001f)
             {
-                gripPreassure -= gripPreassure * moveSpeed;
-                B_ClawIK_target.transform.localPosition = new Vector3
-                    (B_ClawIK_target.transform.localPosition.x, 
-                    Mathf.Clamp(B_ClawIK_target.transform.localPosition.x * gripPreassure * botYRatio, BottomTargetMin.y, BottomTargetMin.y), 
-                    B_ClawIK_target.transform.localPosition.z);
-                Debug.Log("B_Claw " + B_ClawIK_target.transform.localPosition.y);
-                T_ClawIK_target.transform.localPosition = new Vector3
-                    (T_ClawIK_target.transform.localPosition.x,
-                    Mathf.Clamp(T_ClawIK_target.transform.localPosition.x * gripPreassure * botYRatio, TopTargetMin.y, TopTargetMin.y),
-                    T_ClawIK_target.transform.localPosition.z);
-                Debug.Log("T_Claw " + T_ClawIK_target.transform.localPosition.y);
+                gripPreassure = Mathf.MoveTowards(gripPreassure, 0, moveSpeed * Time.deltaTime);
+
+                B_ClawIK_target.transform.localPosition = Vector3.Lerp(BottomTargetMin, BottomTargetMax, gripPreassure);
+                T_ClawIK_target.transform.localPosition = Vector3.Lerp(TopTargetMin, TopTargetMax, gripPreassure);
+
+                Debug.Log($"Closing: B_Claw {B_ClawIK_target.transform.localPosition.y}, T_Claw {T_ClawIK_target.transform.localPosition.y}");
 
                 playerMovement = true;
             }
-            else { canClose = false; }
-
+            else
+            {
+                canClose = false; // Prevent further closing
+            }
         }
         else if (openClawInput)
         {
-            if (negativeDirection)
-                position.x = Mathf.Clamp(position.x - (moveSpeed * Time.deltaTime), stopMin, stopMax);
-            else
-                position.x = Mathf.Clamp(position.x + (moveSpeed * Time.deltaTime), stopMin, stopMax);
+            gripPreassure = Mathf.MoveTowards(gripPreassure, 1, moveSpeed * Time.deltaTime);
+
+            B_ClawIK_target.transform.localPosition = Vector3.Lerp(BottomTargetMin, BottomTargetMax, gripPreassure);
+            T_ClawIK_target.transform.localPosition = Vector3.Lerp(TopTargetMin, TopTargetMax, gripPreassure);
+
+            Debug.Log($"Opening: B_Claw {B_ClawIK_target.transform.localPosition.y}, T_Claw {T_ClawIK_target.transform.localPosition.y}");
+
             playerMovement = true;
-            transform.localPosition = position;
-            //clawParent.clawIsGrabbing();
 
+            // Reset `canClose` so the claw can close again after reaching max open
+            if (gripPreassure >= 1.0f)
+            {
+                canClose = true;
+            }
         }
-
     }
+
 }
