@@ -6,7 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 [CustomEditor(typeof(SigmoidFunction))]
-[ExecuteInEditMode]
+
 public class HappinessManagerSigmoidEditor : Editor
 {
     public VisualTreeAsset visualTree;
@@ -22,8 +22,8 @@ public class HappinessManagerSigmoidEditor : Editor
         visualTree.CloneTree(root);
 
         var curveField = new CurveField("Sigmoid Curve");
-        curveField.value = new AnimationCurve(new Keyframe (sigmoidFunction.buffer, 0, 0, 0),
-            new Keyframe(sigmoidFunction.timeFrame + sigmoidFunction.buffer, 1, 0, 0));
+        curveField.value = new AnimationCurve(new Keyframe (0, 0, 0, 0),
+            new Keyframe(sigmoidFunction.timeFrame, 1, 0, 0));
 
         curveField.RegisterValueChangedCallback(evt =>
         {
