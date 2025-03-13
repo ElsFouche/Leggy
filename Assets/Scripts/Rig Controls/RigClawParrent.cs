@@ -14,21 +14,37 @@ public class RigClawParrent : MonoBehaviour
 
     private BasketData detectedBasket;
     private Transform grabbedObject;
+    private float overpressureMultiplier = 0.2f; // Allowable overpressure percentage
 
     private void Update()
     {
+        // Only detect objects when grip pressure is NOT too high (claw isn't wide open)
+        if (WristMouth.ObjectDetected != null && clawController.gripPreassure <= 0.9f)
+        {
+            detectedBasket = WristMouth.ObjectDetected.GetComponent<BasketData>();
+        }
+        else
+        {
+            detectedBasket = null; // Prevent false detection when claw is too open
+        }
+
         if (detectedBasket != null)
         {
-            if (clawController.gripPreassure >= detectedBasket.requiredGripPressure)
+            float overpressureThreshold = detectedBasket.requiredGripPressure * (1 + overpressureMultiplier);
+
+            if (grabbedObject == null && clawController.gripPreassure <= detectedBasket.requiredGripPressure) // Inverted logic
             {
+                Debug.Log("Grabbing object: " + detectedBasket.name);
                 GrabObject(detectedBasket);
             }
-            else if (grabbedObject != null && clawController.gripPreassure < detectedBasket.requiredGripPressure)
+            else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure) // Inverted logic
             {
+                Debug.Log("Releasing object: " + grabbedObject.name);
                 ReleaseObject();
             }
-            else if (clawController.gripPreassure > detectedBasket.requiredGripPressure + 0.2f)
+            else if (grabbedObject != null && clawController.gripPreassure < detectedBasket.requiredGripPressure - overpressureThreshold) // Adjusted ejection threshold
             {
+                Debug.Log("Ejecting object: " + grabbedObject.name);
                 EjectObject();
             }
         }
@@ -36,12 +52,21 @@ public class RigClawParrent : MonoBehaviour
 
     private void GrabObject(BasketData basket)
     {
-        if (grabbedObject == null && WristMouth.ObjectInClawMouth)
+        if (grabbedObject == null && WristMouth.ObjectInClawMouth && clawController.gripPreassure <= basket.requiredGripPressure)
         {
             grabbedObject = basket.transform;
+
+            // Store world position/rotation before parenting
+            Vector3 worldPosition = grabbedObject.position;
+            Quaternion worldRotation = grabbedObject.rotation;
+            Vector3 originalScale = grabbedObject.localScale; // Preserve original scale
+
             grabbedObject.SetParent(heldItemParent); // Parent to the empty GameObject
-            grabbedObject.localPosition = Vector3.zero;
-            grabbedObject.localRotation = Quaternion.identity;
+
+            // Restore world position/rotation and maintain original scale
+            grabbedObject.position = worldPosition;
+            grabbedObject.rotation = worldRotation;
+            grabbedObject.localScale = originalScale; // Fix potential deformation
 
             if (basket.objectRigidbody != null)
             {
@@ -56,9 +81,12 @@ public class RigClawParrent : MonoBehaviour
         {
             grabbedObject.SetParent(null);
 
-            if (detectedBasket.objectRigidbody != null)
+            if (grabbedObject.TryGetComponent(out BasketData basket))
             {
-                detectedBasket.objectRigidbody.isKinematic = false;
+                if (basket.objectRigidbody != null)
+                {
+                    basket.objectRigidbody.isKinematic = false;
+                }
             }
 
             grabbedObject = null;
@@ -72,10 +100,13 @@ public class RigClawParrent : MonoBehaviour
         {
             grabbedObject.SetParent(null);
 
-            if (detectedBasket.objectRigidbody != null)
+            if (grabbedObject.TryGetComponent(out BasketData basket))
             {
-                detectedBasket.objectRigidbody.isKinematic = false;
-                detectedBasket.objectRigidbody.AddForce(transform.forward * 10f, ForceMode.Impulse);
+                if (basket.objectRigidbody != null)
+                {
+                    basket.objectRigidbody.isKinematic = false;
+                    basket.objectRigidbody.AddForce(transform.forward * 10f, ForceMode.Impulse);
+                }
             }
 
             grabbedObject = null;

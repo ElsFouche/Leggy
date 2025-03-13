@@ -53,8 +53,8 @@ public class RigClawController : MonoBehaviour
         B_ClawIK_target = GameObject.Find("B_ClawIK_target");
         T_ClawIK_target = GameObject.Find("T_ClawIK_target");
 
-        Bottom_Claw = GameObject.Find("RightTrigger");
-        Top_Claw = GameObject.Find("LeftTrigger");
+        //Bottom_Claw = GameObject.Find("RightTrigger");
+        //Top_Claw = GameObject.Find("LeftTrigger");
 
         var controls = new ClawControls();
         openClawAction = controls.Player.OpenClaw;
@@ -126,12 +126,7 @@ public class RigClawController : MonoBehaviour
             Debug.Log($"Opening: B_Claw {B_ClawIK_target.transform.localPosition.y}, T_Claw {T_ClawIK_target.transform.localPosition.y}");
 
             playerMovement = true;
-
-            // Reset `canClose` so the claw can close again after reaching max open
-            if (gripPreassure >= 1.0f)
-            {
-                canClose = true;
-            }
+            canClose = true;
         }
     }
 

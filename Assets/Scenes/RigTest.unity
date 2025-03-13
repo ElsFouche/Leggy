@@ -284,7 +284,6 @@ GameObject:
   - component: {fileID: 93787828}
   - component: {fileID: 93787832}
   - component: {fileID: 93787831}
-  - component: {fileID: 93787829}
   - component: {fileID: 93787833}
   m_Layer: 0
   m_Name: Cube
@@ -302,40 +301,12 @@ Transform:
   m_GameObject: {fileID: 93787827}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6715463, y: 0.9287581, z: -0.8930601}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1585058359}
-  m_Father: {fileID: 0}
+  m_Children: []
+  m_Father: {fileID: 1585058359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &93787829
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 93787827}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 3
 --- !u!23 &93787831
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -491,7 +462,7 @@ AimConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: -8.630132, y: -0, z: 0}
-  m_RotationOffset: {x: 49.335297, y: -177.8572, z: 2.2734687}
+  m_RotationOffset: {x: 49.335297, y: -177.8571, z: 2.2734685}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
@@ -1639,7 +1610,7 @@ AimConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: -7.159033, y: 1.1055523, z: -0.1063871}
-  m_RotationOffset: {x: -67.443214, y: 6.341495, z: -5.8481083}
+  m_RotationOffset: {x: -67.44323, y: 6.341497, z: -5.84811}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
@@ -2238,6 +2209,7 @@ GameObject:
   - component: {fileID: 1585058358}
   - component: {fileID: 1585058357}
   - component: {fileID: 1585058360}
+  - component: {fileID: 1585058361}
   m_Layer: 0
   m_Name: Basket
   m_TagString: Grabbable
@@ -2279,7 +2251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredGripPressure: 0.5
-  objectRigidbody: {fileID: 93787829}
+  objectRigidbody: {fileID: 1585058361}
 --- !u!4 &1585058359
 Transform:
   m_ObjectHideFlags: 0
@@ -2289,11 +2261,12 @@ Transform:
   m_GameObject: {fileID: 1585058356}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11.111111, y: 11.111111, z: 11.111111}
+  m_LocalPosition: {x: -0.6715463, y: 0.9287581, z: -0.8930601}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 93787828}
+  m_Children:
+  - {fileID: 93787828}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1585058360
 MeshFilter:
@@ -2303,6 +2276,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585058356}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1585058361
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585058356}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &1618353528 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1483652846134748764, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
@@ -2495,10 +2495,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0775244f0e7db014ca24026578bf0c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WristMouth: {fileID: 0}
-  wristCollider: {fileID: 0}
-  clawController: {fileID: 0}
-  heldItemParent: {fileID: 0}
+  WristMouth: {fileID: 173035098}
+  wristCollider: {fileID: 173035097}
+  clawController: {fileID: 1684521480}
+  heldItemParent: {fileID: 845057385}
 --- !u!114 &1684521480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2511,8 +2511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905954f1ff3e00640a54fb064dcb6c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  B_ClawIK_target: {fileID: 0}
-  T_ClawIK_target: {fileID: 0}
+  B_ClawIK_target: {fileID: 1496481923}
+  T_ClawIK_target: {fileID: 177010531}
   Bottom_Claw: {fileID: 0}
   Top_Claw: {fileID: 0}
   gripPreassure: 0
@@ -3181,4 +3181,4 @@ SceneRoots:
   - {fileID: 88459750}
   - {fileID: 1457748182}
   - {fileID: 392189594}
-  - {fileID: 93787828}
+  - {fileID: 1585058359}
