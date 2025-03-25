@@ -1208,6 +1208,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 210108486114279306, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: m_RotationOffset.x
+      value: -15.500011
+      objectReference: {fileID: 0}
+    - target: {fileID: 210108486114279306, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: m_RotationOffset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 355858528160576513, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x
       value: -1.4703953
@@ -1306,15 +1314,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x
-      value: 49.335224
+      value: 49.33522
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: -177.8569
+      value: -177.85689
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: 2.2735655
+      value: 2.273573
       objectReference: {fileID: 0}
     - target: {fileID: 4015819019322354130, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1418,11 +1426,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: 5.2437506
+      value: 5.2437677
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: -4.659623
+      value: -4.659644
       objectReference: {fileID: 0}
     - target: {fileID: 8050823504137590629, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x
@@ -1477,6 +1485,10 @@ PrefabInstance:
       value: -0.27
       objectReference: {fileID: 0}
     - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: ikMinY
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: gantryMaxX
       value: 5
       objectReference: {fileID: 0}
@@ -1484,6 +1496,18 @@ PrefabInstance:
       propertyPath: gantryMinX
       value: -5
       objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: ikMaxRotationZ
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: ikMinRotationZ
+      value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: parentGameObject
+      value: 
+      objectReference: {fileID: 584920655}
     - target: {fileID: 8839685165150919215, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_Name
       value: LeggyPlayer
@@ -1820,6 +1844,11 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &584920655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4911582541036461929, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+  m_PrefabInstance: {fileID: 467481921}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &605317453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2256653769447414955, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
