@@ -5,6 +5,7 @@ public class RigControls : MonoBehaviour
 {
     public GameObject ArmIK_target;
     public GameObject parentGameObject;
+    public GameObject armRotationObject;
     public float moveSpeed = 1.0f;
     public float rotationSpeed = 100f;
     public float baseRotationSpeed = 50f;
@@ -56,6 +57,7 @@ public class RigControls : MonoBehaviour
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
 
+        armRotationObject = GameObject.Find("Base_twist_int");
         ArmIK_target = GameObject.Find("ArmIK_target");
         if (ArmIK_target == null) Debug.LogError("ArmIK_target not found!");
 
@@ -100,7 +102,7 @@ public class RigControls : MonoBehaviour
         if (reachedZLimit && rightStickInput.x != 0)
         {
             float rotationDirection = -Mathf.Sign(rightStickInput.x);
-            parentGameObject.transform.Rotate(Vector3.up, rotationDirection * baseRotationSpeed * Time.deltaTime);
+            armRotationObject.transform.Rotate(Vector3.up, rotationDirection * baseRotationSpeed * Time.deltaTime); // may be funky
         }
 
         if (reachedXLimit && rightStickInput.y != 0)
@@ -115,10 +117,10 @@ public class RigControls : MonoBehaviour
         // Rotate body
         if (bodyRotationInput != 0)
         {
-            float newRotation = parentGameObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
+            float newRotation = armRotationObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
             if (newRotation > 180f) newRotation -= 360f;
             newRotation = Mathf.Clamp(newRotation, baseMinRotation, baseMaxRotation);
-            parentGameObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
+            armRotationObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
         }
 
         // Reset level if button is held
