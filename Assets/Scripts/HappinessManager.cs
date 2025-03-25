@@ -15,7 +15,7 @@ public class HappinessManager : MonoBehaviour
     public TextMeshProUGUI happinessDisplay;
     public int happinessCount;
     public int maxDepressor;
-    public float depressorMultiplier;
+    //public float depressorMultiplier;
     float timer;
 
     public bool isVisible;
@@ -30,12 +30,21 @@ public class HappinessManager : MonoBehaviour
 
     public int extraExcitedThreshold;
 
+    public SigmoidFunction sigmoidFunction;
+
+    bool startedFunction = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
     }
+
+    private float depressionFactor;
+    private float depressionTime;
 
     // Update is called once per frame
     void Update()
@@ -55,10 +64,15 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
-        int depression = Mathf.RoundToInt(maxDepressor * depressorMultiplier);
-
-        if (isVisible)
+        //int depression = maxDepressor;
+        
+        if (isVisible && !startedFunction)
         {
+            callCoroutine();
+
+
+
+            /*
             timer += Time.deltaTime;
             if (timer >= 1)
             {
@@ -70,6 +84,7 @@ public class HappinessManager : MonoBehaviour
                 updateThousands();
                 StartCoroutine(testing());
             }
+            */
         }
 
         float test = 0f;
@@ -94,6 +109,39 @@ public class HappinessManager : MonoBehaviour
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
     }
+    
+    public void callCoroutine()
+    {
+        StartCoroutine(artificialDelay());
+        startedFunction = true;
+    }
+
+    
+    public IEnumerator artificialDelay()
+    {
+        yield return new WaitForSeconds(sigmoidFunction.buffer);
+        StartCoroutine(startSigmoid());
+    }
+    
+
+    float sigmoidTime = 0;
+
+
+    private IEnumerator startSigmoid()
+    {
+        sigmoidTime += Time.deltaTime;
+        sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        //Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
+
+        float test = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        Debug.Log($"Curve Value at time {sigmoidTime}: {test}");
+
+        yield return new WaitForSeconds(Time.deltaTime);
+
+        if (sigmoidTime < sigmoidFunction.timeFrame) StartCoroutine(startSigmoid());
+    }
+
+    
 
     public void updateThousands()
     {
