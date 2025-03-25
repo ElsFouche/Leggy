@@ -30,31 +30,19 @@ public class RigClawParrent : MonoBehaviour
 
         if (detectedBasket != null)
         {
-<<<<<<< Updated upstream
             float overpressureThreshold = detectedBasket.requiredGripPressure * (1 + overpressureMultiplier);
 
             if (grabbedObject == null && clawController.gripPreassure <= detectedBasket.requiredGripPressure) // Inverted logic
-=======
-            if (clawController.gripPreassure <= detectedBasket.requiredGripPressure)
->>>>>>> Stashed changes
             {
                 Debug.Log("Grabbing object: " + detectedBasket.name);
                 GrabObject(detectedBasket);
             }
-<<<<<<< Updated upstream
             else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure) // Inverted logic
-=======
-            else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure)
->>>>>>> Stashed changes
             {
                 Debug.Log("Releasing object: " + grabbedObject.name);
                 ReleaseObject();
             }
-<<<<<<< Updated upstream
             else if (grabbedObject != null && clawController.gripPreassure < detectedBasket.requiredGripPressure - overpressureThreshold) // Adjusted ejection threshold
-=======
-            else if (clawController.gripPreassure < detectedBasket.requiredGripPressure - 0.2f)
->>>>>>> Stashed changes
             {
                 Debug.Log("Ejecting object: " + grabbedObject.name);
                 EjectObject();
