@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    public BackAndForth movementAnchor;
-
     public Camera topDown;
     public Camera firstPerson;
     public Camera leftView;
@@ -15,16 +12,20 @@ public class CameraController : MonoBehaviour
 
     public bool onLeftView;
     public bool onLeftShoulder;
-    
 
-    
+    private ClawControls controls; // Reference to the input controls
+
+    // Time variables for handling the delay between camera switches
+    public float switchDelay = 0.5f; // Delay between camera switches in seconds
+    private float lastSwitchTime; // Last time the camera was switched
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        movementAnchor = FindObjectOfType<BackAndForth>();
-        
-        firstPerson.enabled = true;
+        controls = new ClawControls(); // Initialize controls here
 
+        // Initially enable the first person view and disable others
+        firstPerson.enabled = true;
         topDown.enabled = false;
         leftView.enabled = false;
         rightView.enabled = false;
@@ -34,20 +35,31 @@ public class CameraController : MonoBehaviour
         onLeftView = false;
     }
 
+    private void OnEnable() => controls.Enable();
+    private void OnDisable() => controls.Disable();
+
     // Update is called once per frame
     void Update()
     {
-        leftShoulder.transform.position = movementAnchor.transform.position + (Vector3.left * 3) + Vector3.back + (Vector3.up * 0.5f);
-        rightShoulder.transform.position = movementAnchor.transform.position + (Vector3.right * 3) + Vector3.back + (Vector3.up * 0.5f);
+        // Get the D-pad input
+        Vector2 dpadInput = controls.Player.Dpad.ReadValue<Vector2>();
 
-        if (Input.GetKeyDown(KeyCode.UpArrow)) switchCamera("up");
-        if (Input.GetKeyDown(KeyCode.DownArrow)) switchCamera("down");
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) switchCamera("left");
-        if (Input.GetKeyDown(KeyCode.RightArrow)) switchCamera("right");
+        // Check if enough time has passed since the last camera switch
+        if (Time.time - lastSwitchTime >= switchDelay)
+        {
+            // Handle the camera switching
+            if (dpadInput.y > 0) SwitchCamera("up");   // D-pad up
+            else if (dpadInput.y < 0) SwitchCamera("down");  // D-pad down
+            else if (dpadInput.x < 0) SwitchCamera("left");  // D-pad left
+            else if (dpadInput.x > 0) SwitchCamera("right"); // D-pad right
+        }
     }
 
-    public void switchCamera(string directionPressed)
+    // Switch the camera based on the direction pressed
+    public void SwitchCamera(string directionPressed)
     {
+        lastSwitchTime = Time.time; // Update the last switch time
+
         if (directionPressed == "up")
         {
             firstPerson.enabled = true;
@@ -120,5 +132,4 @@ public class CameraController : MonoBehaviour
             onLeftView = false;
         }
     }
-    
 }
