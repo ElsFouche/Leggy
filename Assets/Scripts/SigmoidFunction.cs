@@ -21,6 +21,7 @@ public class SigmoidFunction : MonoBehaviour
         curveField.value = new AnimationCurve(new Keyframe(0, 0, 0, 0),
             new Keyframe(timeFrame, 1, 0, 0));
         */
+        sigmoidCurve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(timeFrame, 1, 0, 0));
     }
 
     // Update is called once per frame
