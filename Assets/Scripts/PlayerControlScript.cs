@@ -1,9 +1,12 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PlayerControlScript : MonoBehaviour
 {
+    public Button RestartButton;
+
     public TextMeshProUGUI WristInput;
     public GameObject WristCCSprite;
     public GameObject WristCSprite;
@@ -25,6 +28,7 @@ public class PlayerControlScript : MonoBehaviour
     public float rotationSpeed = 100f;
     public float rotationStep = 5f;
     private Quaternion baseJointRotation;
+    private float wristZRotation = 0f;
 
     private bool available = true;
     private float timer;
@@ -37,6 +41,10 @@ public class PlayerControlScript : MonoBehaviour
 
     private bool restartPromptActive = false;
 
+    public float minX = -10f, maxX = 10f; // Min/Max for X movement
+    public float minY = 0f, maxY = 5f;   // Min/Max for Y movement (controlled by Up/Down arrow keys)
+    public float minZ = -5f, maxZ = 5f;   // Min/Max for Z movement (controlled by W/S keys)
+
     void Start()
     {
         baseJointRotation = BaseJoint.transform.rotation;
@@ -48,91 +56,126 @@ public class PlayerControlScript : MonoBehaviour
         UpSprite.gameObject.SetActive(false);
         DownSprite.gameObject.SetActive(false);
 
-        if (RestartPrompt != null)
-            RestartPrompt.gameObject.SetActive(false); // Hide restart prompt at start
+        RestartPrompt.gameObject.SetActive(false);
     }
 
     void Update()
     {
         HandleMovement();
-        HandleRestart();
-    }
 
-    void HandleRestart()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (restartPromptActive)
-            {
-                // If the player presses R again while the prompt is active, restart the level
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
-            else
-            {
-                // Show the restart prompt
-                restartPromptActive = true;
-                if (RestartPrompt != null)
-                {
-                    RestartPrompt.text = "Press R again to restart, or any other key to cancel.";
-                    RestartPrompt.gameObject.SetActive(true);
-                }
-            }
-        }
-
-        // If the player presses any other key, cancel the restart prompt
-        if (restartPromptActive && Input.anyKeyDown && !Input.GetKeyDown(KeyCode.R))
+        // Handle hiding the restart prompt if any key other than 'R' is pressed
+        if (restartPromptActive && (Input.anyKeyDown && !Input.GetMouseButtonDown(0))) // Exclude left mouse click
         {
             restartPromptActive = false;
             if (RestartPrompt != null)
-                RestartPrompt.gameObject.SetActive(false);
+            {
+                RestartPrompt.gameObject.SetActive(false);  // Hide the restart prompt
+            }
+        }
+    }
+
+    // Getter to expose wristZRotation to other scripts
+    public float GetWristZRotation()
+    {
+        return wristZRotation;
+    }
+
+    public void OnRestartButtonClick()
+    {
+        if (restartPromptActive)
+        {
+            // If the restart prompt is active, restart the level
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            // Show the restart prompt
+            restartPromptActive = true;
+            if (RestartPrompt != null)
+            {
+                RestartPrompt.text = "Press restart again to confirm, or any other button to cancel.";
+                RestartPrompt.gameObject.SetActive(true);
+            }
         }
     }
 
     void HandleMovement()
     {
-        // Rotation and movement logic
+        // Rotate wrist directly instead of applying incremental quaternion multiplications
         if (Input.GetKey(KeyCode.Q))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, rotationStep * Time.deltaTime);
+            wristZRotation += rotationStep * Time.deltaTime;
             WristCSprite.gameObject.SetActive(false);
             WristCCSprite.gameObject.SetActive(true);
             WristInput.text = "Q";
-            WristCCSprite.transform.eulerAngles += new Vector3(0, 0, rotationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.E))
         {
-            BaseJoint.transform.rotation *= Quaternion.Euler(0f, 0f, -rotationStep * Time.deltaTime);
+            wristZRotation -= rotationStep * Time.deltaTime;
             WristCSprite.gameObject.SetActive(true);
             WristCCSprite.gameObject.SetActive(false);
             WristInput.text = "E";
-            WristCSprite.transform.eulerAngles += new Vector3(0, 0, -rotationSpeed * Time.deltaTime);
         }
 
+        // Update position for Z axis with W/S keys
         if (Input.GetKey(KeyCode.W))
         {
-            BaseJoint.transform.localPosition += new Vector3(0f, 0f, speed * Time.deltaTime);
-            UpSprite.gameObject.SetActive(true);
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(0f, 0f, speed * Time.deltaTime);
+            newPosition.z = Mathf.Clamp(newPosition.z, minZ, maxZ);
+            BaseJoint.transform.localPosition = newPosition;
+            UpSprite.gameObject.SetActive(false);
             DownSprite.gameObject.SetActive(false);
+
             DepthInput.text = "W";
         }
         if (Input.GetKey(KeyCode.S))
         {
-            BaseJoint.transform.localPosition += new Vector3(0f, 0f, -speed * Time.deltaTime);
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(0f, 0f, -speed * Time.deltaTime);
+            newPosition.z = Mathf.Clamp(newPosition.z, minZ, maxZ);
+            BaseJoint.transform.localPosition = newPosition;
             UpSprite.gameObject.SetActive(false);
-            DownSprite.gameObject.SetActive(true);
+            DownSprite.gameObject.SetActive(false);
+
             DepthInput.text = "S";
         }
 
+        // Update position for Y axis with Up/Down Arrow keys
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(0f, speed * Time.deltaTime, 0f);
+            newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+            BaseJoint.transform.localPosition = newPosition;
+            UpSprite.gameObject.SetActive(true);
+            DownSprite.gameObject.SetActive(false);
+
+            DepthInput.text = "Up Arrow";
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(0f, -speed * Time.deltaTime, 0f);
+            newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+            BaseJoint.transform.localPosition = newPosition;
+            UpSprite.gameObject.SetActive(false);
+            DownSprite.gameObject.SetActive(true);
+
+            DepthInput.text = "Down Arrow";
+        }
+
+        // Control X movement with A/D keys (already part of the code)
         if (Input.GetKey(KeyCode.A))
         {
-            BaseJoint.transform.position += new Vector3(-speed * Time.deltaTime, 0f, 0f);
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(-speed * Time.deltaTime, 0f, 0f);
+            newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+            BaseJoint.transform.localPosition = newPosition;
             LeftSprite.gameObject.SetActive(true);
             RightSprite.gameObject.SetActive(false);
             GantryInput.text = "A";
         }
         if (Input.GetKey(KeyCode.D))
         {
-            BaseJoint.transform.position += new Vector3(speed * Time.deltaTime, 0f, 0f);
+            Vector3 newPosition = BaseJoint.transform.localPosition + new Vector3(speed * Time.deltaTime, 0f, 0f);
+            newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+            BaseJoint.transform.localPosition = newPosition;
             LeftSprite.gameObject.SetActive(false);
             RightSprite.gameObject.SetActive(true);
             GantryInput.text = "D";
@@ -151,11 +194,31 @@ public class PlayerControlScript : MonoBehaviour
             LeftSprite.gameObject.SetActive(false);
             RightSprite.gameObject.SetActive(false);
         }
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
         {
             DepthInput.text = " ";
             UpSprite.gameObject.SetActive(false);
             DownSprite.gameObject.SetActive(false);
         }
+    }
+
+    // Draw the bounds in the scene view
+    void OnDrawGizmos()
+    {
+        if (BaseJoint == null) return;
+
+        Gizmos.color = Color.green;
+
+        // Convert local min/max to world space
+        Vector3 minPos = BaseJoint.transform.TransformPoint(new Vector3(minX, minY, minZ));
+        Vector3 maxPos = BaseJoint.transform.TransformPoint(new Vector3(maxX, maxY, maxZ));
+
+        // Draw the boundary cube
+        Gizmos.DrawWireCube((minPos + maxPos) / 2, maxPos - minPos);
+
+        // Draw min and max points
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(minPos, 0.2f);
+        Gizmos.DrawSphere(maxPos, 0.2f);
     }
 }
