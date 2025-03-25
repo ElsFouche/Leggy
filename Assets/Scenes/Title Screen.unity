@@ -370,6 +370,7 @@ GameObject:
   - component: {fileID: 608856415}
   - component: {fileID: 608856418}
   - component: {fileID: 608856417}
+  - component: {fileID: 608856419}
   - component: {fileID: 608856416}
   m_Layer: 5
   m_Name: Play
@@ -442,9 +443,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 319346885}
-        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
-        m_MethodName: startGame
+      - m_Target: {fileID: 608856419}
+        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
+        m_MethodName: OnButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -492,6 +493,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608856414}
   m_CullTransparentMesh: 1
+--- !u!114 &608856419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608856414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneIndex: 0
 --- !u!1 &837358558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,7 +1220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 608856414}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1711504194
