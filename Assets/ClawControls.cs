@@ -355,7 +355,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""83039f45-0541-444b-85b2-03231089b3d8"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
