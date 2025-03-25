@@ -16,6 +16,16 @@ public class WristMouth : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Grabbable"))
+        {
+            ObjectInClawMouth = true;
+            ObjectDetected = other.gameObject;
+        }
+    }
+
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Grabbable"))
