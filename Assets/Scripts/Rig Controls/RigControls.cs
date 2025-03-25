@@ -24,6 +24,9 @@ public class RigControls : MonoBehaviour
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
 
+    public float gantryMinX = -2.0f; // Min limit for gantry movement
+    public float gantryMaxX = 2.0f;  // Max limit for gantry movement
+
     private Vector3 localPosition;
     private Vector2 leftStickInput;
     private Vector2 rightStickInput;
@@ -66,14 +69,19 @@ public class RigControls : MonoBehaviour
     {
         if (ArmIK_target == null || parentGameObject == null) return;
 
-        parentGameObject.transform.position += new Vector3(-leftStickInput.x * moveSpeed * Time.deltaTime, 0, 0);
+        // Move gantry left/right with clamping
+        float newX = parentGameObject.transform.position.x + (-leftStickInput.x * moveSpeed * Time.deltaTime);
+        newX = Mathf.Clamp(newX, gantryMinX, gantryMaxX);
+        parentGameObject.transform.position = new Vector3(newX, parentGameObject.transform.position.y, parentGameObject.transform.position.z);
 
+        // Move IK target forward/backward
         localPosition = ArmIK_target.transform.localPosition;
         localPosition.z -= leftStickInput.y * moveSpeed * Time.deltaTime;
         localPosition.z = Mathf.Clamp(localPosition.z, ikMinZ, ikMaxZ);
         localPosition.y = Mathf.Clamp(localPosition.y, ikMinY, ikMaxY);
         ArmIK_target.transform.localPosition = localPosition;
 
+        // Rotate IK target
         Quaternion currentRotation = ArmIK_target.transform.localRotation;
 
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
@@ -88,6 +96,7 @@ public class RigControls : MonoBehaviour
 
         ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
 
+        // Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)
         {
             float rotationDirection = -Mathf.Sign(rightStickInput.x);
@@ -103,6 +112,7 @@ public class RigControls : MonoBehaviour
             ArmIK_target.transform.localPosition = localPosition;
         }
 
+        // Rotate body
         if (bodyRotationInput != 0)
         {
             float newRotation = parentGameObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
@@ -111,7 +121,7 @@ public class RigControls : MonoBehaviour
             parentGameObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
         }
 
-
+        // Reset level if button is held
         if (isResetting)
         {
             timeHeld += Time.deltaTime;
@@ -140,5 +150,4 @@ public class RigControls : MonoBehaviour
         Debug.Log("Resetting the level...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
-
 }
