@@ -20,12 +20,22 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            paused = !paused;
-            pauseMenuHolder.SetActive(paused);
-            mainGameHolder.SetActive(!paused);
+            togglePause();
         }
 
         if (paused) Time.timeScale = 0;
         else Time.timeScale = 1;
+    }
+
+    public void togglePause()
+    {
+        paused = !paused;
+        pauseMenuHolder.SetActive(paused);
+        mainGameHolder.SetActive(!paused);
+    }
+
+    public void returnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }
