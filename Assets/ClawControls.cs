@@ -107,6 +107,15 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""7130afbf-64e6-44f7-be90-df1e5e506a34"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -382,6 +391,17 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dpad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1d6778d-d6b0-4390-a1b6-f486cef91a1f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -978,6 +998,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         m_Player_ResetLevel = m_Player.FindAction("ResetLevel", throwIfNotFound: true);
         m_Player_MoveRightStick = m_Player.FindAction("MoveRightStick", throwIfNotFound: true);
         m_Player_Dpad = m_Player.FindAction("Dpad", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1060,6 +1081,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ResetLevel;
     private readonly InputAction m_Player_MoveRightStick;
     private readonly InputAction m_Player_Dpad;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @ClawControls m_Wrapper;
@@ -1073,6 +1095,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         public InputAction @ResetLevel => m_Wrapper.m_Player_ResetLevel;
         public InputAction @MoveRightStick => m_Wrapper.m_Player_MoveRightStick;
         public InputAction @Dpad => m_Wrapper.m_Player_Dpad;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1109,6 +1132,9 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @Dpad.started += instance.OnDpad;
             @Dpad.performed += instance.OnDpad;
             @Dpad.canceled += instance.OnDpad;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1140,6 +1166,9 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @Dpad.started -= instance.OnDpad;
             @Dpad.performed -= instance.OnDpad;
             @Dpad.canceled -= instance.OnDpad;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1331,6 +1360,7 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         void OnResetLevel(InputAction.CallbackContext context);
         void OnMoveRightStick(InputAction.CallbackContext context);
         void OnDpad(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

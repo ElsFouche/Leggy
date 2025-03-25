@@ -14,7 +14,7 @@ public class RigClawParrent : MonoBehaviour
 
     private BasketData detectedBasket;
     private Transform grabbedObject;
-    private float overpressureMultiplier = 0.2f; // Allowable overpressure percentage
+    private float overpressureMultiplier = 0.2f;
 
     private void Update()
     {
@@ -25,19 +25,19 @@ public class RigClawParrent : MonoBehaviour
         }
         else
         {
-            detectedBasket = null; // Prevent false detection when claw is too open
+            detectedBasket = null; 
         }
 
         if (detectedBasket != null)
         {
             float overpressureThreshold = detectedBasket.requiredGripPressure * (1 + overpressureMultiplier);
 
-            if (grabbedObject == null && clawController.gripPreassure <= detectedBasket.requiredGripPressure) // Inverted logic
+            if (grabbedObject == null && clawController.gripPreassure <= detectedBasket.requiredGripPressure)
             {
                 Debug.Log("Grabbing object: " + detectedBasket.name);
                 GrabObject(detectedBasket);
             }
-            else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure) // Inverted logic
+            else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure) 
             {
                 Debug.Log("Releasing object: " + grabbedObject.name);
                 ReleaseObject();
@@ -59,14 +59,14 @@ public class RigClawParrent : MonoBehaviour
             // Store world position/rotation before parenting
             Vector3 worldPosition = grabbedObject.position;
             Quaternion worldRotation = grabbedObject.rotation;
-            Vector3 originalScale = grabbedObject.localScale; // Preserve original scale
+            Vector3 originalScale = grabbedObject.localScale; 
 
-            grabbedObject.SetParent(heldItemParent); // Parent to the empty GameObject
+            grabbedObject.SetParent(heldItemParent);
 
             // Restore world position/rotation and maintain original scale
             grabbedObject.position = worldPosition;
             grabbedObject.rotation = worldRotation;
-            grabbedObject.localScale = originalScale; // Fix potential deformation
+            grabbedObject.localScale = originalScale; 
 
             if (basket.objectRigidbody != null)
             {
