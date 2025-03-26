@@ -20,7 +20,7 @@ public class TitleManager : MonoBehaviour
 
     public void startGame()
     {
-        StartCoroutine(transitionManager.GetComponent<TransitionManager>().fadeToBlack());
+        StartCoroutine(transitionManager.GetComponent<TransitionManager>().fadeToBlack(1));
     }
 
     public void quitGame()
