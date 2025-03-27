@@ -126,6 +126,7 @@ public class HappinessManager : MonoBehaviour
 
     float sigmoidTime = 0;
 
+    public float sigmoidMultiplier;
 
     private IEnumerator startSigmoid()
     {
@@ -133,8 +134,8 @@ public class HappinessManager : MonoBehaviour
         sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
         //Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
 
-        float test = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
-        Debug.Log($"Curve Value at time {sigmoidTime}: {test}");
+        sigmoidMultiplier = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        Debug.Log($"Curve Value at time {sigmoidTime}: {sigmoidMultiplier}");
 
         yield return new WaitForSeconds(Time.deltaTime);
 
