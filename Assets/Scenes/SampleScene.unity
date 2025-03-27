@@ -315,6 +315,7 @@ MonoBehaviour:
   extraExcitedThreshold: 0
   sigmoidFunction: {fileID: 91127746}
   sigmoidMultiplier: 0
+  timeBetweenHappinessLoss: 0.5
 --- !u!114 &91127746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buffer: 3
-  timeFrame: 5
+  timeFrame: 15
   sigmoidCurve:
     serializedVersion: 2
     m_Curve: []
