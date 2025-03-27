@@ -116,6 +116,42 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClawVerticalUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""05a280c0-bf2f-4731-8c7d-030a722bc31d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClawVerticalDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""b20fd482-8e74-4aac-9485-0a6222cf519e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClawHorizontalLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""1dc2f3f8-1222-4a28-b23c-d35997410609"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClawHorizontalRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""b47ffbb8-92a0-45c8-b7ce-bd385bdd0764"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -402,6 +438,50 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cea7ffe-871b-42ff-9c8f-27af8bd57c69"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClawHorizontalLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8011ee52-5c7f-4115-9b59-a8ca24dbe8fc"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClawVerticalDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0b5e486-6e2a-44e4-a139-faba873e6dfb"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClawVerticalUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b73e99a-eac0-446a-ac5e-331cfd90de5a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClawHorizontalRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -999,6 +1079,10 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         m_Player_MoveRightStick = m_Player.FindAction("MoveRightStick", throwIfNotFound: true);
         m_Player_Dpad = m_Player.FindAction("Dpad", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_ClawVerticalUp = m_Player.FindAction("ClawVerticalUp", throwIfNotFound: true);
+        m_Player_ClawVerticalDown = m_Player.FindAction("ClawVerticalDown", throwIfNotFound: true);
+        m_Player_ClawHorizontalLeft = m_Player.FindAction("ClawHorizontalLeft", throwIfNotFound: true);
+        m_Player_ClawHorizontalRight = m_Player.FindAction("ClawHorizontalRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1082,6 +1166,10 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MoveRightStick;
     private readonly InputAction m_Player_Dpad;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_ClawVerticalUp;
+    private readonly InputAction m_Player_ClawVerticalDown;
+    private readonly InputAction m_Player_ClawHorizontalLeft;
+    private readonly InputAction m_Player_ClawHorizontalRight;
     public struct PlayerActions
     {
         private @ClawControls m_Wrapper;
@@ -1096,6 +1184,10 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         public InputAction @MoveRightStick => m_Wrapper.m_Player_MoveRightStick;
         public InputAction @Dpad => m_Wrapper.m_Player_Dpad;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @ClawVerticalUp => m_Wrapper.m_Player_ClawVerticalUp;
+        public InputAction @ClawVerticalDown => m_Wrapper.m_Player_ClawVerticalDown;
+        public InputAction @ClawHorizontalLeft => m_Wrapper.m_Player_ClawHorizontalLeft;
+        public InputAction @ClawHorizontalRight => m_Wrapper.m_Player_ClawHorizontalRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1135,6 +1227,18 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @ClawVerticalUp.started += instance.OnClawVerticalUp;
+            @ClawVerticalUp.performed += instance.OnClawVerticalUp;
+            @ClawVerticalUp.canceled += instance.OnClawVerticalUp;
+            @ClawVerticalDown.started += instance.OnClawVerticalDown;
+            @ClawVerticalDown.performed += instance.OnClawVerticalDown;
+            @ClawVerticalDown.canceled += instance.OnClawVerticalDown;
+            @ClawHorizontalLeft.started += instance.OnClawHorizontalLeft;
+            @ClawHorizontalLeft.performed += instance.OnClawHorizontalLeft;
+            @ClawHorizontalLeft.canceled += instance.OnClawHorizontalLeft;
+            @ClawHorizontalRight.started += instance.OnClawHorizontalRight;
+            @ClawHorizontalRight.performed += instance.OnClawHorizontalRight;
+            @ClawHorizontalRight.canceled += instance.OnClawHorizontalRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1169,6 +1273,18 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @ClawVerticalUp.started -= instance.OnClawVerticalUp;
+            @ClawVerticalUp.performed -= instance.OnClawVerticalUp;
+            @ClawVerticalUp.canceled -= instance.OnClawVerticalUp;
+            @ClawVerticalDown.started -= instance.OnClawVerticalDown;
+            @ClawVerticalDown.performed -= instance.OnClawVerticalDown;
+            @ClawVerticalDown.canceled -= instance.OnClawVerticalDown;
+            @ClawHorizontalLeft.started -= instance.OnClawHorizontalLeft;
+            @ClawHorizontalLeft.performed -= instance.OnClawHorizontalLeft;
+            @ClawHorizontalLeft.canceled -= instance.OnClawHorizontalLeft;
+            @ClawHorizontalRight.started -= instance.OnClawHorizontalRight;
+            @ClawHorizontalRight.performed -= instance.OnClawHorizontalRight;
+            @ClawHorizontalRight.canceled -= instance.OnClawHorizontalRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1361,6 +1477,10 @@ public partial class @ClawControls: IInputActionCollection2, IDisposable
         void OnMoveRightStick(InputAction.CallbackContext context);
         void OnDpad(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnClawVerticalUp(InputAction.CallbackContext context);
+        void OnClawVerticalDown(InputAction.CallbackContext context);
+        void OnClawHorizontalLeft(InputAction.CallbackContext context);
+        void OnClawHorizontalRight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
