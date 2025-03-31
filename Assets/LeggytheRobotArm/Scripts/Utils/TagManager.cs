@@ -84,8 +84,8 @@ public class TagManager : MonoBehaviour
 
     [Tooltip("The Main Tag defines what the game object is.")]
     public MainTag mainTag;
-    [Tooltip("The Location Tag defines which location is which.")]
+    [Tooltip("The Location Tag defines which location is which. Set this for goal zones.")]
     public LocationTag locationTag;
-    [Tooltip("The Object Tag defines where an object should be moved or used.")]
+    [Tooltip("The Object Tag defines where an object should be moved or used. Set this for objects.")]
     public ObjectTag objectTag;
 }
