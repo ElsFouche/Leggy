@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class LockSystem : MonoBehaviour
@@ -10,6 +11,16 @@ public class LockSystem : MonoBehaviour
     {
         if (other.gameObject.name == requiredKeyName) // Check if the correct key enters the trigger
         {
+            Transform BasketParrentTemp = other.transform.parent;
+            BasketParrentTemp.transform.parent = null;
+            BasketParrentTemp.tag = "Untagged";
+            BasketParrentTemp.gameObject.transform.position = transform.position;
+            BasketParrentTemp.rotation = transform.rotation;
+
+            Rigidbody KeyRigid = BasketParrentTemp.GetComponent<Rigidbody>();
+            KeyRigid.isKinematic = true;
+            KeyRigid.useGravity = false;
+
             UnlockLid();
         }
     }
@@ -18,6 +29,8 @@ public class LockSystem : MonoBehaviour
     {
         if (lid != null)
         {
+            lid.tag = "Grabbable";
+
             Rigidbody lidRb = lid.GetComponent<Rigidbody>();
             if (lidRb != null)
             {
