@@ -7,18 +7,24 @@ using UnityEngine.UI;
 public class HappinessManager : MonoBehaviour
 {
     //The higher the position, the worse the state
-    public List<AudioClip> emotes;
+    [Header("Debug")]
     public int extraHappy;
     public int happy;
     public int sad;
+    public bool isVisible;
+
+    [Header("Level Designers")]
+    [Tooltip("The amount of happiness the level starts off with.")]
+    public int happinessCount;
+    [Tooltip("The maximum amount of happiness lost after the sigmoid curve runs its course.")]
+    public int maxDepressor;
+    [Tooltip("The minimum amount of happiness required to gain for the 'extra happy' sound to play.")]
+    public int extraExcitedThreshold;
+
+    [Header("Misc References")]
+    public List<AudioClip> emotes;
     public AudioSource speaker;
     public TextMeshProUGUI happinessDisplay;
-    public int happinessCount;
-    public int maxDepressor;
-    public float depressorMultiplier;
-    float timer;
-
-    public bool isVisible;
 
     public Image backgroundBar;
     public Image backgroundDepressLayer;
@@ -28,14 +34,21 @@ public class HappinessManager : MonoBehaviour
     bool decreasing;
     public bool buffering;
 
-    public int extraExcitedThreshold;
+    public SigmoidFunction sigmoidFunction;
+
+    bool startedFunction = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
     }
+
+    private float depressionFactor;
+    private float depressionTime;
 
     // Update is called once per frame
     void Update()
@@ -55,10 +68,15 @@ public class HappinessManager : MonoBehaviour
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
 
-        int depression = Mathf.RoundToInt(maxDepressor * depressorMultiplier);
-
-        if (isVisible)
+        //int depression = maxDepressor;
+        
+        if (isVisible && !startedFunction)
         {
+            callCoroutine();
+
+
+
+            /*
             timer += Time.deltaTime;
             if (timer >= 1)
             {
@@ -70,6 +88,7 @@ public class HappinessManager : MonoBehaviour
                 updateThousands();
                 StartCoroutine(testing());
             }
+            */
         }
 
         float test = 0f;
@@ -93,6 +112,52 @@ public class HappinessManager : MonoBehaviour
         {
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
+    }
+    
+    public void callCoroutine()
+    {
+        StartCoroutine(artificialDelay());
+        startedFunction = true;
+    }
+
+    
+    public IEnumerator artificialDelay()
+    {
+        yield return new WaitForSeconds(sigmoidFunction.buffer);
+        StartCoroutine(startSigmoid());
+        StartCoroutine(depression());
+    }
+
+
+    float sigmoidTime = 0;
+
+    public float sigmoidMultiplier;
+
+    private IEnumerator startSigmoid()
+    {
+        sigmoidTime += Time.deltaTime;
+        sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        //Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
+
+        sigmoidMultiplier = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        //Debug.Log($"Curve Value at time {sigmoidTime}: {sigmoidMultiplier}");
+
+        yield return new WaitForSeconds(Time.deltaTime);
+
+        if (sigmoidTime < sigmoidFunction.timeFrame) StartCoroutine(startSigmoid());
+    }
+
+    public float timeBetweenHappinessLoss;
+
+    public IEnumerator depression()
+    {
+        int depressionAmount = Mathf.RoundToInt(maxDepressor * sigmoidMultiplier);
+        happinessCount -= depressionAmount;
+        Debug.Log("Happiness Lost: " + depressionAmount);
+        StartCoroutine(testing());
+        updateThousands();
+        yield return new WaitForSeconds(timeBetweenHappinessLoss);
+        StartCoroutine(depression());
     }
 
     public void updateThousands()
