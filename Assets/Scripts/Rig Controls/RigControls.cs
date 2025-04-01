@@ -6,7 +6,6 @@ public class RigControls : MonoBehaviour
     public GameObject ArmIK_target;
     public GameObject parentGameObject;
     public GameObject armRotationObject;
-    public GameObject ArmIK;
     public float moveSpeed = 1.0f;
     public float rotationSpeed = 100f;
     public float baseRotationSpeed = 50f;
@@ -26,10 +25,8 @@ public class RigControls : MonoBehaviour
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
 
-    public float gantryMinX = -2.0f; 
-    public float gantryMaxX = 2.0f;
-
-    public float clawVerticalInput = 0f;
+    public float gantryMinX = -2.0f; // Min limit for gantry movement
+    public float gantryMaxX = 2.0f;  // Max limit for gantry movement
 
     private Vector3 localPosition;
     private Vector2 leftStickInput;
@@ -57,18 +54,11 @@ public class RigControls : MonoBehaviour
         controls.Player.RotateRight.performed += ctx => bodyRotationInput = 1f;
         controls.Player.RotateRight.canceled += ctx => bodyRotationInput = 0f;
 
-        controls.Player.ClawVerticalUp.performed += ctx => clawVerticalInput = 1f;
-        controls.Player.ClawVerticalUp.canceled += ctx => clawVerticalInput = 0f;
-
-        controls.Player.ClawVerticalDown.performed += ctx => clawVerticalInput = -1f;
-        controls.Player.ClawVerticalDown.canceled += ctx => clawVerticalInput = 0f;
-
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
 
-        armRotationObject = GameObject.Find("Base_twist_jnt");
+        armRotationObject = GameObject.Find("Base_twist_int");
         ArmIK_target = GameObject.Find("ArmIK_target");
-        ArmIK = GameObject.Find("ArmIK");
         if (ArmIK_target == null) Debug.LogError("ArmIK_target not found!");
 
         if (parentGameObject == null) Debug.LogError("Parent GameObject is not assigned!");
@@ -80,8 +70,6 @@ public class RigControls : MonoBehaviour
     void Update()
     {
         if (ArmIK_target == null || parentGameObject == null) return;
-
-        ArmIK.transform.rotation = armRotationObject.transform.rotation;
 
         // Move gantry left/right with clamping
         float newX = parentGameObject.transform.position.x + (-leftStickInput.x * moveSpeed * Time.deltaTime);
@@ -100,27 +88,27 @@ public class RigControls : MonoBehaviour
 
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
         if (targetRotationX > 180f) targetRotationX -= 360f;
-        //bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
+        bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
         targetRotationX = Mathf.Clamp(targetRotationX, ikMinRotationX, ikMaxRotationX);
 
         float targetRotationZ = currentRotation.eulerAngles.z + (rightStickInput.x * rotationSpeed * Time.deltaTime);
         if (targetRotationZ > 180f) targetRotationZ -= 360f;
-        //bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
+        bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
         targetRotationZ = Mathf.Clamp(targetRotationZ, ikMinRotationZ, ikMaxRotationZ);
 
         ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
 
-        /* Base rotation adjustments if IK reaches limits
+        // Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)
         {
             float rotationDirection = -Mathf.Sign(rightStickInput.x);
             armRotationObject.transform.Rotate(Vector3.up, rotationDirection * baseRotationSpeed * Time.deltaTime); // may be funky
-        }*/
+        }
 
-        if (clawVerticalInput != 0)
+        if (reachedXLimit && rightStickInput.y != 0)
         {
             localPosition = ArmIK_target.transform.localPosition;
-            float heightDirection = clawVerticalInput;
+            float heightDirection = Mathf.Sign(rightStickInput.y);
             localPosition.y += heightDirection * ikVerticalMoveSpeed * Time.deltaTime;
             localPosition.y = Mathf.Clamp(localPosition.y, ikMinY, ikMaxY);
             ArmIK_target.transform.localPosition = localPosition;
@@ -132,7 +120,6 @@ public class RigControls : MonoBehaviour
             float newRotation = armRotationObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
             if (newRotation > 180f) newRotation -= 360f;
             newRotation = Mathf.Clamp(newRotation, baseMinRotation, baseMaxRotation);
-            
             armRotationObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
         }
 

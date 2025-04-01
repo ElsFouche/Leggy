@@ -29,7 +29,7 @@ public class ControlsManager : MonoBehaviour
         speedTrackerLeft.GetComponent<Image>().fillAmount = Mathf.SmoothDamp
                     (speedTrackerLeft.GetComponent<Image>().fillAmount, amountOnLow, ref zero, 0.03f);
 
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if (isLow) amountOnLow = 0;
             else amountOnLow = 1;

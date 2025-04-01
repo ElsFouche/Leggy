@@ -5,6 +5,8 @@ public class CameraController : MonoBehaviour
 {
     public Camera topDown;
     public Camera firstPerson;
+    public Camera leftView;
+    public Camera rightView;
     public Camera leftShoulder;
     public Camera rightShoulder;
 
@@ -61,6 +63,8 @@ public class CameraController : MonoBehaviour
             firstPerson.enabled = true;
 
             topDown.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
         }
@@ -69,6 +73,8 @@ public class CameraController : MonoBehaviour
         {
             topDown.enabled = true;
             firstPerson.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
         }
@@ -77,6 +83,8 @@ public class CameraController : MonoBehaviour
         {
             topDown.enabled = false;
             firstPerson.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
             leftShoulder.enabled = true;
             rightShoulder.enabled = false;
         }
@@ -85,8 +93,12 @@ public class CameraController : MonoBehaviour
         {
             topDown.enabled = false;
             firstPerson.enabled = false;
+            leftView.enabled = false;
+            rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = true;
         }
     }
+
+
 }
