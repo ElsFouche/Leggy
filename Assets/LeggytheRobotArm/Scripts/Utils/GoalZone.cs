@@ -75,7 +75,7 @@ public class GoalZone : MonoBehaviour
             hitTags = other.gameObject.GetComponent<TagManager>(); 
         }
 
-        if ((int)hitTags.objectTag == (int)tagManager.locationTag) 
+        if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber++;
             Debug.Log("Matching Objects: " + matchingCollisionNumber);
@@ -114,7 +114,7 @@ public class GoalZone : MonoBehaviour
         }
 
         // These need to change.
-        if ((int)hitTags.objectTag == (int)tagManager.locationTag) 
+        if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber--;
             Debug.Log("Matching Objects: " + matchingCollisionNumber);
@@ -125,7 +125,7 @@ public class GoalZone : MonoBehaviour
                 loseHappiness((int)matchingObjectHappiness);
             }
         }
-        else if (hitTags.objectTag != TagManager.ObjectTag.None)
+        else if (hitTags.zoneTag != TagManager.ZoneTag.None)
         {
             generalCollisionNumber--;
 
