@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class TransitionManager : MonoBehaviour
 {
-    public float fadeInDelay;
-    public float fadeOutDelay;
+    public float textFadeInDelay;
     public float sceneSwitchDelay;
     public TMP_Text loreText;
     public Image blackScreen;
@@ -17,6 +16,9 @@ public class TransitionManager : MonoBehaviour
 
     float fadeTime;
     bool loreFadedIn;
+
+    public float fadeInTime;
+    public float fadeOutTime;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +45,7 @@ public class TransitionManager : MonoBehaviour
     // Start the fade to black animation
     public IEnumerator fadeToBlack(int sceneIndex)
     {
+        float increaseValue = 0;
         if (blackScreen == null || loreText == null)
         {
             yield return null;
@@ -52,34 +55,39 @@ public class TransitionManager : MonoBehaviour
         {
             blackScreen.gameObject.SetActive(true);
             loreText.gameObject.SetActive(true);
-            while (blackScreen.GetComponent<Image>().color.a < 1.0f)
+
+            while (increaseValue < 1)
             {
-                blackScreen.GetComponent<Image>().color = new Color
-                    (0, 0, 0, blackScreen.GetComponent<Image>().color.a + Time.deltaTime);
+                increaseValue += (Time.deltaTime / fadeInTime);
+                blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, increaseValue);
 
                 yield return new WaitForSeconds(0.01f);
             }
         }
-        StartCoroutine(fadeText(fadeInDelay, fadeOutDelay, sceneSwitchDelay, sceneIndex));
+
+        StartCoroutine(fadeInText(textFadeInDelay));
     }
 
     // Fade out the black screen
     public IEnumerator blackFadeOut()
     {
-        while (fadeTime > 0)
+        float decreaseValue = 1;
+        while (decreaseValue > 0)
         {
-            fadeTime -= Time.deltaTime;
-            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, fadeTime);
+            decreaseValue -= (Time.deltaTime / fadeOutTime);
+            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, decreaseValue);
 
             yield return new WaitForSeconds(0.01f);
         }
         happinessManager.GetComponent<HappinessManager>().isVisible = true;
+
+        
     }
 
     // Handle the text fade animation
-    public IEnumerator fadeText(float fadeInDelay, float fadeOutDelay, float sceneSwitchDelay, int sceneIndex)
+    public IEnumerator fadeInText(float textFadeInDelay)
     {
-        yield return new WaitForSeconds(fadeInDelay);
+        yield return new WaitForSeconds(textFadeInDelay);
 
         while (loreText.color.a < 1.0f)
         {
@@ -91,8 +99,10 @@ public class TransitionManager : MonoBehaviour
             }
         }
         loreFadedIn = true;
-        yield return new WaitForSeconds(fadeOutDelay);
+    }
 
+    public IEnumerator fadeOutText(float sceneSwitchDelay, int sceneIndex)
+    {
         while (fadeTime > 0)
         {
             fadeTime -= Time.deltaTime;
@@ -104,6 +114,7 @@ public class TransitionManager : MonoBehaviour
         yield return new WaitForSeconds(sceneSwitchDelay);
         SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
     }
+
 
     public void PressToStart()
     {
@@ -119,7 +130,8 @@ public class TransitionManager : MonoBehaviour
     public void TransitionToScene(int sceneIndex)
     {
         isTransitioning = true;
-        StartCoroutine(fadeToBlack(sceneIndex));
+        if (!loreFadedIn) StartCoroutine(fadeToBlack(sceneIndex));
+        else StartCoroutine(fadeOutText(sceneSwitchDelay, sceneIndex));
     }
 
     // This is the wrapper method to make it work with Unity's UI Button OnClick()
