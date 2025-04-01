@@ -28,7 +28,7 @@ public class TransitionManager : MonoBehaviour
         blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         loreText.color = new Color(1, 1, 1, 0);
 
-        if (SceneManager.GetActiveScene().buildIndex > 0)
+        if (SceneManager.GetActiveScene().buildIndex > 1)
         {
             StartCoroutine(blackFadeOut());
             happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
@@ -43,14 +43,22 @@ public class TransitionManager : MonoBehaviour
     // Start the fade to black animation
     public IEnumerator fadeToBlack(int sceneIndex)
     {
-        blackScreen.gameObject.SetActive(true);
-        loreText.gameObject.SetActive(true);
-        while (blackScreen.GetComponent<Image>().color.a < 1.0f)
+        if (blackScreen == null || loreText == null)
         {
-            blackScreen.GetComponent<Image>().color = new Color
-                (0, 0, 0, blackScreen.GetComponent<Image>().color.a + Time.deltaTime);
+            yield return null;
+            SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
+        }
+        else
+        {
+            blackScreen.gameObject.SetActive(true);
+            loreText.gameObject.SetActive(true);
+            while (blackScreen.GetComponent<Image>().color.a < 1.0f)
+            {
+                blackScreen.GetComponent<Image>().color = new Color
+                    (0, 0, 0, blackScreen.GetComponent<Image>().color.a + Time.deltaTime);
 
-            yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.01f);
+            }
         }
         StartCoroutine(fadeText(fadeInDelay, fadeOutDelay, sceneSwitchDelay, sceneIndex));
     }
