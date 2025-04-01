@@ -121,8 +121,9 @@ public class HappinessManager : MonoBehaviour
     {
         yield return new WaitForSeconds(sigmoidFunction.buffer);
         StartCoroutine(startSigmoid());
+        StartCoroutine(depression());
     }
-    
+
 
     float sigmoidTime = 0;
 
@@ -142,7 +143,16 @@ public class HappinessManager : MonoBehaviour
         if (sigmoidTime < sigmoidFunction.timeFrame) StartCoroutine(startSigmoid());
     }
 
-    
+    public float timeBetweenHappinessLoss;
+
+    public IEnumerator depression()
+    {
+        happinessCount -= Mathf.RoundToInt(maxDepressor * sigmoidMultiplier);
+        StartCoroutine(testing());
+        updateThousands();
+        yield return new WaitForSeconds(timeBetweenHappinessLoss);
+        StartCoroutine(depression());
+    }
 
     public void updateThousands()
     {
