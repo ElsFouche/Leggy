@@ -44,9 +44,8 @@ public class TagManager : MonoBehaviour
     /// Special locations advance progress on a task, granting happiness when a certain
     /// amount of progress is made. Progress is only made when an object with the 
     /// ObjectToUse tag and the correct ObjectTag is used on them. 
-    /// DEPRECATED
     /// </summary>
-/*    public enum LocationTag
+    public enum LocationTag
     {
         None,
         Zone0,
@@ -59,18 +58,16 @@ public class TagManager : MonoBehaviour
         Zone7,
         Zone8,
         Zone9
-    }*/
+    }
 
     /// <summary>
     /// The ObjectTag is used in conjunction with the LocationTag to determine if
     /// an object is the correct one for a given task. ObjectToSort objects will
     /// have this tag checked to determine if they should grant bonus happiness.
     /// ObjectToUse objects will have this tag checked to determine if they're
-    /// being used in the correct location. 
-    /// 
-    /// DEPRECATED
+    /// being used in the correct location.
     /// </summary>
-/*    public enum ObjectTag
+    public enum ObjectTag
     {
         None,
         Zone0,
@@ -84,30 +81,11 @@ public class TagManager : MonoBehaviour
         Zone8,
         Zone9
     }
-*/
-    public enum ZoneTag
-    {
-        None,
-        Zone0,
-        Zone1,
-        Zone2,
-        Zone3,
-        Zone4,
-        Zone5,
-        Zone6,
-        Zone7,
-        Zone8,
-        Zone9
-    }
-    [Header("Tags")]
+
     [Tooltip("The Main Tag defines what the game object is.")]
     public MainTag mainTag;
-    [Tooltip("The Zone Tag creates associations between goal areas and objects based on whether the zone tag is the same.")]
-    public ZoneTag zoneTag;
-
-    // DEPRECATED
-    /*    [Tooltip("The Location Tag defines which location is which. Set this for goal zones.")]
-        public LocationTag locationTag;
-        [Tooltip("The Object Tag defines where an object should be moved or used. Set this for objects.")]
-        public ObjectTag objectTag;*/
+    [Tooltip("The Location Tag defines which location is which.")]
+    public LocationTag locationTag;
+    [Tooltip("The Object Tag defines where an object should be moved or used.")]
+    public ObjectTag objectTag;
 }
