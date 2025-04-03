@@ -296,23 +296,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051a74c8356df054f9797d1683bbd655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  extraHappy: 100
+  happy: 55
+  sad: -50
+  isVisible: 0
+  happinessCount: 9500
+  maxDepressor: 50
+  extraExcitedThreshold: 0
   emotes:
   - {fileID: 8300000, guid: c42b836ea1919a24f93fd159978f5289, type: 3}
   - {fileID: 8300000, guid: 657ebc7e87908224a9a1151a36796eaa, type: 3}
   - {fileID: 8300000, guid: 8490298b143d36b42b8aba15d4d74675, type: 3}
-  extraHappy: 100
-  happy: 55
-  sad: -50
   speaker: {fileID: 91127744}
   happinessDisplay: {fileID: 1957512097}
-  happinessCount: 9500
-  maxDepressor: 50
-  isVisible: 0
   backgroundBar: {fileID: 750553180}
   backgroundDepressLayer: {fileID: 295886042}
   thousandTracker: {fileID: 1167690062}
   buffering: 0
-  extraExcitedThreshold: 0
   sigmoidFunction: {fileID: 91127746}
   sigmoidMultiplier: 0
   timeBetweenHappinessLoss: 0.5
@@ -1377,6 +1377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1461,6 +1462,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &750553178
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,6 +4047,10 @@ PrefabInstance:
     - target: {fileID: 5678521050203363685, guid: e760036fad2cb1d4ca39b1fbf6b3b0f9, type: 3}
       propertyPath: m_Name
       value: PauseParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5678521050203363685, guid: e760036fad2cb1d4ca39b1fbf6b3b0f9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
