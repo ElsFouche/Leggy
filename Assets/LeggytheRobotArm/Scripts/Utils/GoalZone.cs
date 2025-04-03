@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Xml;
 using UnityEngine;
 
 /// <summary>
@@ -28,6 +30,7 @@ public class GoalZone : MonoBehaviour
     private HappinessManager happinessManager;
     private int matchingCollisionNumber = 0;
     private int generalCollisionNumber = 0;
+    private HashSet<int> objectIDs = new HashSet<int>();
     public enum happinessValues
     {
         _000 = 0,
@@ -63,16 +66,27 @@ public class GoalZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        TagManager hitTags = null; 
+        TagManager hitTags = null;
+        // Debug.Log("Other Object ID Entered: " + other.gameObject.transform.root.GetInstanceID());
 
-        if (other.gameObject.GetComponent<TagManager>() == null) 
+        if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             // If the object we hit has no TagManager, exit this code block. 
             return; 
         }
         else
         {
-            hitTags = other.gameObject.GetComponent<TagManager>(); 
+            hitTags = other.gameObject.transform.root.GetComponent<TagManager>();
+            if (!objectIDs.Add(other.gameObject.transform.root.GetInstanceID()))
+            {
+                return;
+                // Exit
+            }
+            else
+            {
+                Debug.Log("Adding: " + other.gameObject.transform.root.GetInstanceID());
+                // Continue
+            }
         }
 
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
@@ -103,16 +117,27 @@ public class GoalZone : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         TagManager hitTags = null;
+        // Debug.Log("Other Object ID Exited: " + other.gameObject.transform.root.GetInstanceID());
 
-        if (other.gameObject.GetComponent<TagManager>() == null) 
+        if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             return; 
         }
         else
         {
-            hitTags = other.gameObject.GetComponent<TagManager>(); 
+            hitTags = other.gameObject.transform.root.GetComponent<TagManager>();
+            if (!objectIDs.Remove(other.gameObject.transform.root.GetInstanceID()))
+            {
+                return; 
+                // Exit
+            }
+            else 
+            { 
+                Debug.Log("Removing: " + other.gameObject.transform.root.GetInstanceID());
+                // Continue
+            }
         }
-
+        
         // These need to change.
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
