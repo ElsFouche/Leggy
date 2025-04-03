@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 52865050}
   - component: {fileID: 52865049}
   - component: {fileID: 52865048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 87549655}
   - component: {fileID: 87549654}
   - component: {fileID: 87549653}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -518,6 +518,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 674416359899384222, guid: e64c990f15f7e7148b3026cbbd95e9f1, type: 3}
   m_PrefabInstance: {fileID: 580555185}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &179718869 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1353165955062686491, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+  m_PrefabInstance: {fileID: 1504071026}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &199612049
 GameObject:
@@ -1145,7 +1150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 631945014}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Key Postion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2338,7 +2343,7 @@ GameObject:
   - component: {fileID: 1019907984}
   - component: {fileID: 1019907983}
   - component: {fileID: 1019907982}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2863,8 +2868,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1294472686}
+  - component: {fileID: 1294472687}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Raycast Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2878,13 +2884,34 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294472685}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1488287812}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
+--- !u!114 &1294472687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294472685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f85d0567b7b5658458688069e15930bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IKTarget: {fileID: 179718869}
+  detectDistanceX: 0.11
+  detectDistanceY: 0.07
+  detectDistanceZ: 0.17
+  rotationAdjustment: 10
+  moveAdjustment: 0.1
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1321378415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3383,7 +3410,7 @@ GameObject:
   - component: {fileID: 1438052475}
   - component: {fileID: 1438052474}
   - component: {fileID: 1438052473}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3726,15 +3753,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x
-      value: 49.33522
+      value: 49.335224
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: -177.85689
+      value: -177.8569
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: 2.273573
+      value: 2.2735655
       objectReference: {fileID: 0}
     - target: {fileID: 4015819019322354130, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3838,11 +3865,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: 5.2437677
+      value: 5.2437506
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: -4.659644
+      value: -4.659623
       objectReference: {fileID: 0}
     - target: {fileID: 8050823504137590629, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x
@@ -4176,7 +4203,7 @@ GameObject:
   - component: {fileID: 1618396700}
   - component: {fileID: 1618396702}
   - component: {fileID: 1618396701}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Lock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4571,7 +4598,7 @@ GameObject:
   - component: {fileID: 1835643425}
   - component: {fileID: 1835643424}
   - component: {fileID: 1835643423}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5245,7 +5272,7 @@ GameObject:
   - component: {fileID: 2085118817}
   - component: {fileID: 2085118819}
   - component: {fileID: 2085118818}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
