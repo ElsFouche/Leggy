@@ -6,6 +6,7 @@ public class LockSystem : MonoBehaviour
     public GameObject lid; // Assign the lid in the Inspector
     public string requiredKeyName = "KeyObject"; // The name of the key object
     public bool isUnlocked = false; // Public bool to track lock state
+    public GameObject KeyTransformPosition;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,9 +15,17 @@ public class LockSystem : MonoBehaviour
             Transform BasketParrentTemp = other.transform.parent;
             BasketParrentTemp.transform.parent = null;
             BasketParrentTemp.tag = "Untagged";
-            BasketParrentTemp.gameObject.transform.position = transform.position;
-            BasketParrentTemp.rotation = transform.rotation;
+            if (KeyTransformPosition != null)
+            {
+                BasketParrentTemp.gameObject.transform.position = KeyTransformPosition.transform.position;
+            }
+            else
+            {
 
+                BasketParrentTemp.gameObject.transform.position = transform.position;
+            }
+
+            BasketParrentTemp.rotation = transform.rotation;
             Rigidbody KeyRigid = BasketParrentTemp.GetComponent<Rigidbody>();
             KeyRigid.isKinematic = true;
             KeyRigid.useGravity = false;
