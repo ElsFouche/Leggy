@@ -72,6 +72,15 @@ public class RigControls : MonoBehaviour
         if (ArmIK_target == null) Debug.LogError("ArmIK_target not found!");
 
         if (parentGameObject == null) Debug.LogError("Parent GameObject is not assigned!");
+        
+    }
+    private void Start()
+    {
+        armRotationObject.transform.rotation = Quaternion.Euler(
+            armRotationObject.transform.rotation.eulerAngles.x,
+            0,
+            armRotationObject.transform.rotation.eulerAngles.z
+        );
     }
 
     private void OnEnable() => controls.Enable();
