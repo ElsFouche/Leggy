@@ -130,6 +130,9 @@
 		</property>
 	</object>
 	<object class="EventMixerGroup" id="{ee67cc8e-bad9-405c-a9fb-5d473dc02772}">
+		<property name="volume">
+			<value>2</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -218,6 +221,7 @@
 	<object class="MixerBusEffectChain" id="{e8b36f63-e8f7-4d8e-b7f7-c6fe5c0f2975}">
 		<relationship name="effects">
 			<destination>{fc37d137-3d2d-4235-ab63-3006623bae86}</destination>
+			<destination>{da2abd1f-8a42-45a6-815a-419ba53a1e26}</destination>
 			<destination>{02cb8c6c-8e6d-4538-85a6-001aa897aa3a}</destination>
 		</relationship>
 	</object>
@@ -238,6 +242,14 @@
 		<property name="gain">
 			<value>2</value>
 		</property>
+	</object>
+	<object class="ProxyEffect" id="{da2abd1f-8a42-45a6-815a-419ba53a1e26}">
+		<property name="inputFormat">
+			<value>1</value>
+		</property>
+		<relationship name="preset">
+			<destination>{b8d00b78-8318-437a-82a1-22d6e82b1ea9}</destination>
+		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{02cb8c6c-8e6d-4538-85a6-001aa897aa3a}" />
 </objects>
