@@ -52,8 +52,9 @@ public class TutorialManager : MonoBehaviour
         {
             blackScreen.transform.localPosition = new Vector3(Mathf.SmoothDamp(blackScreen.transform.localPosition.x,
                 0, ref dummy, 0.03f), 0, 0);
+
             continueHint.transform.localPosition = new Vector3(Mathf.SmoothDamp(continueHint.transform.localPosition.x,
-                675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummy, 0.03f), 0);
+                675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 0, ref dummy, 0.5f), 0);
         }
 
         if (Input.GetKeyDown(KeyCode.JoystickButton0))
@@ -64,6 +65,7 @@ public class TutorialManager : MonoBehaviour
                 moveOn = false;
                 viewingTutorial = false;
                 blackScreen.SetActive(false);
+                continueHint.SetActive(false);
 
                 gameObject.GetComponent<HappinessManager>().callCoroutine();
 
