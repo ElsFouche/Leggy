@@ -8,10 +8,19 @@ public class TutorialManager : MonoBehaviour
     public GameObject blackScreen;
     float dummy;
 
+    List<GameObject> sceneObjects;
+
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
+
+        //sceneObjects = FindObjectsOfType<GameObject>().asList();
+
+        for (int i = 0; i < sceneObjects.Count; i++)
+        {
+
+        }
         dummy = 0;
         blackScreen.SetActive(true);
     }
