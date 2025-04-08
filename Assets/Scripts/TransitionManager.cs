@@ -16,7 +16,7 @@ public class TransitionManager : MonoBehaviour
     public int sceneToChangeTo;
 
     float fadeTime;
-    bool loreFadedIn;
+    public bool loreFadedIn;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +52,25 @@ public class TransitionManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+<<<<<<< Updated upstream
         StartCoroutine(fadeText(fadeInDelay, fadeOutDelay, sceneSwitchDelay, sceneIndex));
+=======
+        else
+        {
+            blackScreen.gameObject.SetActive(true);
+            loreText.gameObject.SetActive(true);
+
+            while (increaseValue < 1)
+            {
+                increaseValue += (Time.deltaTime / fadeInTime);
+                blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, increaseValue);
+
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+
+        StartCoroutine(fadeInText(textFadeInDelay, sceneIndex));
+>>>>>>> Stashed changes
     }
 
     // Fade out the black screen
@@ -69,7 +87,11 @@ public class TransitionManager : MonoBehaviour
     }
 
     // Handle the text fade animation
+<<<<<<< Updated upstream
     public IEnumerator fadeText(float fadeInDelay, float fadeOutDelay, float sceneSwitchDelay, int sceneIndex)
+=======
+    public IEnumerator fadeInText(float textFadeInDelay, int sceneIndex)
+>>>>>>> Stashed changes
     {
         yield return new WaitForSeconds(fadeInDelay);
 
@@ -83,7 +105,13 @@ public class TransitionManager : MonoBehaviour
             }
         }
         loreFadedIn = true;
+<<<<<<< Updated upstream
         yield return new WaitForSeconds(fadeOutDelay);
+=======
+
+        StartCoroutine(fadeOutText(textFadeInDelay, sceneIndex));
+    }
+>>>>>>> Stashed changes
 
         while (fadeTime > 0)
         {
@@ -92,6 +120,7 @@ public class TransitionManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+        StartCoroutine(blackFadeOut());
 
         yield return new WaitForSeconds(sceneSwitchDelay);
         SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene

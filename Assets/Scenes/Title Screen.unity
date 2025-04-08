@@ -152,12 +152,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f89d57a0b22e0b43ad28228449370a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeInDelay: 1
-  fadeOutDelay: 1
+  textFadeInDelay: 0
   sceneSwitchDelay: 1
   loreText: {fileID: 311508420}
   blackScreen: {fileID: 1079735106}
   happinessManager: {fileID: 0}
+<<<<<<< Updated upstream
+=======
+  isTransitioning: 0
+  sceneToChangeTo: 0
+  fadeInTime: 0
+  fadeOutTime: 0
+>>>>>>> Stashed changes
 --- !u!4 &307978476
 Transform:
   m_ObjectHideFlags: 0
@@ -490,6 +496,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608856414}
   m_CullTransparentMesh: 1
+<<<<<<< Updated upstream
+=======
+--- !u!114 &608856419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608856414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneIndex: 2
+>>>>>>> Stashed changes
 --- !u!1 &837358558
 GameObject:
   m_ObjectHideFlags: 0
