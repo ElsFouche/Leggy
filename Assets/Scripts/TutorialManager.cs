@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
-    bool moveOn;
+    public bool moveOn;
     public GameObject blackScreen;
     float dummy;
 
-    List<GameObject> sceneObjects;
+    public List<GameObject> sceneObjects;
 
     // Start is called before the first frame update
     void Start()
     {
         //Time.timeScale = 0;
 
-        //sceneObjects = FindObjectsOfType<GameObject>().asList();
+        foreach (GameObject sceneObject in FindObjectsOfType<GameObject>())
+        {
+            sceneObjects.Add(sceneObject);
+        }
 
         for (int i = 0; i < sceneObjects.Count; i++)
         {
-
+            if (sceneObjects[i].GetComponent<Rigidbody>() != null)
+            {
+                sceneObjects[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+                sceneObjects[i].GetComponent<Rigidbody>().useGravity = false;
+                sceneObjects[i].GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         dummy = 0;
         blackScreen.SetActive(true);
@@ -40,7 +48,17 @@ public class TutorialManager : MonoBehaviour
             else if (moveOn)
             {
                 moveOn = false;
-                Time.timeScale = 1;
+
+                for (int i = 0; i < sceneObjects.Count; i++)
+                {
+                    if (sceneObjects[i].GetComponent<Rigidbody>() != null &&
+                        sceneObjects[i].GetComponent<Rigidbody>().velocity == Vector3.zero)
+                    {
+                        sceneObjects[i].GetComponent<Rigidbody>().velocity = Vector3.one;
+                        sceneObjects[i].GetComponent<Rigidbody>().useGravity = true;
+                        sceneObjects[i].GetComponent<Rigidbody>().isKinematic = false;
+                    }
+                }
                 blackScreen.SetActive(false);
                 Destroy(this);
             }
