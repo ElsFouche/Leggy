@@ -6,10 +6,12 @@ public class LeggyRaycast : MonoBehaviour
 {
     public Transform IKTarget; // The IK target to move/rotate
 
+    // Detection distances (trigger movement/rotation)
     public float detectDistanceX = 1f;
     public float detectDistanceY = 1f;
     public float detectDistanceZ = 1f;
 
+    // Casting distances (ray length, should be larger than detectDistance)
     public float castDistanceX = 1.5f;
     public float castDistanceY = 1.5f;
     public float castDistanceZ = 1.5f;
@@ -22,19 +24,11 @@ public class LeggyRaycast : MonoBehaviour
 
     public LayerMask obstacleLayer; // Define which layers should be detected
 
-    private float rotationCooldownTimer = 0f;
-    public float rotationCooldownDuration = 0.25f;
-    public float rotationBuffer = 0.05f;
-
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
     private Vector3 lastKnownPosition;  // Track the last known position
     private Quaternion lastKnownRotation; // Track the last known rotation
-
-    // Block movement flags
-    private bool blockZMovement = false;
-    private bool blockYMovement = false;
 
     void Start()
     {
@@ -42,10 +36,6 @@ public class LeggyRaycast : MonoBehaviour
         {
             targetRotation = IKTarget.rotation;
             targetPosition = IKTarget.position;
-
-            targetRotation = IKTarget.localRotation;
-            targetPosition = IKTarget.localPosition;
-
             lastKnownPosition = targetPosition;
             lastKnownRotation = targetRotation;
         }
@@ -59,23 +49,15 @@ public class LeggyRaycast : MonoBehaviour
         lastKnownPosition = IKTarget.position;
         lastKnownRotation = IKTarget.rotation;
 
-
+        // Perform raycast checks and adjust the IK target if needed
         CheckAndAdjustIK();
 
-        // Clamp X position
+        // Smoothly apply the position and rotation if necessary
+        // Clamp X to 0 but allow Y and Z to adjust
         targetPosition = new Vector3(0f, targetPosition.y, targetPosition.z);
 
-        // Apply final movement with block conditions
-        Vector3 finalPosition = IKTarget.localPosition;
-
-        if (!blockYMovement)
-            finalPosition.y = Mathf.MoveTowards(IKTarget.localPosition.y, targetPosition.y, moveSpeed * Time.deltaTime);
-
-        if (!blockZMovement)
-            finalPosition.z = Mathf.MoveTowards(IKTarget.localPosition.z, targetPosition.z, moveSpeed * Time.deltaTime);
-
-        IKTarget.localPosition = finalPosition;
-        IKTarget.localRotation = Quaternion.RotateTowards(IKTarget.localRotation, targetRotation, rotationSpeed * Time.deltaTime);
+        IKTarget.position = Vector3.MoveTowards(IKTarget.position, targetPosition, moveSpeed * Time.deltaTime);
+        IKTarget.rotation = Quaternion.RotateTowards(IKTarget.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     void CheckAndAdjustIK()
@@ -91,11 +73,7 @@ public class LeggyRaycast : MonoBehaviour
         float[] detectDistances = { detectDistanceX, detectDistanceY, detectDistanceY, detectDistanceZ, detectDistanceZ };
         float[] castDistances = { castDistanceX, castDistanceY, castDistanceY, castDistanceZ, castDistanceZ };
 
-        bool adjustmentsMade = false;
-
-        // Reset block flags
-        blockZMovement = false;
-        blockYMovement = false;
+        bool adjustmentsMade = false;  // Flag to track if any adjustments were made
 
         for (int i = 0; i < directions.Length; i++)
         {
@@ -115,7 +93,6 @@ public class LeggyRaycast : MonoBehaviour
                 {
                     Debug.DrawRay(rayStart, rayDirection * hitDistance, Color.red);
                     Debug.Log($"[LeggyRaycast] HIT: {hit.collider.gameObject.name} at {hitDistance}m in {rayDirection}");
-
                     AdjustIKTarget(rayDirection, i);
                     adjustmentsMade = true;
                 }
@@ -125,6 +102,7 @@ public class LeggyRaycast : MonoBehaviour
                 }
             }
         }
+
         // Only update the target position/rotation if any adjustments were made
         if (!adjustmentsMade)
         {
@@ -139,33 +117,18 @@ public class LeggyRaycast : MonoBehaviour
 
         switch (directionIndex)
         {
-            case 0: // +X — forward (actual X) — rotate away
-                if (rotationCooldownTimer <= 0f)
-                {
-                    Vector3 euler = targetRotation.eulerAngles;
-                    euler.x += rotationAdjustment;
-                    euler.y = 0f;
-                    targetRotation = Quaternion.Euler(euler);
-                    rotationCooldownTimer = rotationCooldownDuration;
-                }
+            case 0: // +X ? Rotate to avoid
+                targetRotation *= Quaternion.Euler(0, rotationAdjustment * Time.deltaTime, 0);
                 break;
 
-            case 1: // +Y — block downward, move down
-                blockYMovement = true;
-                targetPosition.y -= moveAdjustment;
+            case 1: // +Y ? Move along Z
+            case 2: // -Y ? Move along Z
+                targetPosition += new Vector3(0, 0, -direction.z * moveAdjustment * Time.deltaTime);
                 break;
 
-            case 2: // -Y — block upward, move up
-                blockYMovement = true;
-                targetPosition.y += moveAdjustment;
-                break;
-
-            case 3: // +Z — right side (actual side dodge)
-                targetPosition.z -= moveAdjustment; // move left
-                break;
-
-            case 4: // -Z — left side (actual side dodge)
-                targetPosition.z += moveAdjustment; // move right
+            case 3: // +Z ? Move upward (Y)
+            case 4: // -Z ? Move upward (Y)
+                targetPosition += new Vector3(0, -direction.z * moveAdjustment * Time.deltaTime, 0);
                 break;
         }
     }

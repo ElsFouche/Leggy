@@ -1,25 +1,12 @@
-using System.Collections;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class LockSystem : MonoBehaviour
 {
     public GameObject lid; // Assign the lid in the Inspector
-    public GameObject dummyLid;
     public string requiredKeyName = "KeyObject"; // The name of the key object
     public bool isUnlocked = false; // Public bool to track lock state
     public GameObject KeyTransformPosition;
-    public GameObject KeyFloatPoint;
-
-    public bool isInternalObject = true;
-    public GameObject InternalGameobject;
-
-    public bool gameEndGoal = false;
-
-
-
-    public TransitionManager transitionManager;
-
-    public GameObject gameover;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -51,9 +38,6 @@ public class LockSystem : MonoBehaviour
     {
         if (lid != null)
         {
-            lid.gameObject.SetActive(true);
-            dummyLid.SetActive(false);
-
             lid.tag = "Grabbable";
 
             Rigidbody lidRb = lid.GetComponent<Rigidbody>();
@@ -63,28 +47,8 @@ public class LockSystem : MonoBehaviour
                 lidRb.useGravity = true; // Re-enable gravity
             }
 
-            isUnlocked = true; // Update lock state\
-            if (isInternalObject)
-            {
-                InternalGameobject.GetComponent<Rigidbody>().isKinematic = true;
-                InternalGameobject.transform.position = KeyFloatPoint.transform.position;
-            }
+            isUnlocked = true; // Update lock state
             Debug.Log("Lid Unlocked!");
-
-
-            if (gameEndGoal)
-            {
-                CompleteGoal();
-            }
         }
-    }
-
-    private void CompleteGoal()
-    {
-        Debug.Log("Goal Completed!");
-        transitionManager.PressToStart();
-
-        // Add any completion logic here (e.g., UI update, level progression, etc.)
-        gameover.SetActive(true);
     }
 }
