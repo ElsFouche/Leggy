@@ -152,14 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f89d57a0b22e0b43ad28228449370a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeInDelay: 1
-  fadeOutDelay: 1
+  textFadeInDelay: 0
   sceneSwitchDelay: 1
   loreText: {fileID: 0}
   blackScreen: {fileID: 0}
   happinessManager: {fileID: 0}
   isTransitioning: 0
-  sceneToChangeTo: 0
+  sceneToChangeTo: 1
+  fadeInTime: 0
+  fadeOutTime: 0
 --- !u!4 &307978476
 Transform:
   m_ObjectHideFlags: 0
