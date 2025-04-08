@@ -54,7 +54,7 @@ public class TutorialManager : MonoBehaviour
                 0, ref dummy, 0.03f), 0, 0);
 
             continueHint.transform.localPosition = new Vector3(Mathf.SmoothDamp(continueHint.transform.localPosition.x,
-                675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 0, ref dummy, 0.5f), 0);
+                675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummy, 0.03f), 0);
         }
 
         if (Input.GetKeyDown(KeyCode.JoystickButton0))
