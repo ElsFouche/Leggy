@@ -122,11 +122,38 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2497681473212898262, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7194543071533402486}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 419343226483572025, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7866984560566174276}
   m_SourcePrefab: {fileID: 100100000, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+--- !u!1 &5329314760333558151 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 419343226483572025, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+  m_PrefabInstance: {fileID: 5486591578571635902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7866984560566174276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5329314760333558151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ffd39747811fdc42a66318dc8eafdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requiredGripPressure: 0.5
+  objectRigidbody: {fileID: 8475441280327972837}
 --- !u!4 &7966240923502028648 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2497681473212898262, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+  m_PrefabInstance: {fileID: 5486591578571635902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &8475441280327972837 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 4159805466421496667, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
   m_PrefabInstance: {fileID: 5486591578571635902}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7229015944595664541
