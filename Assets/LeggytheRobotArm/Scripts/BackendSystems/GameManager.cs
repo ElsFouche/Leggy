@@ -3,17 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+/// <summary>
+/// This script is persistant across the game and tracks data
+/// relevant to the player. It is a data-only singleton class.
+/// It manages:
+/// Pausing - OFFLOAD TO A DIFFERENT SCRIPT
+/// Player Happiness - HappinessManager.cs
+/// 
+/// </summary>
+
+public class GameManager
 {
+    private static GameManager instance;
+
+    // Construction Script
+    private GameManager() 
+    {
+        Debug.Log("GameManager singleton has been instantiated.");
+    }
+    public static GameManager getInstance()
+    {
+        if (instance == null) instance = new GameManager();
+        return instance;
+    }
+
+    /* Pause Menu Functionality to be offloaded to new script
+    
     public bool paused;
 
     public GameObject mainGameHolder;
     public GameObject pauseMenuHolder;
-
-    // Start is called before the first frame update
     void Start()
     {
-        pauseMenuHolder.SetActive(false);
+        // pauseMenuHolder.SetActive(false);
     }
 
     // Update is called once per frame
@@ -44,4 +66,5 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    */
 }
