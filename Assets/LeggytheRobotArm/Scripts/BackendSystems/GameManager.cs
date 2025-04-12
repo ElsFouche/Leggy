@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,32 +9,45 @@ using UnityEngine.SceneManagement;
 /// This script is persistant across the game and tracks data
 /// relevant to the player. It is a data-only singleton class.
 /// It manages:
-/// Pausing - OFFLOAD TO A DIFFERENT SCRIPT
+/// Pausing
 /// Player Happiness - HappinessManager.cs
 /// 
 /// </summary>
-
-public class GameManager
+public class GameManager : MonoBehaviour
 {
-    private static GameManager instance;
+    // Private
 
-    // Construction Script
-    private GameManager() 
+    // Must persist
+    private HappinessManager HappinessManager { get; set; }
+    private SigmoidFunction _sigmoidFunction;
+
+    // Public
+    public int MaxHappinessLoss = 500;
+
+    // Singleton-style duplication checking for parent game object.
+    private void Awake()
     {
-        Debug.Log("GameManager singleton has been instantiated.");
-    }
-    public static GameManager getInstance()
-    {
-        if (instance == null) instance = new GameManager();
-        return instance;
+        HappinessManager tempHManager = FindObjectOfType<HappinessManager>();
+        // Destroy any Happiness Manager object that's created after the first one. 
+        if (tempHManager != null && tempHManager.transform.root.gameObject != this.transform.root.gameObject) 
+        {
+            Debug.Log("Updating local variables with existing values.");
+            MaxHappinessLoss = tempHManager.maxDepressor;
+            Debug.Log("New HM instance self-destructing.");  
+            Destroy(this); 
+            return; 
+        }
+        
+        Debug.Log("Game Manager created with ID: " +  transform.root.GetInstanceID());
+        HappinessManager = transform.root.gameObject.GetComponentInChildren<HappinessManager>();
+        Debug.Log("Happiness Manager created with ID: " + HappinessManager.GetInstanceID());
     }
 
-    /* Pause Menu Functionality to be offloaded to new script
-    
-    public bool paused;
+ 
+    private bool paused;
 
-    public GameObject mainGameHolder;
-    public GameObject pauseMenuHolder;
+    private GameObject mainGameHolder;
+    private GameObject pauseMenuHolder;
     void Start()
     {
         // pauseMenuHolder.SetActive(false);
@@ -53,6 +68,7 @@ public class GameManager
     public void togglePause()
     {
         paused = !paused;
+        //if (paused) : Time.timeScale = 1 : 
         pauseMenuHolder.SetActive(paused);
         mainGameHolder.SetActive(!paused);
     }
