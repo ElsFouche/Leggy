@@ -12,16 +12,15 @@ using UnityEngine;
 /// This script requires Text Mesh Pro and enforces its inclusion via RequireComponent.
 /// </summary>
 
-[RequireComponent(typeof(TextMeshProUGUI))]
-[ExecuteInEditMode]
 
+[ExecuteInEditMode]
 public class FontRandomizer : MonoBehaviour
 {
     [Header("Enter Text")]
     public string textToRandomize;
     [Header("Set of Fonts to Randomize From")]
     public List<Font> fonts;
-    private TextMeshProUGUI textObject;
+    public TextMeshProUGUI textObject;
     
     /// <summary>
     /// Grab a reference to the TMP component handling the text on this game object. 
@@ -65,7 +64,7 @@ public class FontRandomizer : MonoBehaviour
     /// By default this filepath is Assets/TextMesh Pro/Resources/Fonts & Materials
     /// </summary>
     /// <param name="text"></param>
-    private void RandomizeText(string text)
+    public void RandomizeText(string text)
     {
         if (fonts.Count == 0) { return; }
         string tempText = null; 
