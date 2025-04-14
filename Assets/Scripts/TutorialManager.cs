@@ -7,6 +7,7 @@ public class TutorialManager : MonoBehaviour
     public bool moveOn;
     public GameObject blackScreen;
     public GameObject continueHint;
+    public GameObject happinessExplanation;
     float dummy;
 
     public bool viewingTutorial;
@@ -17,6 +18,7 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         viewingTutorial = true;
+        happinessExplanation.SetActive(false);
 
         continueHint.transform.localPosition = new Vector3(-625, -100, 0);
 
@@ -59,13 +61,18 @@ public class TutorialManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.JoystickButton0))
         {
-            if (!moveOn) moveOn = true;
+            if (!moveOn)
+            {
+                moveOn = true;
+                happinessExplanation.SetActive(true);
+            }
             else if (moveOn)
             {
                 moveOn = false;
                 viewingTutorial = false;
                 blackScreen.SetActive(false);
                 continueHint.SetActive(false);
+                happinessExplanation.SetActive(false);
 
                 gameObject.GetComponent<HappinessManager>().callCoroutine();
 
@@ -79,7 +86,7 @@ public class TutorialManager : MonoBehaviour
                         //sceneObjects[i].GetComponent<Rigidbody>().isKinematic = false;
                     }
                 }
-                
+
                 Destroy(this);
             }
         }
