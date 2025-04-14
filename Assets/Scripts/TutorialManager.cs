@@ -53,7 +53,8 @@ public class TutorialManager : MonoBehaviour
         if (moveOn)
         {
             blackScreen.transform.localPosition = new Vector3(Mathf.SmoothDamp(blackScreen.transform.localPosition.x,
-                0, ref dummy, 0.03f), 0, 0);
+                0, ref dummy, 0.03f), Mathf.SmoothDamp(blackScreen.transform.localPosition.y,
+                0f, ref dummy, 0.03f), 0);
 
             continueHint.transform.localPosition = new Vector3(Mathf.SmoothDamp(continueHint.transform.localPosition.x,
                 675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummy, 0.03f), 0);
