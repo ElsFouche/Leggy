@@ -6,6 +6,7 @@ public class LeggyCarrotOnStick : MonoBehaviour
 {
     public GameObject LeggyWristPivot; // The pivot point for rotation
     public GameObject LeggyClawCenter; // Claw's main object (not used for rotation anymore)
+    public PlayerControlScript playerControl;
 
     [Header("Rotation Limits")]
     public float minXRotation = -30f; // Minimum X rotation limit
@@ -23,8 +24,8 @@ public class LeggyCarrotOnStick : MonoBehaviour
 
     void Start()
     {
-        targetPosition = LeggyWristPivot.transform.position;
-        transform.position = targetPosition;
+        // Initialize targetPosition to the position of the GameObject this script is attached to
+        targetPosition = transform.position;
     }
 
     void Update()
@@ -41,49 +42,58 @@ public class LeggyCarrotOnStick : MonoBehaviour
     {
         if (isMouseLocked)
         {
-            // Get mouse input
+            // Get mouse input for movement
             float moveX = Input.GetAxis("Mouse X");
             float moveY = Input.GetAxis("Mouse Y");
 
-            // Apply movement
+            // Apply movement to the target position, allowing Z movement to be free
             targetPosition += new Vector3(moveX, moveY, 0) * moveSpeed * Time.fixedDeltaTime;
 
-            // Clamp within limits
+            // Clamp X and Y movements, but leave Z axis movement unrestricted
             targetPosition.x = Mathf.Clamp(targetPosition.x, xMin, xMax);
             targetPosition.y = Mathf.Clamp(targetPosition.y, yMin, yMax);
 
-            // Apply position
-            transform.position = targetPosition;
+            // Update the actual position of the GameObject this script is attached to
+            transform.position = new Vector3(targetPosition.x, targetPosition.y, transform.position.z); // Preserve the original Z
         }
 
-        // Rotate the wrist pivot towards the carrot
+        // Rotate the wrist pivot towards the carrot while keeping the player's Z-rotation intact
         RotateWristTowardsCarrot();
     }
 
+
     void RotateWristTowardsCarrot()
     {
+        // Calculate the direction from the wrist pivot to the target object
         Vector3 directionToCarrot = transform.position - LeggyWristPivot.transform.position;
 
-        if (directionToCarrot != Vector3.zero) // Prevent NaN errors
-        {
-            // Get target rotation
-            Quaternion targetRotation = Quaternion.LookRotation(directionToCarrot);
+        // Get the wrist Z rotation directly from PlayerControlScript
+        float wristZRotation = playerControl.GetWristZRotation();
 
-            // Convert to Euler to clamp X and Y angles
-            Vector3 eulerRotation = targetRotation.eulerAngles;
+        // Clamp wrist Z rotation to avoid excessive rotation if needed (you can adjust the limits)
+        wristZRotation = Mathf.Clamp(wristZRotation, -90f, 90f); // Example limits, adjust as needed
 
-            // Convert to -180 to 180 range for proper clamping
-            eulerRotation.x = (eulerRotation.x > 180) ? eulerRotation.x - 360 : eulerRotation.x;
-            eulerRotation.y = (eulerRotation.y > 180) ? eulerRotation.y - 360 : eulerRotation.y;
+        // Calculate the look-at rotation for the wrist, ignoring Z rotation
+        Quaternion lookAtRotation = Quaternion.LookRotation(directionToCarrot);
 
-            // Clamp angles using public values
-            eulerRotation.x = Mathf.Clamp(eulerRotation.x, minXRotation, maxXRotation);
-            eulerRotation.y = Mathf.Clamp(eulerRotation.y, minYRotation, maxYRotation);
+        // Extract the current Euler angles of the look-at rotation
+        Vector3 lookAtEuler = lookAtRotation.eulerAngles;
 
-            // Convert back to Quaternion and apply rotation
-            LeggyWristPivot.transform.rotation = Quaternion.Euler(eulerRotation);
-        }
+        // Smooth the interpolation between the current Z rotation and the target wristZRotation
+        float smoothZRotation = Mathf.MoveTowardsAngle(lookAtEuler.z, wristZRotation, moveSpeed * Time.deltaTime);
+
+        // Set the smoothed Z rotation to the look-at rotation
+        lookAtEuler.z = smoothZRotation;
+
+        // Reapply the updated Euler angles back to the look-at rotation
+        lookAtRotation = Quaternion.Euler(lookAtEuler);
+
+        // Set the final local rotation to the wrist pivot
+        LeggyWristPivot.transform.localRotation = lookAtRotation;
     }
+
+
+
 
     void ToggleMouseLock(bool lockMouse)
     {
