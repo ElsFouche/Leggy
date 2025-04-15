@@ -33,7 +33,6 @@ public class ObjectiveTracker : MonoBehaviour
     [Range(50, 500)]
     public int earlyExitHappinessLoss;
     [Tooltip("This is the number of goals the player must satisfy to not lose happiness when ending the level early.")]
-    [Range(1,10)]
     public int minNumGoalsCompleted;
 
     public enum GoalState
@@ -47,7 +46,6 @@ public class ObjectiveTracker : MonoBehaviour
     {
         // init range slider values if they have not been set. 
         if (earlyExitHappinessLoss <= 0) earlyExitHappinessLoss = 50;
-        if (minNumGoalsCompleted <= 0) minNumGoalsCompleted = 1;
 
         gameManager = transform.root.GetComponent<GameManager>();
         if (!gameManager)

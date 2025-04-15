@@ -63,6 +63,7 @@ MonoBehaviour:
   buffering: 0
   sigmoidFunction: {fileID: 6906259428476312505}
   tutorialManager: {fileID: 0}
+  viewingTutorial: 0
   sigmoidMultiplier: 0
   timeBetweenHappinessLoss: 0
 --- !u!114 &6791590893330753685
@@ -439,6 +440,10 @@ PrefabInstance:
     - target: {fileID: 8210555835126484936, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8449699928852178542, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8603031342724480019, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
       propertyPath: m_AnchorMax.y
