@@ -1141,8 +1141,8 @@ PositionConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.000000017462298, y: 0.08404105, z: 0.045397174}
-  m_TranslationOffset: {x: 0.0015550387, y: -0.0020885915, z: 0.00008679554}
+  m_TranslationAtRest: {x: 0.000000016763806, y: 0.08404103, z: 0.04539717}
+  m_TranslationOffset: {x: 0.001555039, y: -0.0020885915, z: 0.00008678064}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -1162,7 +1162,7 @@ RotationConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -7.1590548, y: 1.1055522, z: -0.10638668}
+  m_RotationOffset: {x: -7.159033, y: 1.1055522, z: -0.10638666}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1180,6 +1180,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1353165955062686491}
+  - component: {fileID: 2485455484665336192}
+  - component: {fileID: 8680781703888981425}
   m_Layer: 0
   m_Name: ArmIK_target
   m_TagString: Untagged
@@ -1197,11 +1199,59 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.13485093, y: -0, z: -0, w: 0.9908659}
   m_LocalPosition: {x: -0.000000009540449, y: 1.28, z: -0.202}
-  m_LocalScale: {x: 0.10003888, y: 0.10003888, z: 0.10003888}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3176529522979038297}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2485455484665336192
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2174509713913790624}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &8680781703888981425
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2174509713913790624}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2216263926271265321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,13 +1303,13 @@ MonoBehaviour:
   castDistanceX: 1.5
   castDistanceY: 1.5
   castDistanceZ: 1.5
-  rotationAdjustment: 2
-  moveAdjustment: 2
+  rotationAdjustment: 0.1
+  moveAdjustment: 0.1
   moveSpeed: 30
   rotationSpeed: 30
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!1 &2875751636775296094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1303,8 +1353,8 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -8.630153, y: 0, z: 0}
-  m_RotationOffset: {x: -1.4703953, y: -1.0961237, z: -0.031411253}
+  m_RotationAtRest: {x: -8.630176, y: 0, z: 0}
+  m_RotationOffset: {x: -1.4703965, y: -1.0961169, z: -0.031411655}
   m_AffectRotationX: 1
   m_AffectRotationY: 0
   m_AffectRotationZ: 0
@@ -1357,7 +1407,7 @@ RotationConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -8.630132, y: 0, z: 0}
+  m_RotationOffset: {x: -8.630131, y: 0, z: 0}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1376,7 +1426,7 @@ PositionConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: -0.001457144, y: 0.09408212, z: -0.01780361}
+  m_TranslationAtRest: {x: -0.0014570795, y: 0.094082095, z: -0.017803578}
   m_TranslationOffset: {x: 0, y: 0, z: 0}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
@@ -1489,7 +1539,7 @@ RotationConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -7.159033, y: 1.1055522, z: -0.10638668}
+  m_RotationOffset: {x: -7.159033, y: 1.1055522, z: -0.10638666}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1670,8 +1720,8 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -8.630132, y: 0, z: 0}
+  m_RotationAtRest: {x: -0.00012874597, y: 0, z: 0}
+  m_RotationOffset: {x: -8.630131, y: 0, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1806,7 +1856,7 @@ PositionConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.00000001641456, y: -0.0857, z: -0.048}
+  m_TranslationAtRest: {x: 0.00000001641456, y: -0.085700005, z: -0.048000023}
   m_TranslationOffset: {x: -0.00069933676, y: 0.0004093945, z: -0.0001376383}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
@@ -1882,8 +1932,8 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -7.159033, y: 1.1055523, z: -0.1063871}
-  m_RotationOffset: {x: -7.159033, y: 1.1055522, z: -0.10638668}
+  m_RotationAtRest: {x: -7.1590548, y: 1.1055522, z: -0.10638707}
+  m_RotationOffset: {x: -7.1590548, y: 1.1055522, z: -0.10638666}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1902,8 +1952,8 @@ AimConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -7.159033, y: 1.1055523, z: -0.1063871}
-  m_RotationOffset: {x: -67.489426, y: 5.2437677, z: -4.659644}
+  m_RotationAtRest: {x: -7.1590548, y: 1.1055522, z: -0.10638707}
+  m_RotationOffset: {x: -67.48944, y: 5.243755, z: -4.6596346}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
@@ -2186,6 +2236,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 316887708155636103}
+  - {fileID: 3937506932098650872}
   m_Father: {fileID: 1399567992906051458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4347130174943177865
@@ -2296,6 +2347,76 @@ RotationConstraint:
   m_Sources:
   - sourceTransform: {fileID: 1399567992906051458}
     weight: 1
+--- !u!1 &4721642481671590269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3937506932098650872}
+  - component: {fileID: 1203668992986748864}
+  - component: {fileID: 8266866639017620693}
+  m_Layer: 0
+  m_Name: IK Target Fallback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3937506932098650872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4721642481671590269}
+  serializedVersion: 2
+  m_LocalRotation: {x: 5.551115e-17, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.003944054, z: -0.5837223}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7905920173504466050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1203668992986748864
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4721642481671590269}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.01
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8266866639017620693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4721642481671590269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656123255dffdf743bc9825678589676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 8839685165150919215}
+  IK_Target: {fileID: 2174509713913790624}
+  IK_Target_Still_In_Range: 1
+  the_claw_jnt: {fileID: 4347130174943177865}
 --- !u!1 &4730680356180407286
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,8 +3599,8 @@ PositionConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.001457144, y: -0.09458963, z: 0.01772145}
-  m_TranslationOffset: {x: -0.00033211964, y: -0.000013388693, z: -0.0001585111}
+  m_TranslationAtRest: {x: 0.001457144, y: -0.09458971, z: 0.01772153}
+  m_TranslationOffset: {x: -0.00033211964, y: -0.000013388693, z: -0.0001584813}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -3501,7 +3622,7 @@ RotationConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -8.630132, y: 0, z: 0}
+  m_RotationOffset: {x: -8.630131, y: 0, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -3840,7 +3961,7 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -8.630132, y: 0, z: 0}
+  m_RotationAtRest: {x: -8.630002, y: 0, z: 0}
   m_RotationOffset: {x: 0, y: 0, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 0
@@ -4458,8 +4579,8 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -8.630132, y: 0, z: 0}
+  m_RotationAtRest: {x: -0.00012874597, y: 0, z: 0}
+  m_RotationOffset: {x: -8.630131, y: 0, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -4544,6 +4665,9 @@ MonoBehaviour:
   parentGameObject: {fileID: 4911582541036461929}
   armRotationObject: {fileID: 271130050051865512}
   ArmIK: {fileID: 0}
+  ikTargetFallback: {fileID: 8266866639017620693}
+  ArmIKFallback: {fileID: 4721642481671590269}
+  ArmIK_target_ResetInterval: 0.1
   moveSpeed: 1
   rotationSpeed: 100
   baseRotationSpeed: 50
@@ -4735,8 +4859,8 @@ RotationConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -8.630132, y: 0, z: 0}
-  m_RotationOffset: {x: -8.630132, y: 0, z: 0}
+  m_RotationAtRest: {x: -8.630002, y: 0, z: 0}
+  m_RotationOffset: {x: -8.630002, y: 0, z: 0}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -4755,8 +4879,8 @@ AimConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_RotationAtRest: {x: -8.630132, y: -0, z: 0}
-  m_RotationOffset: {x: 49.335255, y: -177.8574, z: 2.273079}
+  m_RotationAtRest: {x: -8.630002, y: -0, z: 0}
+  m_RotationOffset: {x: 49.335373, y: -177.8574, z: 2.2730818}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
