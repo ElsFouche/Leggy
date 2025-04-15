@@ -113,9 +113,15 @@ public class HappinessManager : MonoBehaviour
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
     }
-    
+
+    public TutorialManager tutorialManager = FindObjectOfType<TutorialManager>();
+
     public void callCoroutine()
     {
+        if (tutorialManager.viewingTutorial)
+        {
+            return;
+        }
         StartCoroutine(artificialDelay());
         startedFunction = true;
     }

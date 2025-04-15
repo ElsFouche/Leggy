@@ -27,11 +27,8 @@ public class WristMouth : MonoBehaviour
 
 
     private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Grabbable"))
-        {
-            ObjectInClawMouth = false;
-            ObjectDetected = null;
-        }
+    {   
+        ObjectInClawMouth = false;
+        ObjectDetected = null;
     }
 }
