@@ -77,7 +77,7 @@ public class TutorialManager : MonoBehaviour
                 continueHint.SetActive(false);
                 happinessExplanation.SetActive(false);
 
-                gameObject.GetComponent<HappinessManager>().callCoroutine();
+                happinessManager.callCoroutine();
 
                 for (int i = 0; i < sceneObjects.Count; i++)
                 {

@@ -117,7 +117,7 @@ public class HappinessManager : MonoBehaviour
         }
     }
 
-    public TutorialManager tutorialManager = FindObjectOfType<TutorialManager>();
+    
 
     public void callCoroutine()
     {
