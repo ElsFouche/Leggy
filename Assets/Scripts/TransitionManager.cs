@@ -28,7 +28,7 @@ public class TransitionManager : MonoBehaviour
         blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         loreText.color = new Color(1, 1, 1, 0);
 
-        if (SceneManager.GetActiveScene().buildIndex > 0)
+        if (SceneManager.GetActiveScene().buildIndex > 1)
         {
             StartCoroutine(blackFadeOut());
             happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
