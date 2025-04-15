@@ -60,7 +60,7 @@ public class TutorialManager : MonoBehaviour
                 675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummy, 0.03f), 0);
         }
 
-        if (Input.GetKeyDown(KeyCode.JoystickButton0))
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) && viewingTutorial)
         {
             if (!moveOn)
             {
