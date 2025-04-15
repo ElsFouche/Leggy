@@ -38,6 +38,8 @@ public class HappinessManager : MonoBehaviour
 
     bool startedFunction = false;
 
+    public bool viewingTutorial;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -118,7 +120,7 @@ public class HappinessManager : MonoBehaviour
 
     public void callCoroutine()
     {
-        if (tutorialManager.viewingTutorial)
+        if (viewingTutorial)
         {
             return;
         }
