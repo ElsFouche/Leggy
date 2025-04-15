@@ -1,12 +1,23 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class RigControls : MonoBehaviour
 {
+   
+
     public GameObject ArmIK_target;
     public GameObject parentGameObject;
     public GameObject armRotationObject;
     public GameObject ArmIK;
+
+    [Header("Reset Interval For IK Target")]
+    [SerializeField] IkTargetFallback ikTargetFallback;
+    public GameObject ArmIKFallback;
+    public float ArmIK_target_ResetInterval = 1.0f;
+    private bool ArmFallbackTriggered = false;
+
+
     public float moveSpeed = 1.0f;
     public float rotationSpeed = 100f;
     public float baseRotationSpeed = 50f;
@@ -79,7 +90,15 @@ public class RigControls : MonoBehaviour
 
     void Update()
     {
+
+
         if (ArmIK_target == null || parentGameObject == null) return;
+
+        if (!ArmFallbackTriggered && !ikTargetFallback.IK_Target_Still_In_Range)
+        {
+            ArmFallbackTriggered = true;
+            StartCoroutine(ResetArmIK());  
+        }
 
         ArmIK.transform.rotation = armRotationObject.transform.rotation;
 
@@ -164,5 +183,12 @@ public class RigControls : MonoBehaviour
     {
         Debug.Log("Resetting the level...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator ResetArmIK()
+    {
+        ArmIK_target.transform.position = ArmIKFallback.transform.position;
+        yield return new WaitForSeconds(ArmIK_target_ResetInterval);
+        ArmFallbackTriggered = false;
     }
 }

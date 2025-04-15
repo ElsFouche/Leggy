@@ -41,7 +41,7 @@ public class LeggyRaycast : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (IKTarget == null) return;
 
@@ -54,7 +54,7 @@ public class LeggyRaycast : MonoBehaviour
 
         // Smoothly apply the position and rotation if necessary
         // Clamp X to 0 but allow Y and Z to adjust
-        targetPosition = new Vector3(0f, targetPosition.y, targetPosition.z);
+        //targetPosition = new Vector3(0f, targetPosition.y, targetPosition.z);
 
         IKTarget.position = Vector3.MoveTowards(IKTarget.position, targetPosition, moveSpeed * Time.deltaTime);
         IKTarget.rotation = Quaternion.RotateTowards(IKTarget.rotation, targetRotation, rotationSpeed * Time.deltaTime);
