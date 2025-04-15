@@ -18,7 +18,6 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         happinessManager = FindObjectOfType<HappinessManager>();
-        happinessManager.viewingTutorial = true;
         happinessExplanation.SetActive(false);
 
         continueHint.transform.localPosition = new Vector3(-625, -100, 0);
@@ -46,6 +45,8 @@ public class TutorialManager : MonoBehaviour
         }
         dummy = 0;
         blackScreen.SetActive(true);
+
+        happinessManager.viewingTutorial = true;
     }
 
     // Update is called once per frame
