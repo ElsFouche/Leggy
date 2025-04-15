@@ -10,14 +10,14 @@ public class TutorialManager : MonoBehaviour
     public GameObject happinessExplanation;
     float dummy;
 
-    public bool viewingTutorial;
+    public HappinessManager happinessManager;
 
     public List<GameObject> sceneObjects;
 
     // Start is called before the first frame update
     void Start()
     {
-        viewingTutorial = true;
+        happinessManager = FindObjectOfType<HappinessManager>();
         happinessExplanation.SetActive(false);
 
         continueHint.transform.localPosition = new Vector3(-625, -100, 0);
@@ -45,6 +45,8 @@ public class TutorialManager : MonoBehaviour
         }
         dummy = 0;
         blackScreen.SetActive(true);
+
+        happinessManager.viewingTutorial = true;
     }
 
     // Update is called once per frame
@@ -60,7 +62,7 @@ public class TutorialManager : MonoBehaviour
                 675, ref dummy, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummy, 0.03f), 0);
         }
 
-        if (Input.GetKeyDown(KeyCode.JoystickButton0))
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) && happinessManager.viewingTutorial)
         {
             if (!moveOn)
             {
@@ -70,7 +72,7 @@ public class TutorialManager : MonoBehaviour
             else if (moveOn)
             {
                 moveOn = false;
-                viewingTutorial = false;
+                happinessManager.viewingTutorial = false;
                 blackScreen.SetActive(false);
                 continueHint.SetActive(false);
                 happinessExplanation.SetActive(false);
