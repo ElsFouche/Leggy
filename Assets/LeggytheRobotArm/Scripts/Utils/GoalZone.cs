@@ -31,7 +31,11 @@ public class GoalZone : MonoBehaviour
     private int matchingCollisionNumber = 0;
     private int generalCollisionNumber = 0;
     private HashSet<int> objectIDs = new HashSet<int>();
-    public enum happinessValues
+    private ObjectiveTracker.GoalState goalState;
+    private ObjectiveTracker tracker;
+    private int instanceID;
+
+    public enum HappinessValues
     {
         _000 = 0,
         _050 = 50,  
@@ -47,9 +51,9 @@ public class GoalZone : MonoBehaviour
     }
 
     [Tooltip("Happiness gained from correct objects.")]
-    public happinessValues matchingObjectHappiness = happinessValues._250; // This allows the designer to determine how much happiness a matching object gives.
+    public HappinessValues matchingObjectHappiness = HappinessValues._250; // This allows the designer to determine how much happiness a matching object gives.
     [Tooltip("Happiness gained from incorrect objects.")]
-    public happinessValues generalObjectHappiness = happinessValues._100;
+    public HappinessValues generalObjectHappiness = HappinessValues._100;
     [Tooltip("Number of matching objects required to gain happiness.")]
     [Range(1, 10)]
     public int minNumMatchingObjects; // The minimum number of objects that must match before getting happiness.
@@ -57,11 +61,28 @@ public class GoalZone : MonoBehaviour
     [Range(1, 10)]
     public int minNumGeneralObjects; // As above but for general objects.
 
+    // Setter
+    public void SetTrackerRef(ObjectiveTracker objectiveTracker)
+    {
+        tracker = objectiveTracker;
+    }
+
     void Start()
     {
+        // If a level designer has not adjusted the slider values they will stay 0
+        // even if set during the initialization above. Initialize here instead:
+        if (minNumMatchingObjects <= 0) minNumMatchingObjects = 1;
+        if (minNumGeneralObjects <= 0) minNumGeneralObjects = 1;
+
         tagManager = this.GetComponent<TagManager>();
         // This needs to be changed.
         happinessManager = FindObjectOfType<HappinessManager>();
+
+        if (!tracker)
+        {
+            Debug.Log("Objective tracker not found! Are you sure you loaded this goal zone into the objective tracker?");
+        }
+        instanceID = this.GetInstanceID();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -94,10 +115,12 @@ public class GoalZone : MonoBehaviour
             matchingCollisionNumber++;
             Debug.Log("Matching Objects: " + matchingCollisionNumber);
 
-            if (matchingCollisionNumber % minNumMatchingObjects == 0)
+            if (minNumMatchingObjects != 0 && matchingCollisionNumber % minNumMatchingObjects == 0)
             {
                 Debug.Log("Gain Happiness: " + (int)matchingObjectHappiness);
                 gainHappiness((int)matchingObjectHappiness);
+                goalState = ObjectiveTracker.GoalState.Perfect;
+                if (tracker) tracker.SetGoal(instanceID, goalState);
             }
 
         }
@@ -106,10 +129,15 @@ public class GoalZone : MonoBehaviour
             generalCollisionNumber++;
             Debug.Log("Mismatched Objects: " +  generalCollisionNumber);
 
-            if (generalCollisionNumber % minNumGeneralObjects == 0)
+            if (minNumGeneralObjects != 0 && generalCollisionNumber % minNumGeneralObjects == 0) 
             {
                 Debug.Log("Gain Happiness: " + (int)generalObjectHappiness);
                 gainHappiness((int)generalObjectHappiness);
+                if (goalState != ObjectiveTracker.GoalState.Perfect)
+                {
+                    goalState = ObjectiveTracker.GoalState.Satisfied;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
     }
@@ -148,6 +176,16 @@ public class GoalZone : MonoBehaviour
             {
                 Debug.Log("Lose Happiness: " + (int)matchingObjectHappiness); 
                 loseHappiness((int)matchingObjectHappiness);
+                if (generalCollisionNumber % minNumGeneralObjects == minNumGeneralObjects - 1
+                    && matchingCollisionNumber < minNumMatchingObjects)
+                { 
+                    goalState = ObjectiveTracker.GoalState.Satisfied;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                } else
+                {
+                    goalState = ObjectiveTracker.GoalState.Incomplete;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
         else if (hitTags.zoneTag != TagManager.ZoneTag.None)
@@ -158,6 +196,11 @@ public class GoalZone : MonoBehaviour
             {
                 Debug.Log("Lose Happiness: " + (int)generalObjectHappiness);
                 loseHappiness((int)generalObjectHappiness);
+                if (goalState != ObjectiveTracker.GoalState.Perfect && generalCollisionNumber < minNumGeneralObjects)
+                {
+                    goalState = ObjectiveTracker.GoalState.Incomplete;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
     }

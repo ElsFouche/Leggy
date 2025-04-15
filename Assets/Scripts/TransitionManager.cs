@@ -25,8 +25,11 @@ public class TransitionManager : MonoBehaviour
         loreFadedIn = false;
         isTransitioning = false;
 
-        blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
-        loreText.color = new Color(1, 1, 1, 0);
+        if (blackScreen != null)
+        {
+            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            loreText.color = new Color(1, 1, 1, 0);
+        }
 
         if (SceneManager.GetActiveScene().buildIndex > 1)
         {
@@ -35,22 +38,28 @@ public class TransitionManager : MonoBehaviour
         }
         else
         {
-            blackScreen.gameObject.SetActive(false);
-            loreText.gameObject.SetActive(false);
+            if (blackScreen != null)
+            {
+                blackScreen.gameObject.SetActive(false);
+                loreText.gameObject.SetActive(false);
+            }
         }
     }
 
     // Start the fade to black animation
     public IEnumerator fadeToBlack(int sceneIndex)
     {
-        blackScreen.gameObject.SetActive(true);
-        loreText.gameObject.SetActive(true);
-        while (blackScreen.GetComponent<Image>().color.a < 1.0f)
+        if (blackScreen != null)
         {
-            blackScreen.GetComponent<Image>().color = new Color
-                (0, 0, 0, blackScreen.GetComponent<Image>().color.a + Time.deltaTime);
+            blackScreen.gameObject.SetActive(true);
+            loreText.gameObject.SetActive(true);
+            while (blackScreen.GetComponent<Image>().color.a < 1.0f)
+            {
+                blackScreen.GetComponent<Image>().color = new Color
+                    (0, 0, 0, blackScreen.GetComponent<Image>().color.a + Time.deltaTime);
 
-            yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.01f);
+            }
         }
         StartCoroutine(fadeText(fadeInDelay, fadeOutDelay, sceneSwitchDelay, sceneIndex));
     }
@@ -73,27 +82,30 @@ public class TransitionManager : MonoBehaviour
     {
         yield return new WaitForSeconds(fadeInDelay);
 
-        while (loreText.color.a < 1.0f)
+        if (loreText != null)
         {
-            if (!loreFadedIn)
+            while (loreText.color.a < 1.0f)
             {
-                loreText.color = new Color(1, 1, 1, loreText.color.a + Time.deltaTime);
+                if (!loreFadedIn)
+                {
+                    loreText.color = new Color(1, 1, 1, loreText.color.a + Time.deltaTime);
+
+                    yield return new WaitForSeconds(0.01f);
+                }
+            }
+            loreFadedIn = true;
+            yield return new WaitForSeconds(fadeOutDelay);
+
+            while (fadeTime > 0)
+            {
+                fadeTime -= Time.deltaTime;
+                loreText.color = new Color(fadeTime, fadeTime, fadeTime, 1);
 
                 yield return new WaitForSeconds(0.01f);
             }
+
+            yield return new WaitForSeconds(sceneSwitchDelay);
         }
-        loreFadedIn = true;
-        yield return new WaitForSeconds(fadeOutDelay);
-
-        while (fadeTime > 0)
-        {
-            fadeTime -= Time.deltaTime;
-            loreText.color = new Color(fadeTime, fadeTime, fadeTime, 1);
-
-            yield return new WaitForSeconds(0.01f);
-        }
-
-        yield return new WaitForSeconds(sceneSwitchDelay);
         SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
     }
 

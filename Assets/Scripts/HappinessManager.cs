@@ -38,9 +38,12 @@ public class HappinessManager : MonoBehaviour
 
     bool startedFunction = false;
 
+    public bool viewingTutorial;
+
     // Start is called before the first frame update
     void Start()
     {
+        viewingTutorial = false;
         sigmoidFunction = FindObjectOfType<SigmoidFunction>();
 
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
@@ -118,7 +121,7 @@ public class HappinessManager : MonoBehaviour
 
     public void callCoroutine()
     {
-        if (tutorialManager.viewingTutorial)
+        if (viewingTutorial)
         {
             return;
         }

@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private HappinessManager happinessManager;
     private HappinessManager previousManager;
     private TransitionManager transitionManager;
+    private ObjectiveTracker objectiveTracker;
     private SigmoidFunction sigmoidFunction;
     private int currHappiness = 30000;
         // Pause Function
@@ -75,6 +76,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Sigmoid Function created with ID: " + sigmoidFunction.GetInstanceID());
         transitionManager = transform.root.gameObject.GetComponentInChildren<TransitionManager>();
             Debug.Log("Transition Manager created with ID: " + transitionManager.GetInstanceID());
+        objectiveTracker = transform.root.gameObject.GetComponent<ObjectiveTracker>();
+            Debug.Log("Objective Manager created with ID: " + objectiveTracker.GetInstanceID());
         
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
@@ -173,5 +176,15 @@ public class GameManager : MonoBehaviour
     public void restartTask()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void FinishLevel()
+    {
+        if (objectiveTracker.CountCompletedGoals() < objectiveTracker.minNumGoalsCompleted)
+        {
+            happinessManager.loseHappiness(objectiveTracker.earlyExitHappinessLoss);
+        }
+
+        transitionManager.fadeToBlack(nextLevelIndex);
     }
 }
