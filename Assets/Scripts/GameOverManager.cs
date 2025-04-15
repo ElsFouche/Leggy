@@ -2,24 +2,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameOverManager : MonoBehaviour
 {
+    public HappinessManager happinessManager;
+    float test;
     bool fullyDepressed;
     public GameObject fadeBlackTop;
     public GameObject fadeBlackBottom;
+    public GameObject vignette;
+    public GameObject gameOverMenu;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        test = 0;
+
+        happinessManager = FindObjectOfType<HappinessManager>();
+
+        fadeBlackTop.GetComponent<Image>().fillAmount = 0;
+        fadeBlackBottom.GetComponent<Image>().fillAmount = 0;
+        vignette.GetComponent<Image>().color = new Color(1, 0, 0, 0);
+        gameOverMenu.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (happinessManager.happinessCount <= 0 && !fullyDepressed)
+        {
+            happinessManager.isVisible = false;
+            fullyDepressed = true;
+            StartCoroutine(gameOverTransition());
+        }
+    }
+
+    public IEnumerator gameOverTransition()
+    {
+        Debug.Log("Emergency Shutdown");
+        while (Mathf.Approximately(fadeBlackTop.GetComponent<Image>().fillAmount, 1))
+        {
+            fadeBlackTop.GetComponent<Image>().fillAmount = Mathf.SmoothDamp(fadeBlackTop.GetComponent<Image>().fillAmount,
+                1, ref test, 0.03f);
+            fadeBlackBottom.GetComponent<Image>().fillAmount = Mathf.SmoothDamp(fadeBlackBottom.GetComponent<Image>().fillAmount,
+                1, ref test, 0.03f);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        fadeBlackTop.GetComponent<Image>().fillAmount = 1;
+        fadeBlackBottom.GetComponent<Image>().fillAmount = 1;
+
+        Debug.Log("I'm seeing red");
+        while (Mathf.Approximately(vignette.GetComponent<Image>().color.a, 0.5f))
+        {
+            vignette.GetComponent<Image>().color = new Color(1, 0, 0, Mathf.SmoothDamp(vignette.GetComponent<Image>().color.a,
+                0.5f, ref test, 0.03f));
+            yield return new WaitForSeconds(0.05f);
+        }
+        vignette.GetComponent<Image>().color = new Color(1, 0, 0, 0.5f);
+
+        yield return new WaitForSeconds(0.25f);
+        Debug.Log("Retry?");
+        gameOverMenu.SetActive(true);
+        yield return null;
     }
 
     public void retryLevel()
