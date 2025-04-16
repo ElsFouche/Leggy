@@ -88,8 +88,8 @@ public class GoalZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TagManager hitTags = null;
-        // Debug.Log("Other Object ID Entered: " + other.gameObject.transform.root.GetInstanceID());
-
+/*
+        // This has a potential bug when the object has been had its parent set as Leggy. 
         if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             // If the object we hit has no TagManager, exit this code block. 
@@ -109,8 +109,54 @@ public class GoalZone : MonoBehaviour
                 // Continue
             }
         }
+*/
 
-        if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
+        // If the tag manager is at the level of the collider, assign it
+        if (other.gameObject.GetComponent<TagManager>() != null)
+        {
+            hitTags = other.transform.GetComponent<TagManager>();
+            Debug.Log("Tag manager found: " + hitTags.GetInstanceID());
+            if (objectIDs.Add(other.transform.GetInstanceID()))
+            {
+                Debug.Log("Adding: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
+                // Continue
+            }
+            else
+            {
+                return;
+                // Exit
+            }
+        }
+        else
+        {
+            Transform hierarchyPosition;
+            hierarchyPosition = other.transform.parent;
+            // Otherwise, iterate up the hierarchy
+            while (hitTags == null && hierarchyPosition != null)
+            {
+                Debug.Log("Loop | Checking " + hierarchyPosition.name + " for tag manager.");
+                if (hierarchyPosition.GetComponent<TagManager>() != null)
+                {
+                    hitTags = hierarchyPosition.GetComponent<TagManager>();
+                    if (objectIDs.Add(hierarchyPosition.GetInstanceID()))
+                    {
+                        Debug.Log("Adding: " + hierarchyPosition.GetInstanceID());
+                        // Continue
+                    }
+                    else
+                    {
+                        return;
+                        // Exit
+                    }
+                } else
+                {
+                    hierarchyPosition = hierarchyPosition.transform.parent;
+                }
+            }
+        }
+
+        // Begin sortable object logic
+        if (hitTags.mainTag == TagManager.MainTag.ObjectToSort && (int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber++;
             Debug.Log("Matching Objects: " + matchingCollisionNumber);
@@ -146,7 +192,7 @@ public class GoalZone : MonoBehaviour
     {
         TagManager hitTags = null;
         // Debug.Log("Other Object ID Exited: " + other.gameObject.transform.root.GetInstanceID());
-
+/*
         if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             return; 
@@ -165,7 +211,53 @@ public class GoalZone : MonoBehaviour
                 // Continue
             }
         }
-        
+*/
+
+        // If the tag manager is at the level of the collider, assign it
+        if (other.gameObject.GetComponent<TagManager>() != null)
+        {
+            hitTags = other.transform.GetComponent<TagManager>();
+            Debug.Log("Tag manager found: " + hitTags.GetInstanceID());
+            if (objectIDs.Remove(other.transform.GetInstanceID()))
+            {
+                Debug.Log("Adding: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
+                // Continue
+            }
+            else
+            {
+                return;
+                // Exit
+            }
+        }
+        else
+        {
+            Transform hierarchyPosition;
+            hierarchyPosition = other.transform.parent;
+            // Otherwise, iterate up the hierarchy
+            while (hitTags == null && hierarchyPosition != null)
+            {
+                Debug.Log("Loop | Checking " +  hierarchyPosition.name + " for tag manager.");
+                if (hierarchyPosition.GetComponent<TagManager>() != null)
+                {
+                    hitTags = hierarchyPosition.GetComponent<TagManager>();
+                    if (objectIDs.Remove(hierarchyPosition.GetInstanceID()))
+                    {
+                        Debug.Log("Removing: " + hierarchyPosition.GetInstanceID());
+                        // Continue
+                    }
+                    else
+                    {
+                        return;
+                        // Exit
+                    }
+                }
+                else
+                {
+                    hierarchyPosition = hierarchyPosition.transform.parent;
+                }
+            }
+        }
+
         // These need to change.
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
