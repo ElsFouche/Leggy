@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class GameOverManager : MonoBehaviour
 {
-    bool fullyDepressed;
+    public bool fullyDepressed;
     float test;
     public HappinessManager happinessManager;
 

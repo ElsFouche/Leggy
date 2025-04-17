@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 
 public class RigControls : MonoBehaviour
 {
-   
-
     public GameObject ArmIK_target;
     public GameObject parentGameObject;
     public GameObject armRotationObject;
@@ -52,6 +50,8 @@ public class RigControls : MonoBehaviour
     public float holdTime = 2.0f;
     private float timeHeld = 0f;
 
+    public GameObject circleMeter;
+
     private void Awake()
     {
         controls = new ClawControls();
@@ -83,6 +83,11 @@ public class RigControls : MonoBehaviour
         if (ArmIK_target == null) Debug.LogError("ArmIK_target not found!");
 
         if (parentGameObject == null) Debug.LogError("Parent GameObject is not assigned!");
+    }
+
+    private void Start()
+    {
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void OnEnable() => controls.Enable();
@@ -159,10 +164,12 @@ public class RigControls : MonoBehaviour
         if (isResetting)
         {
             timeHeld += Time.deltaTime;
+            circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount += (Time.deltaTime / holdTime);
             if (timeHeld >= holdTime)
             {
                 ResetLevel();
                 timeHeld = 0f;
+                circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
             }
         }
     }
