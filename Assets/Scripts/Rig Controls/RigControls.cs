@@ -178,12 +178,14 @@ public class RigControls : MonoBehaviour
     {
         isResetting = true;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void StopHoldReset()
     {
         isResetting = false;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void ResetLevel()
