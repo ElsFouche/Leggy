@@ -532,7 +532,7 @@ PrefabInstance:
       objectReference: {fileID: 1301707409}
     - target: {fileID: 8180428072928424157, guid: 14bc00742a7bf2547ac4c6fa93c720e8, type: 3}
       propertyPath: happinessCount
-      value: 1
+      value: 9500
       objectReference: {fileID: 0}
     - target: {fileID: 8180428072928424157, guid: 14bc00742a7bf2547ac4c6fa93c720e8, type: 3}
       propertyPath: thousandTracker
@@ -1977,6 +1977,10 @@ PrefabInstance:
       propertyPath: gantryMinX
       value: -5
       objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: circleMeter
+      value: 
+      objectReference: {fileID: 1271150274}
     - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: ikMaxRotationZ
       value: 60
@@ -6349,6 +6353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5476fbec9ebefa44aa6754beb9dc3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fullyDepressed: 0
   happinessManager: {fileID: 0}
   fadeBlackTop: {fileID: 708335491}
   fadeBlackBottom: {fileID: 220730820}
