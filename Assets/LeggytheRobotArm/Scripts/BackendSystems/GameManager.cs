@@ -47,13 +47,13 @@ public class GameManager : MonoBehaviour
     public int maxHappinessLostPerTick = 50;
     [Tooltip("The amount of time in seconds between each happiness loss tick.")]
     [Range(1,10)]
-    public float happinessLossTickSpeed = 1;
+    public float happinessLossTickSpeed;
     [Tooltip("The amount of time in seconds before the maximum amount of happiness lost per tick is reached.")]
     [Range(10,120)]
     public int timeUntilMaxHappinessLoss = 10;
     [Tooltip("The amount of time in seconds before Happiness begins decreasing.")]
     [Range(0, 30)]
-    public int gracePeriod = 0;
+    public int gracePeriod;
 
     [Header("Level Transition Settings")]
     public int textFadeInDelay;
@@ -138,17 +138,21 @@ public class GameManager : MonoBehaviour
                 break;  
         }
 
+    }
+
+    void Start()
+    {
+        pauseMenuHolder.SetActive(false);
+        if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
+        if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
+        if (timeUntilMaxHappinessLoss < 10) timeUntilMaxHappinessLoss = 10;
+
         // Initialize Happiness Subsystem
         happinessManager.happinessCount = currHappiness;
         happinessManager.maxDepressor = maxHappinessLostPerTick;
         happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
         sigmoidFunction.buffer = gracePeriod;
         sigmoidFunction.timeFrame = timeUntilMaxHappinessLoss;
-    }
-
-    void Start()
-    {
-        pauseMenuHolder.SetActive(false);
     }
 
     void Update()

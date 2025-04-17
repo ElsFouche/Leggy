@@ -43,7 +43,7 @@ public class HappinessManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        viewingTutorial = false;
+        viewingTutorial = true;
         sigmoidFunction = FindObjectOfType<SigmoidFunction>();
 
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
@@ -58,15 +58,15 @@ public class HappinessManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            maxHappy();
+            //maxHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            normalHappy();
+            //normalHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            getDepressed();
+            //getDepressed();
         }
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
@@ -117,7 +117,7 @@ public class HappinessManager : MonoBehaviour
         }
     }
 
-    public TutorialManager tutorialManager = FindObjectOfType<TutorialManager>();
+    
 
     public void callCoroutine()
     {
@@ -198,16 +198,21 @@ public class HappinessManager : MonoBehaviour
 
         if (happinessToGain <= 0)
         {
+            happinessCount -= happinessToGain;
             return;
         }
-        else if (happinessToGain >= extraExcitedThreshold)
+        else if (emotes.Count > 0)
         {
-            speaker.clip = emotes[0];
+            if (happinessToGain >= extraExcitedThreshold)
+            {
+                speaker.clip = emotes[0];
+            }
+            else
+            {
+                speaker.clip = emotes[1];
+            }
         }
-        else
-        {
-            speaker.clip = emotes[1];
-        }
+
 
         speaker.Play();
         updateThousands();
@@ -215,14 +220,20 @@ public class HappinessManager : MonoBehaviour
 
     public void loseHappiness(int happinessToLose)
     {
-        speaker.clip = emotes[2];
         happinessCount -= happinessToLose;
+
+        if (happinessToLose >= 0)
+        {
+            happinessCount += happinessToLose;
+            return;
+        }
+        else if (emotes.Count >= 3) speaker.clip = emotes[2];
         speaker.Play();
         updateThousands();
     }
 
 
-
+    /*
     public void maxHappy()
     {
         speaker.clip = emotes[0];
@@ -246,4 +257,5 @@ public class HappinessManager : MonoBehaviour
         speaker.Play();
         updateThousands();
     }
+    */
 }
