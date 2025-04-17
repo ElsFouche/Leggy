@@ -34,6 +34,7 @@ public class GoalZone : MonoBehaviour
     private ObjectiveTracker.GoalState goalState;
     private ObjectiveTracker tracker;
     private int instanceID;
+    private bool checking = false;
 
     public enum HappinessValues
     {
@@ -110,7 +111,9 @@ public class GoalZone : MonoBehaviour
             }
         }
 */
-
+        // Check for lock
+        if (checking) return;
+        checking = true;
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -123,6 +126,8 @@ public class GoalZone : MonoBehaviour
             }
             else
             {
+                Debug.Log("Adding object failed.");
+                checking = false;
                 return;
                 // Exit
             }
@@ -132,6 +137,7 @@ public class GoalZone : MonoBehaviour
             Transform hierarchyPosition;
             hierarchyPosition = other.transform.parent;
             // Otherwise, iterate up the hierarchy
+            // BUG: Needs lockout!
             while (hitTags == null && hierarchyPosition != null)
             {
                 Debug.Log("Loop | Checking " + hierarchyPosition.name + " for tag manager.");
@@ -145,6 +151,8 @@ public class GoalZone : MonoBehaviour
                     }
                     else
                     {
+                        Debug.Log("Adding object failed.");
+                        checking = false;
                         return;
                         // Exit
                     }
@@ -186,6 +194,8 @@ public class GoalZone : MonoBehaviour
                 }
             }
         }
+        // Unlock
+        checking = false;
     }
 
     private void OnTriggerExit(Collider other)
@@ -212,7 +222,10 @@ public class GoalZone : MonoBehaviour
             }
         }
 */
-
+        
+        // Check for lock
+        if (checking) return;
+        checking = true;
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -225,6 +238,8 @@ public class GoalZone : MonoBehaviour
             }
             else
             {
+                checking = false;
+                Debug.Log("Failed to remove object.");
                 return;
                 // Exit
             }
@@ -247,6 +262,8 @@ public class GoalZone : MonoBehaviour
                     }
                     else
                     {
+                        checking = false;
+                        Debug.Log("Failed to remove object.");
                         return;
                         // Exit
                     }
@@ -258,7 +275,6 @@ public class GoalZone : MonoBehaviour
             }
         }
 
-        // These need to change.
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber--;
@@ -295,6 +311,8 @@ public class GoalZone : MonoBehaviour
                 }
             }
         }
+        // Unlock
+        checking = false;
     }
 
     private void gainHappiness(int happinessToGain)
