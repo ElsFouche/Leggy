@@ -68,7 +68,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredGripPressure: 0.5
-  RootRigidBodyGameObject: {fileID: 0}
   objectRigidbody: {fileID: 4159805466421496667}
 --- !u!1 &1445402078241695456
 GameObject:
@@ -133,7 +132,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2564950740957357455}
   - component: {fileID: 4028372083638129820}
-  - component: {fileID: 900813776614546756}
   - component: {fileID: 4159805466421496667}
   m_Layer: 0
   m_Name: Interactable
@@ -172,18 +170,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainTag: 5
   zoneTag: 1
---- !u!114 &900813776614546756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2336689896493934098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2437667930871646a5cba45faa4c805, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4159805466421496667
 Rigidbody:
   m_ObjectHideFlags: 0
