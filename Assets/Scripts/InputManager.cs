@@ -6,17 +6,20 @@ using UnityEngine.EventSystems;
 public class InputManager : MonoBehaviour
 {
     EventSystem eventSystem;
+    GameOverManager gameOverManager;
+
     // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
         eventSystem = FindObjectOfType<EventSystem>();
+        gameOverManager = FindObjectOfType<GameOverManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (EventSystem.current.currentSelectedGameObject == null)
+        if (EventSystem.current.currentSelectedGameObject == null && gameOverManager.gameOverMenu.activeInHierarchy)
             SetFirstSelectedMainMenu();
     }
 
