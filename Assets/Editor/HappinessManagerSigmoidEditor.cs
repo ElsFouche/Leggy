@@ -5,8 +5,14 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-[CustomEditor(typeof(SigmoidFunction))]
+/// Els: Modified 04/18/2025
+/// This script has been dummied out due to changes in the sigmoid function script.
+/// The sigmoid function script is now a non-monobehavior-derived script.
+/// It provides construction access to creating new animation curves with no editor
+/// access. 
 
+// [CustomEditor(typeof(SigmoidFunction))]
+/*
 public class HappinessManagerSigmoidEditor : Editor
 {
     public VisualTreeAsset visualTree;
@@ -44,3 +50,4 @@ public class HappinessManagerSigmoidEditor : Editor
         //UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
     }
 }
+*/
