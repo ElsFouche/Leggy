@@ -23,6 +23,7 @@ public class TutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Replace with new input system when possible
         keysToAdvance = new List<KeyCode> 
         {
         KeyCode.Mouse0, 

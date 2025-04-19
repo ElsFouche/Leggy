@@ -392,9 +392,25 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: textFadeInTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: transitionText
-      value: '[SYS] Sorting Protocol complete. \n[SYS] Exit Code: 0 (Success)\n...\n[SYS]
+      value: '[SYS] Sorting Protocol complete.<br><br>[SYS] Exit Code: 0 (Success)<br><br>...<br><br>[SYS]
         BEGIN TEST 02: BASIC LOGIC'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: fadeToBlackTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: textFadeOutTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: textFadeOutDelay
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: happinessLossTickSpeed
@@ -428,6 +444,14 @@ PrefabInstance:
       propertyPath: goalZones.Array.data[2]
       value: 
       objectReference: {fileID: 1104935642}
+    - target: {fileID: 8112924860730006839, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_isRichText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112924860730006839, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8575887108673534833, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -605,7 +629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: 2.2729526
+      value: 2.2729435
       objectReference: {fileID: 0}
     - target: {fileID: 4678805858062066026, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: gaugeIndicatorObject
@@ -669,11 +693,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: 5.2433496
+      value: 5.2433443
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: -4.6592474
+      value: -4.6592393
       objectReference: {fileID: 0}
     - target: {fileID: 8050823504137590629, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.x

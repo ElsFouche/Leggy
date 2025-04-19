@@ -108,5 +108,4 @@ public class ObjectiveTracker : MonoBehaviour
         }
         return completeCount;
     }
-
 }
