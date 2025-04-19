@@ -86,6 +86,7 @@ public class ObjectiveTracker : MonoBehaviour
     {
         if (CountCompletedGoals() >= goals.Count)
         {
+            Debug.Log("Level complete.");
             gameManager.FinishLevel();
         }
     }
@@ -107,5 +108,4 @@ public class ObjectiveTracker : MonoBehaviour
         }
         return completeCount;
     }
-
 }

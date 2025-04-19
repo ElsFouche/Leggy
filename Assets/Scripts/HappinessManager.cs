@@ -38,13 +38,14 @@ public class HappinessManager : MonoBehaviour
 
     bool startedFunction = false;
 
-    public bool viewingTutorial;
+    public bool viewingTutorial = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        viewingTutorial = true;
-        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+        // Els: Modified 04/18/2025
+        // removed search for sigmoid function. SigmoidFunction.cs is now a non-monbehavior-derived purely digital
+        // function. The value of variable sigmoidFunction is set from within GameManager.cs
 
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
@@ -140,12 +141,13 @@ public class HappinessManager : MonoBehaviour
 
     float sigmoidTime = 0;
 
-    public float sigmoidMultiplier;
+    public float sigmoidMultiplier = 0;
 
     private IEnumerator startSigmoid()
     {
         sigmoidTime += Time.deltaTime;
-        sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        // Els: removed unnecessary curve evaluation 04/18/2025
+        // sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
         //Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
 
         sigmoidMultiplier = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
@@ -162,7 +164,7 @@ public class HappinessManager : MonoBehaviour
     {
         int depressionAmount = Mathf.RoundToInt(maxDepressor * sigmoidMultiplier);
         happinessCount -= depressionAmount;
-        Debug.Log("Happiness Lost: " + depressionAmount);
+        // Debug.Log("Happiness Lost: " + depressionAmount);
         StartCoroutine(testing());
         updateThousands();
         yield return new WaitForSeconds(timeBetweenHappinessLoss);
@@ -205,16 +207,19 @@ public class HappinessManager : MonoBehaviour
         {
             if (happinessToGain >= extraExcitedThreshold)
             {
-                speaker.clip = emotes[0];
+                // Els: Modified 04/18/025
+                // This is now how we'll be handling sound. 
+                // speaker.clip = emotes[0];
             }
             else
             {
-                speaker.clip = emotes[1];
+                // speaker.clip = emotes[1];
             }
         }
 
-
-        speaker.Play();
+        // Els: Modified 04/18/025
+        // This is now how we'll be handling sound. 
+        // speaker.Play();
         updateThousands();
     }
 
@@ -228,7 +233,7 @@ public class HappinessManager : MonoBehaviour
             return;
         }
         else if (emotes.Count >= 3) speaker.clip = emotes[2];
-        speaker.Play();
+        // speaker.Play();
         updateThousands();
     }
 
