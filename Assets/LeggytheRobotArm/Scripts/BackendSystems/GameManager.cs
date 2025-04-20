@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     private HappinessManager previousManager;
     private TransitionManager transitionManager;
     private ObjectiveTracker objectiveTracker;
-    private SigmoidFunction sigmoidFunction;
     private int currHappiness = 30000;
         // Pause Function
     private bool paused;
@@ -41,6 +40,7 @@ public class GameManager : MonoBehaviour
     private FontRandomizer fontRandomizer;
 
     // Public
+        // Happiness 
     [Header("Happines Decay")]
     [Tooltip("Lower values should be used for levels that are expected to take a long time to complete.")]
     [Range(50,500)]
@@ -54,11 +54,16 @@ public class GameManager : MonoBehaviour
     [Tooltip("The amount of time in seconds before Happiness begins decreasing.")]
     [Range(0, 30)]
     public int gracePeriod;
-
+        // Text
     [Header("Level Transition Settings")]
-    public int textFadeInDelay;
+    [Tooltip("The amount of time in seconds before the black screen begins fading in.")]
+    public float textFadeInDelay;
+    [Tooltip("The amount of time in seconds before the black screen begins fading out.")]
+    public float textFadeOutDelay;
+    public float fadeToBlackTime;
     public float textFadeInTime;
     public float textFadeOutTime;
+    public float levelTransitionDelay;
     public int nextLevelIndex;
     public Speaker speakerFont;
     public string transitionText;
@@ -69,38 +74,55 @@ public class GameManager : MonoBehaviour
         // Persist into new scenes.
         DontDestroyOnLoad(this);
 
-        // Store reference to components
-        happinessManager = transform.root.gameObject.GetComponentInChildren<HappinessManager>();
-            Debug.Log("Happiness Manager created with ID: " + happinessManager.GetInstanceID());
-        sigmoidFunction = transform.root.gameObject.GetComponentInChildren<SigmoidFunction>();
-            Debug.Log("Sigmoid Function created with ID: " + sigmoidFunction.GetInstanceID());
-        transitionManager = transform.root.gameObject.GetComponentInChildren<TransitionManager>();
-            Debug.Log("Transition Manager created with ID: " + transitionManager.GetInstanceID());
-        objectiveTracker = transform.root.gameObject.GetComponent<ObjectiveTracker>();
-            Debug.Log("Objective Manager created with ID: " + objectiveTracker.GetInstanceID());
         
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
+        if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.GetInstanceID()); }
         if (previousManager != null && previousManager.transform.root.gameObject != this.transform.root.gameObject) 
         {
             Debug.Log("Found previous happiness manager with ID: " +  previousManager.GetInstanceID());
             Debug.Log("Updating local variables with existing values.");
             currHappiness = previousManager.happinessCount;
             Debug.Log("Deconstructing old game manager.");  
-            Destroy(previousManager);
+            Destroy(previousManager.transform.root.gameObject);
             previousManager = null;
         }
         
+        // Store reference to components
+        objectiveTracker = GetComponent<ObjectiveTracker>();
+            Debug.Log("Objective Manager created with ID: " + objectiveTracker.GetInstanceID());
+        happinessManager = GetComponentInChildren<HappinessManager>();
+            Debug.Log("Happiness Manager created with ID: " + happinessManager.GetInstanceID());
+        transitionManager = GetComponentInChildren<TransitionManager>();
+            Debug.Log("Transition Manager created with ID: " + transitionManager.GetInstanceID());
+        fontRandomizer = GetComponentInChildren<FontRandomizer>();
+            Debug.Log("Found Font Randomizer with ID: " + fontRandomizer.GetInstanceID());
+
         // Initialize UI 
         pauseMenuHolder = GameObject.FindGameObjectWithTag("Subsystem_PauseUI");
             Debug.Log("Found Pause Menu with ID: " + pauseMenuHolder.GetInstanceID());
         mainUIHolder = GameObject.FindGameObjectWithTag("Subsystem_MainUI");
             Debug.Log("Found Main UI with ID: " +  mainUIHolder.GetInstanceID());
+    }
 
-        // Initialize Text Subsystem
-        fontRandomizer = GetComponentInChildren<FontRandomizer>();
-            Debug.Log("Found Font Randomizer with ID: " + fontRandomizer.GetInstanceID());
-        transitionManager.loreText.SetText(transitionText);
+    void Start()
+    {
+        pauseMenuHolder.SetActive(false);
+        // Initialize level variables if unmodified by Level Designers
+        if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
+        if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
+        if (timeUntilMaxHappinessLoss < 10) timeUntilMaxHappinessLoss = 10;
+
+        // Initialize Happiness Subsystem
+        happinessManager.happinessCount = currHappiness;
+        happinessManager.maxDepressor = maxHappinessLostPerTick;
+        happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
+        happinessManager.sigmoidFunction = new SigmoidFunction(gracePeriod, timeUntilMaxHappinessLoss);
+
+        // Initialize transition text value
+        transitionManager.loreText.text = transitionText;
+        transitionManager.loreText.text.Replace("\\n", "\n");
+            Debug.Log("Lore text set to " + "\n\'" + transitionText + "\'");
         switch (speakerFont) 
         {
             case Speaker.None:
@@ -137,34 +159,25 @@ public class GameManager : MonoBehaviour
             default:
                 break;  
         }
-
-    }
-
-    void Start()
-    {
-        pauseMenuHolder.SetActive(false);
-        if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
-        if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
-        if (timeUntilMaxHappinessLoss < 10) timeUntilMaxHappinessLoss = 10;
-
-        // Initialize Happiness Subsystem
-        happinessManager.happinessCount = currHappiness;
-        happinessManager.maxDepressor = maxHappinessLostPerTick;
-        happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
-        sigmoidFunction.buffer = gracePeriod;
-        sigmoidFunction.timeFrame = timeUntilMaxHappinessLoss;
+        transitionManager.fadeInDelay = textFadeInDelay;
+        transitionManager.fadeOutDelay = textFadeOutDelay;
+        transitionManager.sceneSwitchDelay = levelTransitionDelay;
+        transitionManager.blackFadeInTime = fadeToBlackTime;
+        transitionManager.textFadeInTime = this.textFadeInTime;
+        transitionManager.textFadeOutTime = this.textFadeOutTime;
     }
 
     void Update()
     {
+        // Replace this with new input system
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.JoystickButton7))
         {
-            togglePause();
+            TogglePause();
         }
     }
 
     // Pause functionality 
-    public void togglePause()
+    public void TogglePause()
     {
         paused = !paused;
         Time.timeScale = paused ? 0 : 1;
@@ -172,12 +185,12 @@ public class GameManager : MonoBehaviour
         mainUIHolder.SetActive(!paused);
     }
 
-    public void returnToMainMenu()
+    public void ReturnToMainMenu()
     {
         SceneManager.LoadScene(0);
     }
 
-    public void restartTask()
+    public void RestartTask()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -186,9 +199,10 @@ public class GameManager : MonoBehaviour
     {
         if (objectiveTracker.CountCompletedGoals() < objectiveTracker.minNumGoalsCompleted)
         {
+            Debug.Log("Losing happiness due to early level exit.");
             happinessManager.loseHappiness(objectiveTracker.earlyExitHappinessLoss);
         }
 
-        transitionManager.fadeToBlack(nextLevelIndex);
+        StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
     }
 }
