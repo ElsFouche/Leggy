@@ -14,6 +14,6 @@ public class VersionInfo : MonoBehaviour
     private void Start()
     {
         versionDisplay = GetComponent<TMP_Text>();
-        if (versionDisplay) versionDisplay.text = "v" + Application.version;
+        if (versionDisplay) versionDisplay.text = "v" + PlayerSettings.bundleVersion;
     }
 }
