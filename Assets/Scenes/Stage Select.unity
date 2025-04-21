@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 2
+  sceneIndex: 4
 --- !u!1 &287570519
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc765dfb72d73c4a9f98de77261a832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameOverManager: {fileID: 0}
 --- !u!4 &347074815
 Transform:
   m_ObjectHideFlags: 0
@@ -518,7 +519,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 125698473}
+      - m_Target: {fileID: 366702956}
         m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
         m_MethodName: OnButtonPress
         m_Mode: 1
@@ -914,6 +915,9 @@ MonoBehaviour:
   fadeInDelay: 0
   fadeOutDelay: 0
   sceneSwitchDelay: 0
+  blackFadeInTime: 1
+  textFadeInTime: 1
+  textFadeOutTime: 1
   loreText: {fileID: 1602165702}
   blackScreen: {fileID: 440161592}
   happinessManager: {fileID: 0}
@@ -3151,7 +3155,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 125698473}
+      - m_Target: {fileID: 1877999342}
         m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
         m_MethodName: OnButtonPress
         m_Mode: 1
@@ -3213,7 +3217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 2
+  sceneIndex: 4
 --- !u!1 &1905085431
 GameObject:
   m_ObjectHideFlags: 0
@@ -3433,7 +3437,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 125698473}
+      - m_Target: {fileID: 2127847415}
         m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
         m_MethodName: OnButtonPress
         m_Mode: 1
@@ -3495,7 +3499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 2
+  sceneIndex: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

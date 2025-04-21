@@ -37,7 +37,7 @@ public class PlayerControlScript : MonoBehaviour
     public float actionDuration = 2f;
     public int frameSkips = 3;
     public float inbetweenActionDelay = 0.5f;
-    private float inActionDelay = 0.000000000000000000000000000000000000000000000001f;
+    //private float inActionDelay = 0.000000000000000000000000000000000000000000000001f;
 
     private bool restartPromptActive = false;
 
