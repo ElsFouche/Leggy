@@ -34,6 +34,8 @@ public class GoalZone : MonoBehaviour
     private ObjectiveTracker.GoalState goalState;
     private ObjectiveTracker tracker;
     private int instanceID;
+    private bool collisionEnterChecking = false;
+    private bool collisionExitChecking = false;
 
     public enum HappinessValues
     {
@@ -76,13 +78,25 @@ public class GoalZone : MonoBehaviour
 
         tagManager = this.GetComponent<TagManager>();
         // This needs to be changed.
-        happinessManager = FindObjectOfType<HappinessManager>();
+        instanceID = this.GetInstanceID();
 
+        StartCoroutine(DelayForSeconds(0.2f));
+    }
+
+    private IEnumerator DelayForSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        AfterDelayLogic();
+    }
+
+    private void AfterDelayLogic()
+    {
+        happinessManager = FindObjectOfType<HappinessManager>();
+        
         if (!tracker)
         {
             Debug.Log("Objective tracker not found! Are you sure you loaded this goal zone into the objective tracker?");
         }
-        instanceID = this.GetInstanceID();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -110,7 +124,9 @@ public class GoalZone : MonoBehaviour
             }
         }
 */
-
+        // Check for lock
+        if (collisionEnterChecking) return;
+        collisionEnterChecking = true;
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -123,6 +139,8 @@ public class GoalZone : MonoBehaviour
             }
             else
             {
+                Debug.Log("Adding object failed.");
+                collisionEnterChecking = false;
                 return;
                 // Exit
             }
@@ -145,6 +163,8 @@ public class GoalZone : MonoBehaviour
                     }
                     else
                     {
+                        Debug.Log("Adding object failed.");
+                        collisionEnterChecking = false;
                         return;
                         // Exit
                     }
@@ -154,6 +174,8 @@ public class GoalZone : MonoBehaviour
                 }
             }
         }
+
+        if (hitTags == null) { collisionEnterChecking = false;  return; }
 
         // Begin sortable object logic
         if (hitTags.mainTag == TagManager.MainTag.ObjectToSort && (int)hitTags.zoneTag == (int)tagManager.zoneTag) 
@@ -186,6 +208,8 @@ public class GoalZone : MonoBehaviour
                 }
             }
         }
+        // Unlock
+        collisionEnterChecking = false;
     }
 
     private void OnTriggerExit(Collider other)
@@ -212,7 +236,10 @@ public class GoalZone : MonoBehaviour
             }
         }
 */
-
+        
+        // Check for lock
+        if (collisionExitChecking) return;
+        collisionExitChecking= true;
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -220,11 +247,13 @@ public class GoalZone : MonoBehaviour
             Debug.Log("Tag manager found: " + hitTags.GetInstanceID());
             if (objectIDs.Remove(other.transform.GetInstanceID()))
             {
-                Debug.Log("Adding: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
+                Debug.Log("Removing: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
                 // Continue
             }
             else
             {
+                collisionExitChecking= false;
+                Debug.Log("Failed to remove object.");
                 return;
                 // Exit
             }
@@ -247,6 +276,8 @@ public class GoalZone : MonoBehaviour
                     }
                     else
                     {
+                        collisionExitChecking= false;
+                        Debug.Log("Failed to remove object.");
                         return;
                         // Exit
                     }
@@ -258,7 +289,8 @@ public class GoalZone : MonoBehaviour
             }
         }
 
-        // These need to change.
+        if (hitTags == null) { collisionExitChecking= false;  return; }
+
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber--;
@@ -295,6 +327,8 @@ public class GoalZone : MonoBehaviour
                 }
             }
         }
+        // Unlock
+        collisionExitChecking= false;
     }
 
     private void gainHappiness(int happinessToGain)
