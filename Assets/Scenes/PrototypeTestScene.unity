@@ -773,12 +773,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d360d96a3510e824aa561dc40ba23e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveOn: 0
+  tutorialStartDelay: 2
   blackScreen: {fileID: 541024908}
   continueHint: {fileID: 1483180462}
   happinessExplanation: {fileID: 823040471}
-  happinessManager: {fileID: 0}
-  sceneObjects: []
+  controlsExplanation: {fileID: 0}
 --- !u!1 &171289801
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredGripPressure: 0.5
+  RootRigidBodyGameObject: {fileID: 0}
   objectRigidbody: {fileID: 215551826}
 --- !u!4 &215551830
 Transform:
@@ -6610,6 +6610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredGripPressure: 0.5
+  RootRigidBodyGameObject: {fileID: 0}
   objectRigidbody: {fileID: 1834451166}
 --- !u!4 &1834451170
 Transform:
@@ -6644,14 +6645,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c95eff7cf6302a14f8faeb5c469f3131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buffer: 5
-  timeFrame: 15
-  sigmoidCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1890215315
 GameObject:
   m_ObjectHideFlags: 0
@@ -7270,6 +7263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredGripPressure: 0.5
+  RootRigidBodyGameObject: {fileID: 0}
   objectRigidbody: {fileID: 2040241887}
 --- !u!4 &2040241891
 Transform:
@@ -7735,6 +7729,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc765dfb72d73c4a9f98de77261a832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventSystem: {fileID: 0}
+  gameOverManager: {fileID: 0}
 --- !u!4 &2133229492
 Transform:
   m_ObjectHideFlags: 0
