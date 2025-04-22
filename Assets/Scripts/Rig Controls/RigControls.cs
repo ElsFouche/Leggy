@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,16 @@ public class RigControls : MonoBehaviour
 {
     public GameObject ArmIK_target;
     public GameObject parentGameObject;
+    public GameObject armRotationObject;
+    public GameObject ArmIK;
+
+    [Header("Reset Interval For IK Target")]
+    [SerializeField] IkTargetFallback ikTargetFallback;
+    public GameObject ArmIKFallback;
+    public float ArmIK_target_ResetInterval = 1.0f;
+    private bool ArmFallbackTriggered = false;
+
+
     public float moveSpeed = 1.0f;
     public float rotationSpeed = 100f;
     public float baseRotationSpeed = 50f;
@@ -24,8 +35,10 @@ public class RigControls : MonoBehaviour
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
 
-    public float gantryMinX = -2.0f; // Min limit for gantry movement
-    public float gantryMaxX = 2.0f;  // Max limit for gantry movement
+    public float gantryMinX = -2.0f; 
+    public float gantryMaxX = 2.0f;
+
+    public float clawVerticalInput = 0f;
 
     private Vector3 localPosition;
     private Vector2 leftStickInput;
@@ -36,6 +49,8 @@ public class RigControls : MonoBehaviour
     private bool isResetting = false;
     public float holdTime = 2.0f;
     private float timeHeld = 0f;
+
+    public GameObject circleMeter;
 
     private void Awake()
     {
@@ -53,13 +68,26 @@ public class RigControls : MonoBehaviour
         controls.Player.RotateRight.performed += ctx => bodyRotationInput = 1f;
         controls.Player.RotateRight.canceled += ctx => bodyRotationInput = 0f;
 
+        controls.Player.ClawVerticalUp.performed += ctx => clawVerticalInput = 1f;
+        controls.Player.ClawVerticalUp.canceled += ctx => clawVerticalInput = 0f;
+
+        controls.Player.ClawVerticalDown.performed += ctx => clawVerticalInput = -1f;
+        controls.Player.ClawVerticalDown.canceled += ctx => clawVerticalInput = 0f;
+
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
 
+        armRotationObject = GameObject.Find("Base_twist_jnt");
         ArmIK_target = GameObject.Find("ArmIK_target");
+        ArmIK = GameObject.Find("ArmIK");
         if (ArmIK_target == null) Debug.LogError("ArmIK_target not found!");
 
         if (parentGameObject == null) Debug.LogError("Parent GameObject is not assigned!");
+    }
+
+    private void Start()
+    {
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void OnEnable() => controls.Enable();
@@ -67,7 +95,17 @@ public class RigControls : MonoBehaviour
 
     void Update()
     {
+
+
         if (ArmIK_target == null || parentGameObject == null) return;
+
+        if (!ArmFallbackTriggered && !ikTargetFallback.IK_Target_Still_In_Range)
+        {
+            ArmFallbackTriggered = true;
+            StartCoroutine(ResetArmIK());  
+        }
+
+        ArmIK.transform.rotation = armRotationObject.transform.rotation;
 
         // Move gantry left/right with clamping
         float newX = parentGameObject.transform.position.x + (-leftStickInput.x * moveSpeed * Time.deltaTime);
@@ -86,27 +124,27 @@ public class RigControls : MonoBehaviour
 
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
         if (targetRotationX > 180f) targetRotationX -= 360f;
-        bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
+        //bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
         targetRotationX = Mathf.Clamp(targetRotationX, ikMinRotationX, ikMaxRotationX);
 
         float targetRotationZ = currentRotation.eulerAngles.z + (rightStickInput.x * rotationSpeed * Time.deltaTime);
         if (targetRotationZ > 180f) targetRotationZ -= 360f;
-        bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
+        //bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
         targetRotationZ = Mathf.Clamp(targetRotationZ, ikMinRotationZ, ikMaxRotationZ);
 
         ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
 
-        // Base rotation adjustments if IK reaches limits
+        /* Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)
         {
             float rotationDirection = -Mathf.Sign(rightStickInput.x);
-            parentGameObject.transform.Rotate(Vector3.up, rotationDirection * baseRotationSpeed * Time.deltaTime);
-        }
+            armRotationObject.transform.Rotate(Vector3.up, rotationDirection * baseRotationSpeed * Time.deltaTime); // may be funky
+        }*/
 
-        if (reachedXLimit && rightStickInput.y != 0)
+        if (clawVerticalInput != 0)
         {
             localPosition = ArmIK_target.transform.localPosition;
-            float heightDirection = Mathf.Sign(rightStickInput.y);
+            float heightDirection = clawVerticalInput;
             localPosition.y += heightDirection * ikVerticalMoveSpeed * Time.deltaTime;
             localPosition.y = Mathf.Clamp(localPosition.y, ikMinY, ikMaxY);
             ArmIK_target.transform.localPosition = localPosition;
@@ -115,20 +153,23 @@ public class RigControls : MonoBehaviour
         // Rotate body
         if (bodyRotationInput != 0)
         {
-            float newRotation = parentGameObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
+            float newRotation = armRotationObject.transform.eulerAngles.y + bodyRotationInput * bodyRotationSpeed * Time.deltaTime;
             if (newRotation > 180f) newRotation -= 360f;
             newRotation = Mathf.Clamp(newRotation, baseMinRotation, baseMaxRotation);
-            parentGameObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
+            
+            armRotationObject.transform.rotation = Quaternion.Euler(0, newRotation, 0);
         }
 
         // Reset level if button is held
         if (isResetting)
         {
             timeHeld += Time.deltaTime;
+            circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount += (Time.deltaTime / holdTime);
             if (timeHeld >= holdTime)
             {
                 ResetLevel();
                 timeHeld = 0f;
+                circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
             }
         }
     }
@@ -137,17 +178,26 @@ public class RigControls : MonoBehaviour
     {
         isResetting = true;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void StopHoldReset()
     {
         isResetting = false;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void ResetLevel()
     {
         Debug.Log("Resetting the level...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator ResetArmIK()
+    {
+        ArmIK_target.transform.position = ArmIKFallback.transform.position;
+        yield return new WaitForSeconds(ArmIK_target_ResetInterval);
+        ArmFallbackTriggered = false;
     }
 }

@@ -5,8 +5,6 @@ public class CameraController : MonoBehaviour
 {
     public Camera topDown;
     public Camera firstPerson;
-    public Camera leftView;
-    public Camera rightView;
     public Camera leftShoulder;
     public Camera rightShoulder;
 
@@ -27,8 +25,6 @@ public class CameraController : MonoBehaviour
         // Initially enable the first person view and disable others
         firstPerson.enabled = true;
         topDown.enabled = false;
-        leftView.enabled = false;
-        rightView.enabled = false;
         leftShoulder.enabled = false;
         rightShoulder.enabled = false;
 
@@ -65,71 +61,32 @@ public class CameraController : MonoBehaviour
             firstPerson.enabled = true;
 
             topDown.enabled = false;
-            leftView.enabled = false;
-            rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
-
-            onLeftShoulder = false;
-            onLeftView = false;
         }
 
         if (directionPressed == "down")
         {
             topDown.enabled = true;
-
             firstPerson.enabled = false;
-            leftView.enabled = false;
-            rightView.enabled = false;
             leftShoulder.enabled = false;
             rightShoulder.enabled = false;
-
-            onLeftShoulder = false;
-            onLeftView = false;
         }
 
         if (directionPressed == "left")
         {
             topDown.enabled = false;
             firstPerson.enabled = false;
-            leftView.enabled = false;
-            rightView.enabled = false;
-            leftShoulder.enabled = false;
+            leftShoulder.enabled = true;
             rightShoulder.enabled = false;
-
-            if (!onLeftView)
-            {
-                leftView.enabled = true;
-            }
-            else
-            {
-                rightView.enabled = true;
-            }
-
-            onLeftView = !onLeftView;
-            onLeftShoulder = false;
         }
 
         if (directionPressed == "right")
         {
             topDown.enabled = false;
             firstPerson.enabled = false;
-            leftView.enabled = false;
-            rightView.enabled = false;
             leftShoulder.enabled = false;
-            rightShoulder.enabled = false;
-
-            if (!onLeftShoulder)
-            {
-                leftShoulder.enabled = true;
-            }
-            else
-            {
-                rightShoulder.enabled = true;
-            }
-
-            onLeftShoulder = !onLeftShoulder;
-            onLeftView = false;
+            rightShoulder.enabled = true;
         }
     }
 }

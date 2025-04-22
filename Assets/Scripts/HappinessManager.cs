@@ -7,18 +7,24 @@ using UnityEngine.UI;
 public class HappinessManager : MonoBehaviour
 {
     //The higher the position, the worse the state
-    public List<AudioClip> emotes;
+    [Header("Debug")]
     public int extraHappy;
     public int happy;
     public int sad;
+    public bool isVisible;
+
+    [Header("Level Designers")]
+    [Tooltip("The amount of happiness the level starts off with.")]
+    public int happinessCount;
+    [Tooltip("The maximum amount of happiness lost after the sigmoid curve runs its course.")]
+    public int maxDepressor;
+    [Tooltip("The minimum amount of happiness required to gain for the 'extra happy' sound to play.")]
+    public int extraExcitedThreshold;
+
+    [Header("Misc References")]
+    public List<AudioClip> emotes;
     public AudioSource speaker;
     public TextMeshProUGUI happinessDisplay;
-    public int happinessCount;
-    public int maxDepressor;
-    //public float depressorMultiplier;
-    float timer;
-
-    public bool isVisible;
 
     public Image backgroundBar;
     public Image backgroundDepressLayer;
@@ -28,16 +34,18 @@ public class HappinessManager : MonoBehaviour
     bool decreasing;
     public bool buffering;
 
-    public int extraExcitedThreshold;
-
     public SigmoidFunction sigmoidFunction;
 
     bool startedFunction = false;
 
+    public bool viewingTutorial = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        sigmoidFunction = FindObjectOfType<SigmoidFunction>();
+        // Els: Modified 04/18/2025
+        // removed search for sigmoid function. SigmoidFunction.cs is now a non-monbehavior-derived purely digital
+        // function. The value of variable sigmoidFunction is set from within GameManager.cs
 
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
@@ -51,15 +59,15 @@ public class HappinessManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            maxHappy();
+            //maxHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            normalHappy();
+            //normalHappy();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            getDepressed();
+            //getDepressed();
         }
 
         happinessDisplay.text = "HAPPINESS: " + happinessCount;
@@ -109,9 +117,15 @@ public class HappinessManager : MonoBehaviour
             backgroundDepressLayer.GetComponent<Image>().fillAmount -= 0.0015f;
         }
     }
+
     
+
     public void callCoroutine()
     {
+        if (viewingTutorial)
+        {
+            return;
+        }
         StartCoroutine(artificialDelay());
         startedFunction = true;
     }
@@ -121,27 +135,41 @@ public class HappinessManager : MonoBehaviour
     {
         yield return new WaitForSeconds(sigmoidFunction.buffer);
         StartCoroutine(startSigmoid());
+        StartCoroutine(depression());
     }
-    
+
 
     float sigmoidTime = 0;
 
+    public float sigmoidMultiplier = 0;
 
     private IEnumerator startSigmoid()
     {
         sigmoidTime += Time.deltaTime;
-        sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        // Els: removed unnecessary curve evaluation 04/18/2025
+        // sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
         //Debug.Log(sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime));
 
-        float test = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
-        Debug.Log($"Curve Value at time {sigmoidTime}: {test}");
+        sigmoidMultiplier = sigmoidFunction.sigmoidCurve.Evaluate(sigmoidTime);
+        //Debug.Log($"Curve Value at time {sigmoidTime}: {sigmoidMultiplier}");
 
         yield return new WaitForSeconds(Time.deltaTime);
 
         if (sigmoidTime < sigmoidFunction.timeFrame) StartCoroutine(startSigmoid());
     }
 
-    
+    public float timeBetweenHappinessLoss;
+
+    public IEnumerator depression()
+    {
+        int depressionAmount = Mathf.RoundToInt(maxDepressor * sigmoidMultiplier);
+        happinessCount -= depressionAmount;
+        // Debug.Log("Happiness Lost: " + depressionAmount);
+        StartCoroutine(testing());
+        updateThousands();
+        yield return new WaitForSeconds(timeBetweenHappinessLoss);
+        StartCoroutine(depression());
+    }
 
     public void updateThousands()
     {
@@ -172,31 +200,45 @@ public class HappinessManager : MonoBehaviour
 
         if (happinessToGain <= 0)
         {
+            happinessCount -= happinessToGain;
             return;
         }
-        else if (happinessToGain >= extraExcitedThreshold)
+        else if (emotes.Count > 0)
         {
-            speaker.clip = emotes[0];
-        }
-        else
-        {
-            speaker.clip = emotes[1];
+            if (happinessToGain >= extraExcitedThreshold)
+            {
+                // Els: Modified 04/18/025
+                // This is now how we'll be handling sound. 
+                // speaker.clip = emotes[0];
+            }
+            else
+            {
+                // speaker.clip = emotes[1];
+            }
         }
 
-        speaker.Play();
+        // Els: Modified 04/18/025
+        // This is now how we'll be handling sound. 
+        // speaker.Play();
         updateThousands();
     }
 
     public void loseHappiness(int happinessToLose)
     {
-        speaker.clip = emotes[2];
         happinessCount -= happinessToLose;
-        speaker.Play();
+
+        if (happinessToLose >= 0)
+        {
+            happinessCount += happinessToLose;
+            return;
+        }
+        else if (emotes.Count >= 3) speaker.clip = emotes[2];
+        // speaker.Play();
         updateThousands();
     }
 
 
-
+    /*
     public void maxHappy()
     {
         speaker.clip = emotes[0];
@@ -220,4 +262,5 @@ public class HappinessManager : MonoBehaviour
         speaker.Play();
         updateThousands();
     }
+    */
 }
