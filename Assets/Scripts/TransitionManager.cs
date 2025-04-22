@@ -234,6 +234,6 @@ public class TransitionManager : MonoBehaviour
     // This is the wrapper method to make it work with Unity's UI Button OnClick()
     public void TransitionToSceneWrapper(int sceneIndex)
     {
-        TransitionToScene(sceneIndex);
+        StartCoroutine(TransitionToScene(sceneIndex));
     }
 }
