@@ -49,4 +49,9 @@ public class ParticleAttractor : MonoBehaviour
 
         pSystem.SetParticles(particles, particleCount);
     }
+
+    public void particleStream()
+    {
+        pSystem.Emit(30);
+    }
 }
