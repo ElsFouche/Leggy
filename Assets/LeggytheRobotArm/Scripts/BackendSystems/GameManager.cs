@@ -195,6 +195,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public void FinishLevel()
     {
         if (objectiveTracker.CountCompletedGoals() < objectiveTracker.minNumGoalsCompleted)
