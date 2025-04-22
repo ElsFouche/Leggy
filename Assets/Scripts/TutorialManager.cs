@@ -1,4 +1,4 @@
-
+//using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,30 +73,8 @@ public class TutorialManager : MonoBehaviour
         
         if (isWaiting) { return; }
 
-        if (Input.anyKeyDown)
-        {
-            if (!moveOn)
-            {
-                moveOn = true;
-                controlsExplanation.SetActive(false);
-                happinessExplanation.SetActive(true);
-            }
-            else if (moveOn)
-            {
-                moveOn = false;
-                happinessManager.viewingTutorial = false;
-                blackScreen.SetActive(false);
-                continueHint.SetActive(false);
-                happinessExplanation.SetActive(false);
-
-                happinessManager.callCoroutine();
-
-                Destroy(this);
-            }
-        }
-/*
         // Check a custom list of keys that will advance the tutorial. 
-        foreach (KeyCode keyPressed in keysToAdvance)
+        foreach(KeyCode keyPressed in keysToAdvance)
         {
             if (Input.GetKeyDown(keyPressed) && happinessManager.viewingTutorial)
             {
@@ -120,7 +98,6 @@ public class TutorialManager : MonoBehaviour
                 }
             }
         }
-*/
     }
 
     private IEnumerator DelayTutorialStart()
