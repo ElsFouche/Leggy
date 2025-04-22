@@ -14,9 +14,13 @@ public class ParticleAttractor : MonoBehaviour
 
     private ParticleSystem.Particle[] particles;
 
+    float speed;
+
     void Start()
     {
         pSystem = GetComponent<ParticleSystem>();
+
+        speed = 5;
     }
 
     void Update()
@@ -36,6 +40,9 @@ public class ParticleAttractor : MonoBehaviour
             Vector3 direction = (target.position - particles[i].position).normalized;
 
             //Adjust speed
+
+            Quaternion targetRotation = Quaternion.LookRotation(target.position - particles[i].position);
+            pSystem.transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
 
             particles[i].velocity = direction * 3.0f;
         }
