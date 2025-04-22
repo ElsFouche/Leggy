@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     private GameObject mainUIHolder;
     private GameObject pauseMenuHolder;
         // Text
+    private FontRandomizer fontRandomizer;
+
+    // Public
     public enum Speaker 
     {
         None,
@@ -37,9 +40,6 @@ public class GameManager : MonoBehaviour
         Lady,
         System
     }
-    private FontRandomizer fontRandomizer;
-
-    // Public
         // Happiness 
     [Header("Happines Decay")]
     [Tooltip("Lower values should be used for levels that are expected to take a long time to complete.")]
@@ -73,14 +73,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Manager created with ID: " +  transform.root.GetInstanceID());
         // Persist into new scenes.
         DontDestroyOnLoad(this);
-
         
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
-        if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.GetInstanceID()); }
+        if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.transform.root.GetInstanceID()); }
         if (previousManager != null && previousManager.transform.root.gameObject != this.transform.root.gameObject) 
         {
-            Debug.Log("Found previous happiness manager with ID: " +  previousManager.GetInstanceID());
+            Debug.Log("Found previous happiness manager with ID: " +  previousManager.transform.root.GetInstanceID());
             Debug.Log("Updating local variables with existing values.");
             currHappiness = previousManager.happinessCount;
             Debug.Log("Deconstructing old game manager.");  
@@ -165,15 +164,6 @@ public class GameManager : MonoBehaviour
         transitionManager.blackFadeInTime = fadeToBlackTime;
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
-    }
-
-    void Update()
-    {
-        // Replace this with new input system
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.JoystickButton7))
-        {
-            TogglePause();
-        }
     }
 
     // Pause functionality 
