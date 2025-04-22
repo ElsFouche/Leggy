@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public class TutorialManager : MonoBehaviour
 {
     private float dummyVelocity;
-    private bool moveOn;
+    public bool moveOn;
     private bool isWaiting = true;
     private HappinessManager happinessManager;
     private List<KeyCode> keysToAdvance;
@@ -33,14 +33,14 @@ public class TutorialManager : MonoBehaviour
         KeyCode.Mouse4,
         KeyCode.Mouse5,
         KeyCode.Escape,
-        KeyCode.Joystick1Button0,
-        KeyCode.Joystick1Button1,
-        KeyCode.Joystick1Button2,
-        KeyCode.Joystick1Button3,
-        KeyCode.Joystick1Button4,
-        KeyCode.Joystick1Button5,
-        KeyCode.Joystick1Button6,
-        KeyCode.Joystick1Button7
+        KeyCode.JoystickButton0,
+        KeyCode.JoystickButton1,
+        KeyCode.JoystickButton2,
+        KeyCode.JoystickButton3,
+        KeyCode.JoystickButton4,
+        KeyCode.JoystickButton5,
+        KeyCode.JoystickButton6,
+        KeyCode.JoystickButton7
         };
 
         happinessManager = FindObjectOfType<HappinessManager>();
