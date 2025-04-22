@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4198601682609415547}
   - component: {fileID: 3116740249353657539}
   - component: {fileID: 4778796180661384578}
-  - component: {fileID: 1056628906073777782}
   - component: {fileID: 180128334865541292}
   m_Layer: 0
   m_Name: goalZone
@@ -74,22 +73,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainTag: 3
   zoneTag: 2
---- !u!114 &1056628906073777782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6231044241038430381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51d8e2cacd33a478d91b99f288d53c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matchingObjectHappiness: 250
-  generalObjectHappiness: 100
-  minNumMatchingObjects: 2
-  minNumGeneralObjects: 5
 --- !u!33 &180128334865541292
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -109,7 +92,6 @@ GameObject:
   - component: {fileID: 3189648229801124391}
   - component: {fileID: 8458763765484760143}
   - component: {fileID: 4259164758312612950}
-  - component: {fileID: 8221640874367950984}
   - component: {fileID: 5497426087833578877}
   m_Layer: 0
   m_Name: goalZone_02
@@ -172,22 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainTag: 3
   zoneTag: 2
---- !u!114 &8221640874367950984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6399147829352308385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51d8e2cacd33a478d91b99f288d53c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matchingObjectHappiness: 350
-  generalObjectHappiness: 100
-  minNumMatchingObjects: 2
-  minNumGeneralObjects: 2
 --- !u!33 &5497426087833578877
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -207,7 +173,6 @@ GameObject:
   - component: {fileID: 3142770174864416965}
   - component: {fileID: 3467119912829409016}
   - component: {fileID: 3232454624886250316}
-  - component: {fileID: 4129955678429203338}
   - component: {fileID: 3290799956586322018}
   m_Layer: 0
   m_Name: goalZone_01
@@ -270,22 +235,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainTag: 3
   zoneTag: 2
---- !u!114 &4129955678429203338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7241771408942003733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51d8e2cacd33a478d91b99f288d53c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matchingObjectHappiness: 350
-  generalObjectHappiness: 100
-  minNumMatchingObjects: 2
-  minNumGeneralObjects: 2
 --- !u!33 &3290799956586322018
 MeshFilter:
   m_ObjectHideFlags: 0
