@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    //public EventSystem eventSystem;
+    public EventSystem eventSystem;
     public GameOverManager gameOverManager;
 
     Vector2 directionalInput;
@@ -16,23 +16,23 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         Cursor.visible = false;
+        eventSystem = FindObjectOfType<EventSystem>();
         gameOverManager = FindObjectOfType<GameOverManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*if (EventSystem.current.currentSelectedGameObject == null ||
+        if (EventSystem.current.currentSelectedGameObject == null ||
             (EventSystem.current.currentSelectedGameObject == null && gameOverManager.gameOverMenu.activeInHierarchy &&
             SceneManager.GetActiveScene().buildIndex > 1))
                 SetFirstSelectedMainMenu();
-        */
     }
 
     
     
     public void SetFirstSelectedMainMenu()
     {
-        //EventSystem.current.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+        EventSystem.current.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
     }
 }

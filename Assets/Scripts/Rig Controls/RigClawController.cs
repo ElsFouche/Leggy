@@ -8,6 +8,7 @@ public class RigClawController : MonoBehaviour
 {
     public Image gaugeIndicatorObject;
     public float gaugeMin, gaugeMax;
+    private float gaugeOffset = 50f;
 
     public GameObject B_ClawIK_target;
     public GameObject T_ClawIK_target;

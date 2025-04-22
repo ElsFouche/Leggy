@@ -32,32 +32,29 @@ public class TransitionManager : MonoBehaviour
         if (blackScreen != null)
         {
             blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
-        }
-        if (loreText != null)
-        {
             loreText.color = new Color(1, 1, 1, 0);
         }
 
-            // Els: Modified 04/19/2025
-            // Unnecessary check - title screen & level select won't have a
-            // game manager and thus no transition manager.
-            /*
-                    if (SceneManager.GetActiveScene().buildIndex > 1)
+        // Els: Modified 04/19/2025
+        // Unnecessary check - title screen & level select won't have a
+        // game manager and thus no transition manager.
+        /*
+                if (SceneManager.GetActiveScene().buildIndex > 1)
+                {
+                    StartCoroutine(blackFadeOut());
+                    happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
+                }
+                else
+                {
+                    if (blackScreen != null)
                     {
-                        StartCoroutine(blackFadeOut());
-                        happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
+                        blackScreen.gameObject.SetActive(false);
+                        loreText.gameObject.SetActive(false);
                     }
-                    else
-                    {
-                        if (blackScreen != null)
-                        {
-                            blackScreen.gameObject.SetActive(false);
-                            loreText.gameObject.SetActive(false);
-                        }
-                    }
-            */
+                }
+        */
 
-            if (blackScreen != null) 
+        if (blackScreen != null) 
         { 
             blackScreen.gameObject.SetActive(false);
         } else {
@@ -223,13 +220,13 @@ public class TransitionManager : MonoBehaviour
     {
         isTransitioning = true;
         // StartCoroutine(fadeToBlack(sceneIndex));
-            Debug.Log("Beginning fade to black.");
+            // Debug.Log("Beginning fade to black.");
         yield return FadeToBlack(blackFadeInTime);
-            Debug.Log("Beginning text fade in.");
+            // Debug.Log("Beginning text fade in.");
         yield return FadeInText(textFadeInTime, textFadeInTime);
-            Debug.Log("Beginning text fade out.");
+            // Debug.Log("Beginning text fade out.");
         yield return FadeOutText(textFadeOutTime, textFadeOutTime);
-            Debug.Log("Loading next level at index: " +  sceneIndex);
+            // Debug.Log("Loading next level at index: " +  sceneIndex);
         yield return new WaitForSeconds(sceneSwitchDelay);
         SceneManager.LoadScene(sceneIndex);
     }
@@ -237,6 +234,6 @@ public class TransitionManager : MonoBehaviour
     // This is the wrapper method to make it work with Unity's UI Button OnClick()
     public void TransitionToSceneWrapper(int sceneIndex)
     {
-        StartCoroutine(TransitionToScene(sceneIndex));
+        TransitionToScene(sceneIndex);
     }
 }
