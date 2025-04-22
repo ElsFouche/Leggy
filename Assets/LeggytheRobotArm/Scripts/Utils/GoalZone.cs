@@ -337,11 +337,18 @@ public class GoalZone : MonoBehaviour
 
         //add vfx activation
 
-        Debug.Log(inputObject.name);
+        Debug.Log(inputObject.name + " grabbable has reached goal: " + this.name);
 
         if (inputObject != null)
         {
-            inputObject.Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().particleStream();
+            GameObject visualEffects;
+            visualEffects = inputObject.Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
+
+            if (visualEffects != null)
+            {
+                Debug.Log(inputObject.name + ".BinaryFollowsPlayer.TaskCompleteVFX found!");
+                visualEffects.GetComponent<ParticleAttractor>().particleStream();
+            }
         }
         else
         {

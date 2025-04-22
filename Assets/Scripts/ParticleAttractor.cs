@@ -20,6 +20,8 @@ public class ParticleAttractor : MonoBehaviour
     {
         pSystem = GetComponent<ParticleSystem>();
 
+        pSystem.maxParticles = 0;
+
         speed = 5;
     }
 
@@ -52,6 +54,7 @@ public class ParticleAttractor : MonoBehaviour
 
     public void particleStream()
     {
+        if (pSystem.maxParticles == 0) pSystem.maxParticles = 30;
         pSystem.Emit(30);
     }
 }
