@@ -55,6 +55,8 @@ public class ParticleAttractor : MonoBehaviour
     public void particleStream()
     {
         if (pSystem.maxParticles == 0) pSystem.maxParticles = 30;
+
+        Debug.Log("Spewing particles");
         pSystem.Emit(30);
     }
 }

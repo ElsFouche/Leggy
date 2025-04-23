@@ -342,7 +342,7 @@ public class GoalZone : MonoBehaviour
         if (inputObject != null)
         {
             GameObject visualEffects;
-            visualEffects = inputObject.Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
+            visualEffects = inputObject.Find("BinaryFollowsPlayer").Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
 
             if (visualEffects != null)
             {
