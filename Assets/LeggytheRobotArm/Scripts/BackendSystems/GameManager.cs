@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// This script is the primary interface between designer and programmer.
@@ -24,12 +26,15 @@ public class GameManager : MonoBehaviour
     private TransitionManager transitionManager;
     private ObjectiveTracker objectiveTracker;
     private int currHappiness = 30000;
+    private int levelStartHappiness;
         // Pause Function
     private bool paused;
     private GameObject mainUIHolder;
     private GameObject pauseMenuHolder;
         // Text
     private FontRandomizer fontRandomizer;
+        // Controls
+    private ClawControls controls;
 
     // Public
     public enum Speaker 
@@ -74,6 +79,12 @@ public class GameManager : MonoBehaviour
         // Persist into new scenes.
         DontDestroyOnLoad(this);
         
+        // Init Controls
+        controls = new ClawControls(); // The constructor for ClawControls.cs retrieves the associated input actions.
+        controls.Player.Pause.performed += ctx => TogglePause();
+        controls.UI.Pause.performed += ctx => TogglePause();
+
+        
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
         if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.transform.root.GetInstanceID()); }
@@ -98,12 +109,32 @@ public class GameManager : MonoBehaviour
             Debug.Log("Found Font Randomizer with ID: " + fontRandomizer.GetInstanceID());
 
         // Initialize UI 
-        pauseMenuHolder = GameObject.FindGameObjectWithTag("Subsystem_PauseUI");
-            Debug.Log("Found Pause Menu with ID: " + pauseMenuHolder.GetInstanceID());
-        mainUIHolder = GameObject.FindGameObjectWithTag("Subsystem_MainUI");
-            Debug.Log("Found Main UI with ID: " +  mainUIHolder.GetInstanceID());
+        foreach (Transform child in GetComponentsInChildren<Transform>())
+        {  
+            if (child.gameObject.CompareTag("Subsystem_PauseUI"))
+            {
+                pauseMenuHolder = child.gameObject;
+                    Debug.Log("Found Pause Menu with ID: " + pauseMenuHolder.GetInstanceID());
+            } else if (child.gameObject.CompareTag("Subsystem_MainUI"))
+            {
+                mainUIHolder = child.gameObject;
+                    Debug.Log("Found Main UI with ID: " +  mainUIHolder.GetInstanceID());
+            }
+
+            if (pauseMenuHolder != null && mainUIHolder != null) { break; }
+        }
     }
 
+    private void OnEnable() 
+    {
+        controls.Player.Pause.Enable();
+        controls.UI.Pause.Enable();
+    }
+    private void OnDisable()
+    {
+        controls.Player.Pause.Disable();
+        controls.UI.Pause.Disable();
+    }
     void Start()
     {
         pauseMenuHolder.SetActive(false);
@@ -113,6 +144,7 @@ public class GameManager : MonoBehaviour
         if (timeUntilMaxHappinessLoss < 10) timeUntilMaxHappinessLoss = 10;
 
         // Initialize Happiness Subsystem
+        levelStartHappiness = currHappiness;
         happinessManager.happinessCount = currHappiness;
         happinessManager.maxDepressor = maxHappinessLostPerTick;
         happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
@@ -169,19 +201,35 @@ public class GameManager : MonoBehaviour
     // Pause functionality 
     public void TogglePause()
     {
+        Debug.Log("Toggling pause.");
         paused = !paused;
         Time.timeScale = paused ? 0 : 1;
         pauseMenuHolder.SetActive(paused);
         mainUIHolder.SetActive(!paused);
+        switch (paused)
+        {
+            case true:
+                controls.Player.Disable();
+                controls.UI.Enable();
+                break;
+            case false:
+                controls.Player.Enable();
+                controls.UI.Disable();
+                break;
+        }
     }
 
+    // UI button functionality
     public void ReturnToMainMenu()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(0);
     }
 
     public void RestartTask()
     {
+        Time.timeScale = 1.0f;
+        happinessManager.happinessCount = levelStartHappiness;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
