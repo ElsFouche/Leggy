@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -11,39 +12,27 @@ public class TutorialManager : MonoBehaviour
     private bool moveOn;
     private bool isWaiting = true;
     private HappinessManager happinessManager;
-    private List<KeyCode> keysToAdvance;
+    private ClawControls controls;
 
     public float tutorialStartDelay = 2.0f;
     public GameObject blackScreen;
     public GameObject continueHint;
     public GameObject happinessExplanation;
     public GameObject controlsExplanation;
-    
+
+    private void Awake()
+    {
+        controls = new ClawControls();
+        controls.Tutorial.Advance.performed += ctx => MoveOn();
+    }
+
+    private void OnEnable() => controls.Tutorial.Enable();
+    private void OnDisable() => controls.Tutorial.Disable();
 
     // Start is called before the first frame update
     void Start()
     {
-        // Replace with new input system when possible
-        keysToAdvance = new List<KeyCode> 
-        {
-        KeyCode.Mouse0, 
-        KeyCode.Mouse1,
-        KeyCode.Mouse2,
-        KeyCode.Mouse3,
-        KeyCode.Mouse4,
-        KeyCode.Mouse5,
-        KeyCode.Escape,
-        KeyCode.Joystick1Button0,
-        KeyCode.Joystick1Button1,
-        KeyCode.Joystick1Button2,
-        KeyCode.Joystick1Button3,
-        KeyCode.Joystick1Button4,
-        KeyCode.Joystick1Button5,
-        KeyCode.Joystick1Button6,
-        KeyCode.Joystick1Button7
-        };
-
-        happinessManager = FindObjectOfType<HappinessManager>();
+        happinessManager = GetComponent<HappinessManager>();
         happinessExplanation.SetActive(false);
         controlsExplanation.SetActive(false);
         continueHint.SetActive(false);
@@ -60,6 +49,7 @@ public class TutorialManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isWaiting) { return; }
 
         if (moveOn)
         {
@@ -71,61 +61,46 @@ public class TutorialManager : MonoBehaviour
                 675, ref dummyVelocity, 0.03f), Mathf.SmoothDamp(continueHint.transform.localPosition.y, 300, ref dummyVelocity, 0.03f), 0);
         }
         
-        if (isWaiting) { return; }
+    }
 
-        if (Input.anyKeyDown)
+    private void MoveOn()
+    {
+        if (!moveOn)
         {
-            if (!moveOn)
-            {
-                moveOn = true;
-                controlsExplanation.SetActive(false);
-                happinessExplanation.SetActive(true);
-            }
-            else if (moveOn)
-            {
-                moveOn = false;
-                happinessManager.viewingTutorial = false;
-                blackScreen.SetActive(false);
-                continueHint.SetActive(false);
-                happinessExplanation.SetActive(false);
-
-                happinessManager.callCoroutine();
-
-                Destroy(this);
-            }
+            moveOn = true;
+            controlsExplanation.SetActive(false);
+            happinessExplanation.SetActive(true);
         }
-/*
-        // Check a custom list of keys that will advance the tutorial. 
-        foreach (KeyCode keyPressed in keysToAdvance)
+        else if (moveOn)
         {
-            if (Input.GetKeyDown(keyPressed) && happinessManager.viewingTutorial)
-            {
-                if (!moveOn)
-                {
-                    moveOn = true;
-                    controlsExplanation.SetActive(false);
-                    happinessExplanation.SetActive(true);
-                }
-                else if (moveOn)
-                {
-                    moveOn = false;
-                    happinessManager.viewingTutorial = false;
-                    blackScreen.SetActive(false);
-                    continueHint.SetActive(false);
-                    happinessExplanation.SetActive(false);
+            moveOn = false;
+            happinessManager.viewingTutorial = false;
+            blackScreen.SetActive(false);
+            continueHint.SetActive(false);
+            happinessExplanation.SetActive(false);
 
-                    happinessManager.callCoroutine();
+            happinessManager.callCoroutine();
 
-                    Destroy(this);
-                }
-            }
+            controls.Tutorial.Disable();
+            controls.Player.Enable();
+            Debug.Log("Control State, Player: " + controls.Player.enabled);
+            Debug.Log("Control State, UI: " + controls.UI.enabled);
+            Debug.Log("Control State, Tutorial: " + controls.Tutorial.enabled);
+
+            Destroy(this);
         }
-*/
     }
 
     private IEnumerator DelayTutorialStart()
     {
         yield return new WaitForSeconds(tutorialStartDelay);
+        controls.Player.Disable();
+        controls.UI.Disable();
+        controls.Tutorial.Enable();
+        Debug.Log("Control State, Player: " + controls.Player.enabled);
+        Debug.Log("Control State, UI: " + controls.UI.enabled);
+        Debug.Log("Control State, Tutorial: " + controls.Tutorial.enabled);
+
         blackScreen.SetActive(true);
         continueHint.SetActive(true);
         controlsExplanation.SetActive(true);
