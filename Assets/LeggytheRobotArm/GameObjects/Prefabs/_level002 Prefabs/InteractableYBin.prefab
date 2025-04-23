@@ -116,7 +116,11 @@ GameObject:
   - component: {fileID: 2370219749188161717}
   - component: {fileID: 3882146255621792517}
   - component: {fileID: 8187725649132109793}
-  - component: {fileID: 3207752684755708140}
+  - component: {fileID: 425262987099723484}
+  - component: {fileID: 352039342217657416}
+  - component: {fileID: 224116254121881256}
+  - component: {fileID: 4922972386100251195}
+  - component: {fileID: 5918618555266425481}
   m_Layer: 0
   m_Name: Container
   m_TagString: Untagged
@@ -189,8 +193,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3207752684755708140
-MeshCollider:
+--- !u!65 &425262987099723484
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -207,10 +211,93 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1863777704297629970, guid: 6bf8932f57c90024286c17c5ed4409d8, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 41.43808, z: 682.74243}
+  m_Center: {x: 0.00050212047, y: -330.8408, z: -2.2015018e-17}
+--- !u!65 &352039342217657416
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693061720365994122}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 39.658974, y: 703.1203, z: 682.74243}
+  m_Center: {x: -682.7551, y: -0.000022823655, z: 7.848857e-11}
+--- !u!65 &224116254121881256
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693061720365994122}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 47.65442, y: 703.1203, z: 682.74243}
+  m_Center: {x: 678.7582, y: -0.000022823655, z: -4.0511407e-11}
+--- !u!65 &4922972386100251195
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693061720365994122}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 703.1203, z: 60.12013}
+  m_Center: {x: 0.00050212047, y: -0.000022823655, z: -311.31094}
+--- !u!65 &5918618555266425481
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693061720365994122}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 703.1203, z: 60.12013}
+  m_Center: {x: 0.00048828137, y: -0.000022888185, z: 312.8}
 --- !u!1 &1170422455051467121
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,6 +982,10 @@ PrefabInstance:
     - target: {fileID: 2564950740957357455, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4028372083638129820, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+      propertyPath: zoneTag
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8908702724808070805, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
       propertyPath: m_Size.x

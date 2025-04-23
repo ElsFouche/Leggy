@@ -11,7 +11,11 @@ GameObject:
   - component: {fileID: 3128201661773428504}
   - component: {fileID: 6458805502110777125}
   - component: {fileID: 3314125466901295965}
-  - component: {fileID: 2762442648431350608}
+  - component: {fileID: 8039565183566457554}
+  - component: {fileID: 5407324171965688365}
+  - component: {fileID: 1587807389955471263}
+  - component: {fileID: 4104018066792060251}
+  - component: {fileID: 8318120188879228624}
   m_Layer: 0
   m_Name: Container
   m_TagString: Untagged
@@ -84,8 +88,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2762442648431350608
-MeshCollider:
+--- !u!65 &8039565183566457554
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,10 +106,93 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2731608768118246450, guid: 6bf8932f57c90024286c17c5ed4409d8, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 96.97679, y: 710.74304, z: 682.74243}
+  m_Center: {x: -654.096, y: 3.8122807, z: 6.842225e-11}
+--- !u!65 &5407324171965688365
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547108890135962265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 706.66327, z: 91.00001}
+  m_Center: {x: 0.00050212047, y: 1.7725763, z: -295.58}
+--- !u!65 &1587807389955471263
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547108890135962265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 703.1203, z: 25}
+  m_Center: {x: 0.00048828137, y: -0.000022888185, z: 328.69}
+--- !u!65 &4104018066792060251
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547108890135962265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 64.1, y: 703.1203, z: 682.74243}
+  m_Center: {x: 645.98, y: -0.000022888185, z: 1.364242e-12}
+--- !u!65 &8318120188879228624
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547108890135962265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1405.1722, y: 26.679483, z: 682.74243}
+  m_Center: {x: 0.00050212047, y: -338.22, z: -2.2015018e-17}
 --- !u!1 &752065605629174557
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,6 +982,10 @@ PrefabInstance:
     - target: {fileID: 2564950740957357455, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4028372083638129820, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
+      propertyPath: zoneTag
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8908702724808070805, guid: 59e6a00ab1761194e8663a2c324646d0, type: 3}
       propertyPath: m_Size.x
