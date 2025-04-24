@@ -65,9 +65,11 @@ public class IkTargetFallback : MonoBehaviour
             IK_Target.transform.localRotation = Quaternion.Euler(IK_Target.transform.localRotation.x, IK_Target.transform.localRotation.y, IK_Target_ZRotLimit * tempZ); //apply the "clamped" x
         }
 
+        if (IK_Debug_X == null || IK_Debug_Y == null || IK_Debug_Z == null) {  return; }
         IK_Debug_X.text = "X: " + IK_Target.transform.eulerAngles.x + " " + IK_Target.transform.rotation.x;
         IK_Debug_Y.text = "Y: " + IK_Target.transform.eulerAngles.y + " " + IK_Target.transform.rotation.y;
         IK_Debug_Z.text = "Z: " + IK_Target.transform.eulerAngles.z + " " + IK_Target.transform.rotation.z;
+        if (VisualDebug == null) { return; }
         VisualDebug.transform.rotation = IK_Target.transform.rotation;
     }
 
