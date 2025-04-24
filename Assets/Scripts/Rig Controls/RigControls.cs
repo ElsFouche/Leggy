@@ -29,8 +29,10 @@ public class RigControls : MonoBehaviour
 
     public float ikMinZ = -1.53f;
     public float ikMaxZ = -0.2f;
-    public float ikMinY = 0.42f;
-    public float ikMaxY = 2.12f;
+    public float ikMinY;
+    public float ikMaxY;
+    private float ikModifiedMinX;
+    private float ikModifiedMaxX;
 
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
@@ -51,6 +53,8 @@ public class RigControls : MonoBehaviour
     private float timeHeld = 0f;
 
     public GameObject circleMeter;
+
+    public float hightMultiplier;
 
     private void Awake()
     {
@@ -95,6 +99,10 @@ public class RigControls : MonoBehaviour
 
     void Update()
     {
+        hightMultiplier = ArmIK_target.transform.localPosition.y / ikMaxY;
+        Debug.Log(hightMultiplier + " " + ArmIK_target.transform.localPosition.y + " " + ikMaxY);
+        ikModifiedMinX = ikMinRotationX * hightMultiplier;
+        ikModifiedMaxX = ikMaxRotationX * hightMultiplier;
 
 
         if (ArmIK_target == null || parentGameObject == null) return;
@@ -125,14 +133,14 @@ public class RigControls : MonoBehaviour
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
         if (targetRotationX > 180f) targetRotationX -= 360f;
         //bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
-        targetRotationX = Mathf.Clamp(targetRotationX, ikMinRotationX, ikMaxRotationX);
+        targetRotationX = Mathf.Clamp(targetRotationX, ikModifiedMinX, ikModifiedMaxX);
 
         float targetRotationZ = currentRotation.eulerAngles.z + (rightStickInput.x * rotationSpeed * Time.deltaTime);
         if (targetRotationZ > 180f) targetRotationZ -= 360f;
         //bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
         targetRotationZ = Mathf.Clamp(targetRotationZ, ikMinRotationZ, ikMaxRotationZ);
 
-        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
+        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.y, targetRotationZ);
 
         /* Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)

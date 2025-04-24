@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.UI;
+using TMPro;
+
 public class IkTargetFallback : MonoBehaviour
 {
     [SerializeField] GameObject Player;
@@ -10,6 +13,12 @@ public class IkTargetFallback : MonoBehaviour
     private float IK_Target_YRotLimit = 0; //since there isnt option to rotate wrist this will be left 0
     private float IK_Target_XRotMinLimit;
     private float IK_Target_XRotMaxLimit;
+
+    public TMP_Text IK_Debug_X;
+    public TMP_Text IK_Debug_Y;
+    public TMP_Text IK_Debug_Z;
+
+    public GameObject VisualDebug;
 
     public GameObject IK_Target;
     public bool IK_Target_Still_In_Range;
@@ -55,6 +64,11 @@ public class IkTargetFallback : MonoBehaviour
             float tempZ = IK_Target.transform.localRotation.z / IK_Target.transform.localRotation.z; // devideds the x by itself to reaquire - / +
             IK_Target.transform.localRotation = Quaternion.Euler(IK_Target.transform.localRotation.x, IK_Target.transform.localRotation.y, IK_Target_ZRotLimit * tempZ); //apply the "clamped" x
         }
+
+        IK_Debug_X.text = "X: " + IK_Target.transform.eulerAngles.x + " " + IK_Target.transform.rotation.x;
+        IK_Debug_Y.text = "Y: " + IK_Target.transform.eulerAngles.y + " " + IK_Target.transform.rotation.y;
+        IK_Debug_Z.text = "Z: " + IK_Target.transform.eulerAngles.z + " " + IK_Target.transform.rotation.z;
+        VisualDebug.transform.rotation = IK_Target.transform.rotation;
     }
 
     private void OnTriggerStay(Collider other)

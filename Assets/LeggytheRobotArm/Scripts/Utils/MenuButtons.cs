@@ -9,18 +9,16 @@ using UnityEngine;
 /// </summary>
 public class MenuButtons : MonoBehaviour
 {
-    private float delayAfterStart = 0.3f;
     private GameManager gameManager;
 
     private void Start()
     {
-        StartCoroutine(AfterStart());
-    }
-
-    private IEnumerator AfterStart()
-    {
-        yield return new WaitForSeconds(delayAfterStart);
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = transform.root.gameObject.GetComponent<GameManager>();
+        if ( gameManager == null )
+        {
+            Debug.Log("Menu Button " + this.gameObject.GetInstanceID() + ": Game manager not found. Self destructing.");
+            Destroy(this);
+        }
     }
 
     /// <summary>
@@ -28,7 +26,11 @@ public class MenuButtons : MonoBehaviour
     /// </summary>
     public void PauseResumeGame()
     {
-        if (gameManager != null) { Debug.Log("Toggling pause."); gameManager.TogglePause(); }
+        if (gameManager != null) 
+        { 
+            Debug.Log("Toggling pause from menu."); 
+            gameManager.TogglePause(); 
+        } else { Debug.Log("Game manager not found."); }
     }
 
     /// <summary>
