@@ -27,6 +27,12 @@ public class InputManager : MonoBehaviour
             SceneManager.GetActiveScene().buildIndex > 1))
                 SetFirstSelectedMainMenu();
         */
+
+        if (Input.GetButtonDown("Cancel") &&
+            (SceneManager.GetActiveScene().buildIndex == 1 ||SceneManager.GetActiveScene().buildIndex == 2))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     
