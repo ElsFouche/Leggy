@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,14 @@ public class RigControls : MonoBehaviour
     public GameObject parentGameObject;
     public GameObject armRotationObject;
     public GameObject ArmIK;
+
+    [Header("Reset Interval For IK Target")]
+    [SerializeField] IkTargetFallback ikTargetFallback;
+    public GameObject ArmIKFallback;
+    public float ArmIK_target_ResetInterval = 1.0f;
+    private bool ArmFallbackTriggered = false;
+
+
     public float moveSpeed = 1.0f;
     public float rotationSpeed = 100f;
     public float baseRotationSpeed = 50f;
@@ -20,8 +29,10 @@ public class RigControls : MonoBehaviour
 
     public float ikMinZ = -1.53f;
     public float ikMaxZ = -0.2f;
-    public float ikMinY = 0.42f;
-    public float ikMaxY = 2.12f;
+    public float ikMinY;
+    public float ikMaxY;
+    private float ikModifiedMinX;
+    private float ikModifiedMaxX;
 
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
@@ -40,6 +51,10 @@ public class RigControls : MonoBehaviour
     private bool isResetting = false;
     public float holdTime = 2.0f;
     private float timeHeld = 0f;
+
+    public GameObject circleMeter;
+
+    public float hightMultiplier;
 
     private void Awake()
     {
@@ -74,12 +89,29 @@ public class RigControls : MonoBehaviour
         if (parentGameObject == null) Debug.LogError("Parent GameObject is not assigned!");
     }
 
+    private void Start()
+    {
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
+    }
+
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
 
     void Update()
     {
+        hightMultiplier = ArmIK_target.transform.localPosition.y / ikMaxY;
+        Debug.Log(hightMultiplier + " " + ArmIK_target.transform.localPosition.y + " " + ikMaxY);
+        ikModifiedMinX = ikMinRotationX * hightMultiplier;
+        ikModifiedMaxX = ikMaxRotationX * hightMultiplier;
+
+
         if (ArmIK_target == null || parentGameObject == null) return;
+
+        if (!ArmFallbackTriggered && !ikTargetFallback.IK_Target_Still_In_Range)
+        {
+            ArmFallbackTriggered = true;
+            StartCoroutine(ResetArmIK());  
+        }
 
         ArmIK.transform.rotation = armRotationObject.transform.rotation;
 
@@ -101,14 +133,14 @@ public class RigControls : MonoBehaviour
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
         if (targetRotationX > 180f) targetRotationX -= 360f;
         //bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
-        targetRotationX = Mathf.Clamp(targetRotationX, ikMinRotationX, ikMaxRotationX);
+        targetRotationX = Mathf.Clamp(targetRotationX, ikModifiedMinX, ikModifiedMaxX);
 
         float targetRotationZ = currentRotation.eulerAngles.z + (rightStickInput.x * rotationSpeed * Time.deltaTime);
         if (targetRotationZ > 180f) targetRotationZ -= 360f;
         //bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
         targetRotationZ = Mathf.Clamp(targetRotationZ, ikMinRotationZ, ikMaxRotationZ);
 
-        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
+        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.y, targetRotationZ);
 
         /* Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)
@@ -140,10 +172,12 @@ public class RigControls : MonoBehaviour
         if (isResetting)
         {
             timeHeld += Time.deltaTime;
+            circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount += (Time.deltaTime / holdTime);
             if (timeHeld >= holdTime)
             {
                 ResetLevel();
                 timeHeld = 0f;
+                circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
             }
         }
     }
@@ -152,17 +186,26 @@ public class RigControls : MonoBehaviour
     {
         isResetting = true;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void StopHoldReset()
     {
         isResetting = false;
         timeHeld = 0f;
+        circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
     }
 
     private void ResetLevel()
     {
         Debug.Log("Resetting the level...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator ResetArmIK()
+    {
+        ArmIK_target.transform.position = ArmIKFallback.transform.position;
+        yield return new WaitForSeconds(ArmIK_target_ResetInterval);
+        ArmFallbackTriggered = false;
     }
 }

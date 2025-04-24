@@ -12,7 +12,8 @@ public class RigClawParrent : MonoBehaviour
 
     public Transform heldItemParent; // Empty GameObject to hold grabbed items
 
-    private BasketData detectedBasket;
+    public BasketData detectedBasket;
+    public GameObject ObjectGrabbed;
     private Transform grabbedObject;
     private float overpressureMultiplier = 0.2f;
 
@@ -25,7 +26,7 @@ public class RigClawParrent : MonoBehaviour
         }
         else
         {
-            detectedBasket = null; 
+            detectedBasket = null;
         }
 
         if (detectedBasket != null)
@@ -35,9 +36,9 @@ public class RigClawParrent : MonoBehaviour
             if (grabbedObject == null && clawController.gripPreassure <= detectedBasket.requiredGripPressure)
             {
                 Debug.Log("Grabbing object: " + detectedBasket.name);
-                GrabObject(detectedBasket);
+                GrabObject(detectedBasket, WristMouth.ObjectDetected.GetComponent<BasketData>().RootRigidBodyGameObject);
             }
-            else if (grabbedObject != null && clawController.gripPreassure > detectedBasket.requiredGripPressure) 
+            else if ((grabbedObject != null || ObjectGrabbed != null) && clawController.gripPreassure > detectedBasket.requiredGripPressure)
             {
                 Debug.Log("Releasing object: " + grabbedObject.name);
                 ReleaseObject();
@@ -48,26 +49,43 @@ public class RigClawParrent : MonoBehaviour
                 EjectObject();
             }
         }
+
+        if (ObjectGrabbed != null && WristMouth.ObjectDetected == null)
+        {
+            ObjectGrabbed.transform.parent = null;
+        }
     }
 
-    private void GrabObject(BasketData basket)
+    private void GrabObject(BasketData basket, GameObject basketRootParrent)
     {
         if (grabbedObject == null && WristMouth.ObjectInClawMouth && clawController.gripPreassure <= basket.requiredGripPressure)
         {
-            grabbedObject = basket.transform;
+            grabbedObject = basketRootParrent.transform;
+            ObjectGrabbed = basketRootParrent.gameObject;
+            InteractableData rootTransforms = ObjectGrabbed.GetComponent<InteractableData>();
 
             // Store world position/rotation before parenting
             Vector3 worldPosition = grabbedObject.position;
             Quaternion worldRotation = grabbedObject.rotation;
-            Vector3 originalScale = grabbedObject.localScale; 
+            Vector3 originalScale = grabbedObject.lossyScale; 
+
+            Debug.Log(worldRotation +  " : " + worldPosition + " : " + originalScale);
 
             grabbedObject.SetParent(heldItemParent);
 
             // Restore world position/rotation and maintain original scale
-            grabbedObject.position = worldPosition;
-            grabbedObject.rotation = worldRotation;
-            grabbedObject.localScale = originalScale; 
-
+            if (rootTransforms != null) 
+            {
+                //grabbedObject.position = worldPosition;
+                //grabbedObject.rotation = heldItemParent.rotation;
+                grabbedObject.localScale = heldItemParent.lossyScale;
+            }
+            else
+            {
+                grabbedObject.position = worldPosition;
+                grabbedObject.rotation = worldRotation;
+                grabbedObject.localScale = originalScale;
+            }
             if (basket.objectRigidbody != null)
             {
                 basket.objectRigidbody.isKinematic = true;
@@ -80,16 +98,15 @@ public class RigClawParrent : MonoBehaviour
         if (grabbedObject != null)
         {
             grabbedObject.SetParent(null);
-
-            if (grabbedObject.TryGetComponent(out BasketData basket))
-            {
-                if (basket.objectRigidbody != null)
+            ObjectGrabbed.transform.SetParent(null);
+             if (ObjectGrabbed.GetComponent<Rigidbody>() != null)
                 {
-                    basket.objectRigidbody.isKinematic = false;
+                    ObjectGrabbed.GetComponent<Rigidbody>().isKinematic = false;
+
                 }
-            }
 
             grabbedObject = null;
+            ObjectGrabbed = null;
             detectedBasket = null;
         }
     }

@@ -31,7 +31,13 @@ public class GoalZone : MonoBehaviour
     private int matchingCollisionNumber = 0;
     private int generalCollisionNumber = 0;
     private HashSet<int> objectIDs = new HashSet<int>();
-    public enum happinessValues
+    private ObjectiveTracker.GoalState goalState;
+    private ObjectiveTracker tracker;
+    private int instanceID;
+    private bool collisionEnterChecking = false;
+    private bool collisionExitChecking = false;
+
+    public enum HappinessValues
     {
         _000 = 0,
         _050 = 50,  
@@ -47,9 +53,9 @@ public class GoalZone : MonoBehaviour
     }
 
     [Tooltip("Happiness gained from correct objects.")]
-    public happinessValues matchingObjectHappiness = happinessValues._250; // This allows the designer to determine how much happiness a matching object gives.
+    public HappinessValues matchingObjectHappiness = HappinessValues._250; // This allows the designer to determine how much happiness a matching object gives.
     [Tooltip("Happiness gained from incorrect objects.")]
-    public happinessValues generalObjectHappiness = happinessValues._100;
+    public HappinessValues generalObjectHappiness = HappinessValues._100;
     [Tooltip("Number of matching objects required to gain happiness.")]
     [Range(1, 10)]
     public int minNumMatchingObjects; // The minimum number of objects that must match before getting happiness.
@@ -57,18 +63,47 @@ public class GoalZone : MonoBehaviour
     [Range(1, 10)]
     public int minNumGeneralObjects; // As above but for general objects.
 
+    // Setter
+    public void SetTrackerRef(ObjectiveTracker objectiveTracker)
+    {
+        tracker = objectiveTracker;
+    }
+
     void Start()
     {
+        // If a level designer has not adjusted the slider values they will stay 0
+        // even if set during the initialization above. Initialize here instead:
+        if (minNumMatchingObjects <= 0) minNumMatchingObjects = 1;
+        if (minNumGeneralObjects <= 0) minNumGeneralObjects = 1;
+
         tagManager = this.GetComponent<TagManager>();
         // This needs to be changed.
+        instanceID = this.GetInstanceID();
+
+        StartCoroutine(DelayForSeconds(0.2f));
+    }
+
+    private IEnumerator DelayForSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        AfterDelayLogic();
+    }
+
+    private void AfterDelayLogic()
+    {
         happinessManager = FindObjectOfType<HappinessManager>();
+        
+        if (!tracker)
+        {
+            Debug.Log("Objective tracker not found! Are you sure you loaded this goal zone into the objective tracker?");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         TagManager hitTags = null;
-        // Debug.Log("Other Object ID Entered: " + other.gameObject.transform.root.GetInstanceID());
-
+/*
+        // This has a potential bug when the object has been had its parent set as Leggy. 
         if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             // If the object we hit has no TagManager, exit this code block. 
@@ -88,16 +123,72 @@ public class GoalZone : MonoBehaviour
                 // Continue
             }
         }
+*/
+        // Check for lock
+        if (collisionEnterChecking) return;
+        collisionEnterChecking = true;
+        // If the tag manager is at the level of the collider, assign it
+        if (other.gameObject.GetComponent<TagManager>() != null)
+        {
+            hitTags = other.transform.GetComponent<TagManager>();
+            Debug.Log("Tag manager found: " + hitTags.GetInstanceID());
+            if (objectIDs.Add(other.transform.GetInstanceID()))
+            {
+                Debug.Log("Adding: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
+                // Continue
+            }
+            else
+            {
+                Debug.Log("Adding object failed.");
+                collisionEnterChecking = false;
+                return;
+                // Exit
+            }
+        }
+        else
+        {
+            Transform hierarchyPosition;
+            hierarchyPosition = other.transform.parent;
+            // Otherwise, iterate up the hierarchy
+            while (hitTags == null && hierarchyPosition != null)
+            {
+                Debug.Log("Loop | Checking " + hierarchyPosition.name + " for tag manager.");
+                if (hierarchyPosition.GetComponent<TagManager>() != null)
+                {
+                    hitTags = hierarchyPosition.GetComponent<TagManager>();
+                    if (objectIDs.Add(hierarchyPosition.GetInstanceID()))
+                    {
+                        Debug.Log("Adding: " + hierarchyPosition.GetInstanceID());
+                        // Continue
+                    }
+                    else
+                    {
+                        Debug.Log("Adding object failed.");
+                        collisionEnterChecking = false;
+                        return;
+                        // Exit
+                    }
+                } else
+                {
+                    hierarchyPosition = hierarchyPosition.transform.parent;
+                }
+            }
+        }
 
-        if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
+        if (hitTags == null) { collisionEnterChecking = false;  return; }
+
+        // Begin sortable object logic
+        if (hitTags.mainTag == TagManager.MainTag.ObjectToSort && (int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber++;
             Debug.Log("Matching Objects: " + matchingCollisionNumber);
 
-            if (matchingCollisionNumber % minNumMatchingObjects == 0)
+            if (minNumMatchingObjects != 0 && matchingCollisionNumber % minNumMatchingObjects == 0)
             {
                 Debug.Log("Gain Happiness: " + (int)matchingObjectHappiness);
-                gainHappiness((int)matchingObjectHappiness);
+                gainHappiness((int)matchingObjectHappiness, hitTags.transform);
+                goalState = ObjectiveTracker.GoalState.Perfect;
+                if (tracker) tracker.SetGoal(instanceID, goalState);
             }
 
         }
@@ -106,19 +197,26 @@ public class GoalZone : MonoBehaviour
             generalCollisionNumber++;
             Debug.Log("Mismatched Objects: " +  generalCollisionNumber);
 
-            if (generalCollisionNumber % minNumGeneralObjects == 0)
+            if (minNumGeneralObjects != 0 && generalCollisionNumber % minNumGeneralObjects == 0) 
             {
                 Debug.Log("Gain Happiness: " + (int)generalObjectHappiness);
-                gainHappiness((int)generalObjectHappiness);
+                gainHappiness((int)generalObjectHappiness, hitTags.transform);
+                if (goalState != ObjectiveTracker.GoalState.Perfect)
+                {
+                    goalState = ObjectiveTracker.GoalState.Satisfied;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
+        // Unlock
+        collisionEnterChecking = false;
     }
 
     private void OnTriggerExit(Collider other)
     {
         TagManager hitTags = null;
         // Debug.Log("Other Object ID Exited: " + other.gameObject.transform.root.GetInstanceID());
-
+/*
         if (other.gameObject.transform.root.GetComponent<TagManager>() == null) 
         {
             return; 
@@ -137,8 +235,62 @@ public class GoalZone : MonoBehaviour
                 // Continue
             }
         }
+*/
         
-        // These need to change.
+        // Check for lock
+        if (collisionExitChecking) return;
+        collisionExitChecking= true;
+        // If the tag manager is at the level of the collider, assign it
+        if (other.gameObject.GetComponent<TagManager>() != null)
+        {
+            hitTags = other.transform.GetComponent<TagManager>();
+            Debug.Log("Tag manager found: " + hitTags.GetInstanceID());
+            if (objectIDs.Remove(other.transform.GetInstanceID()))
+            {
+                Debug.Log("Removing: " + other.gameObject.name + " with ID: " + other.transform.GetInstanceID());
+                // Continue
+            }
+            else
+            {
+                collisionExitChecking= false;
+                Debug.Log("Failed to remove object.");
+                return;
+                // Exit
+            }
+        }
+        else
+        {
+            Transform hierarchyPosition;
+            hierarchyPosition = other.transform.parent;
+            // Otherwise, iterate up the hierarchy
+            while (hitTags == null && hierarchyPosition != null)
+            {
+                Debug.Log("Loop | Checking " +  hierarchyPosition.name + " for tag manager.");
+                if (hierarchyPosition.GetComponent<TagManager>() != null)
+                {
+                    hitTags = hierarchyPosition.GetComponent<TagManager>();
+                    if (objectIDs.Remove(hierarchyPosition.GetInstanceID()))
+                    {
+                        Debug.Log("Removing: " + hierarchyPosition.GetInstanceID());
+                        // Continue
+                    }
+                    else
+                    {
+                        collisionExitChecking= false;
+                        Debug.Log("Failed to remove object.");
+                        return;
+                        // Exit
+                    }
+                }
+                else
+                {
+                    hierarchyPosition = hierarchyPosition.transform.parent;
+                }
+            }
+        }
+
+        if (hitTags == null) { collisionExitChecking= false;  return; }
+
         if ((int)hitTags.zoneTag == (int)tagManager.zoneTag) 
         {
             matchingCollisionNumber--;
@@ -148,6 +300,16 @@ public class GoalZone : MonoBehaviour
             {
                 Debug.Log("Lose Happiness: " + (int)matchingObjectHappiness); 
                 loseHappiness((int)matchingObjectHappiness);
+                if (generalCollisionNumber % minNumGeneralObjects == minNumGeneralObjects - 1
+                    && matchingCollisionNumber < minNumMatchingObjects)
+                { 
+                    goalState = ObjectiveTracker.GoalState.Satisfied;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                } else
+                {
+                    goalState = ObjectiveTracker.GoalState.Incomplete;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
         else if (hitTags.zoneTag != TagManager.ZoneTag.None)
@@ -158,13 +320,40 @@ public class GoalZone : MonoBehaviour
             {
                 Debug.Log("Lose Happiness: " + (int)generalObjectHappiness);
                 loseHappiness((int)generalObjectHappiness);
+                if (goalState != ObjectiveTracker.GoalState.Perfect && generalCollisionNumber < minNumGeneralObjects)
+                {
+                    goalState = ObjectiveTracker.GoalState.Incomplete;
+                    if (tracker) tracker.SetGoal(instanceID, goalState);
+                }
             }
         }
+        // Unlock
+        collisionExitChecking= false;
     }
 
-    private void gainHappiness(int happinessToGain)
+    private void gainHappiness(int happinessToGain, Transform inputObject = null)
     {
         happinessManager.gainHappiness(happinessToGain);
+
+        //add vfx activation
+
+        Debug.Log(inputObject.name + " grabbable has reached goal: " + this.name);
+
+        if (inputObject != null)
+        {
+            GameObject visualEffects;
+            visualEffects = inputObject.Find("BinaryFollowsPlayer").Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
+
+            if (visualEffects != null)
+            {
+                Debug.Log(inputObject.name + ".BinaryFollowsPlayer.TaskCompleteVFX found!");
+                visualEffects.GetComponent<ParticleAttractor>().particleStream();
+            }
+        }
+        else
+        {
+            Debug.Log("Input is null");
+        }
     }
 
     private void loseHappiness(int happinessToLose)

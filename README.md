@@ -1,3 +1,3 @@
 Leggy the Miraculous Robotic Arm
 
-Version 0.0.0
+Version 0.2.1
