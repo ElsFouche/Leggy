@@ -10,7 +10,14 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// This script is the primary interface between designer and programmer.
-/// It contains and provides access to several subsystems.
+/// It contains and provides access to several subsystems:
+/// - Happiness
+/// - Objective tracking
+/// - UI elements
+/// It is a persistant non-singleton that destroys the 'Don't Destroy On Load' 
+/// game manager that's carried between levels after pulling necessary values from it. 
+/// This was implemented in fashion to unify several programmer's subsystems
+/// without forcing any of those subsystems to be modified heavily. 
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -25,7 +32,7 @@ public class GameManager : MonoBehaviour
     private HappinessManager previousManager;
     private TransitionManager transitionManager;
     private ObjectiveTracker objectiveTracker;
-    private int currHappiness = 30000;
+    private int currHappiness = 30000; 
     private int levelStartHappiness;
         // Pause Function
     private bool paused;
@@ -92,6 +99,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Found previous happiness manager with ID: " +  previousManager.transform.root.GetInstanceID());
             Debug.Log("Updating local variables with existing values.");
+            // TODO: Modify this so that currHappiness is pulled from save file when loading a level from level select
             currHappiness = previousManager.happinessCount;
             Debug.Log("Deconstructing old game manager.");  
             Destroy(previousManager.transform.root.gameObject);
@@ -125,16 +133,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     private void OnEnable() 
     {
         controls.Player.Pause.Enable();
-        controls.UI.Pause.Enable();
+        controls.UI.Pause.Disable();
+        // Assign callback to scene manager
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
     private void OnDisable()
     {
         controls.Player.Pause.Disable();
         controls.UI.Pause.Disable();
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        // If title screen, unload
+        // CAUTION! Build must index title screen as 0 and level select as 1! 
+        if (arg0.buildIndex == 0 || arg0.buildIndex == 1)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         pauseMenuHolder.SetActive(false);
@@ -145,7 +168,7 @@ public class GameManager : MonoBehaviour
 
         // Initialize Happiness Subsystem
         levelStartHappiness = currHappiness;
-        happinessManager.happinessCount = currHappiness;
+        happinessManager.happinessCount = currHappiness;    
         happinessManager.maxDepressor = maxHappinessLostPerTick;
         happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
         happinessManager.sigmoidFunction = new SigmoidFunction(gracePeriod, timeUntilMaxHappinessLoss);
