@@ -37,9 +37,7 @@ public class GameManager : MonoBehaviour
         // Pause Function
     private bool paused;
     private GameObject mainUIHolder;
-    private CanvasGroup mainUICG;
     private GameObject pauseMenuHolder;
-    private CanvasGroup pauseUICG;
         // Text
     private FontRandomizer fontRandomizer;
         // Controls
@@ -163,8 +161,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         pauseMenuHolder.SetActive(false);
-        pauseUICG = pauseMenuHolder.GetComponent<CanvasGroup>();
-        mainUICG = mainUIHolder.GetComponent<CanvasGroup>();
         // Initialize level variables if unmodified by Level Designers
         if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
         if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
@@ -231,11 +227,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Toggling pause.");
         paused = !paused;
         Time.timeScale = paused ? 0 : 1;
-        pauseUICG.interactable = paused;
-        pauseUICG.blocksRaycasts = paused;
         pauseMenuHolder.SetActive(paused);
-        mainUICG.interactable = !paused;
-        mainUICG.blocksRaycasts = !paused;
         mainUIHolder.SetActive(!paused);
         switch (paused)
         {

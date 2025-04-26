@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 108635627265447902}
   - component: {fileID: 6791590893330753685}
   - component: {fileID: 2518866009379423187}
-  - component: {fileID: 1495786546589455432}
   m_Layer: 0
   m_Name: Subsystems
   m_TagString: HappyManager
@@ -79,9 +78,6 @@ MonoBehaviour:
   fadeInDelay: 0
   fadeOutDelay: 0
   sceneSwitchDelay: 0
-  blackFadeInTime: 1
-  textFadeInTime: 1
-  textFadeOutTime: 1
   loreText: {fileID: 8112924860730006839}
   blackScreen: {fileID: 5674731330699218923}
   happinessManager: {fileID: 2808672951618862201}
@@ -106,25 +102,6 @@ MonoBehaviour:
   - {fileID: 12800000, guid: f4b5e40483b9c124c90a13c4be3acc18, type: 3}
   - {fileID: 12800000, guid: 4e35ab9ada72f89429235a0bed159f53, type: 3}
   textObject: {fileID: 8112924860730006839}
---- !u!114 &1495786546589455432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2808672951618862201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5476fbec9ebefa44aa6754beb9dc3c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fullyDepressed: 0
-  happinessManager: {fileID: 108635627265447902}
-  fadeBlackTop: {fileID: 4533356099466851206}
-  fadeBlackBottom: {fileID: 2527082482659590995}
-  vignette: {fileID: 426582366921578314}
-  gameOverMenu: {fileID: 3784371295267068644}
-  eventSystem: {fileID: 0}
 --- !u!1 &3928341203511379510
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,11 +154,8 @@ MonoBehaviour:
   timeUntilMaxHappinessLoss: 0
   gracePeriod: 0
   textFadeInDelay: 0
-  textFadeOutDelay: 0
-  fadeToBlackTime: 0
   textFadeInTime: 0
   textFadeOutTime: 0
-  levelTransitionDelay: 0
   nextLevelIndex: 0
   speakerFont: 0
   transitionText: 
@@ -472,11 +446,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
---- !u!1 &426582366921578314 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3710740064083461603, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
-  m_PrefabInstance: {fileID: 3932966331830178473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1256013487234743475 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2880884936954801690, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
@@ -493,11 +462,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2819665078756427604, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
   m_PrefabInstance: {fileID: 3932966331830178473}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2527082482659590995 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1551125220654748154, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
-  m_PrefabInstance: {fileID: 3932966331830178473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2916074774340172068 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2225708970319473549, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
@@ -509,11 +473,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3784371295267068644 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 148756974028916813, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
-  m_PrefabInstance: {fileID: 3932966331830178473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4477623150920004197 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 627973433747693772, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
@@ -525,11 +484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4533356099466851206 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 611648766782300463, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}
-  m_PrefabInstance: {fileID: 3932966331830178473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4969595673303667886 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8242494302754326023, guid: 49fa573e63ed2e64c8b313eb96d458eb, type: 3}

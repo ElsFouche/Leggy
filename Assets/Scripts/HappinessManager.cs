@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class HappinessManager : MonoBehaviour
 {
-    // Private
-    private GameOverManager gameOverManager;
-
     //The higher the position, the worse the state
     [Header("Debug")]
     public int extraHappy;
@@ -52,7 +49,6 @@ public class HappinessManager : MonoBehaviour
 
         backgroundDepressLayer.GetComponent<Image>().fillAmount = backgroundBar.GetComponent<Image>().fillAmount;
         updateThousands();
-        gameOverManager = GetComponent<GameOverManager>();
     }
 
     private float depressionFactor;
@@ -167,8 +163,7 @@ public class HappinessManager : MonoBehaviour
     public IEnumerator depression()
     {
         int depressionAmount = Mathf.RoundToInt(maxDepressor * sigmoidMultiplier);
-        // happinessCount -= depressionAmount;
-        loseHappiness(depressionAmount);
+        happinessCount -= depressionAmount;
         // Debug.Log("Happiness Lost: " + depressionAmount);
         StartCoroutine(testing());
         updateThousands();
@@ -223,7 +218,7 @@ public class HappinessManager : MonoBehaviour
         }
 
         // Els: Modified 04/18/025
-        // This is not how we'll be handling sound. 
+        // This is now how we'll be handling sound. 
         // speaker.Play();
         updateThousands();
     }
@@ -232,24 +227,14 @@ public class HappinessManager : MonoBehaviour
     {
         happinessCount -= happinessToLose;
 
-/*
         if (happinessToLose >= 0)
         {
             happinessCount += happinessToLose;
             return;
         }
-*/
-        updateThousands();
-
-        if (happinessCount <= 0)
-        {
-            happinessCount = 0;
-            if (gameOverManager == null){ return; }
-
-            gameOverManager.GameOver();
-        }
-        // else if (emotes.Count >= 3) speaker.clip = emotes[2];
+        else if (emotes.Count >= 3) speaker.clip = emotes[2];
         // speaker.Play();
+        updateThousands();
     }
 
 
