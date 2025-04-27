@@ -101,8 +101,8 @@ public class RigControls : MonoBehaviour
     {
         hightMultiplier = ArmIK_target.transform.localPosition.y / ikMaxY;
         Debug.Log(hightMultiplier + " " + ArmIK_target.transform.localPosition.y + " " + ikMaxY);
-        ikModifiedMinX = ikMinRotationX * hightMultiplier;
-        ikModifiedMaxX = ikMaxRotationX * hightMultiplier;
+        ikModifiedMinX = ikMinRotationX * hightMultiplier * 1.2f;
+        ikModifiedMaxX = ikMaxRotationX * hightMultiplier * 1.2f;
 
 
         if (ArmIK_target == null || parentGameObject == null) return;
