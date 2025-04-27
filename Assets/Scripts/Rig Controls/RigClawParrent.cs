@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,10 @@ public class RigClawParrent : MonoBehaviour
     public GameObject ObjectGrabbed;
     private Transform grabbedObject;
     private float overpressureMultiplier = 0.2f;
+
+    private bool gravityBeforeParrent = false;
+    private bool kinematicBeforeParrent = false;
+    private Rigidbody preGrabRigid;
 
     private void Update()
     {
@@ -60,8 +65,10 @@ public class RigClawParrent : MonoBehaviour
     {
         if (grabbedObject == null && WristMouth.ObjectInClawMouth && clawController.gripPreassure <= basket.requiredGripPressure)
         {
+           
             grabbedObject = basketRootParrent.transform;
             ObjectGrabbed = basketRootParrent.gameObject;
+            preGrabRigid = ObjectGrabbed.GetComponent<Rigidbody>();
             InteractableData rootTransforms = ObjectGrabbed.GetComponent<InteractableData>();
 
             // Store world position/rotation before parenting
@@ -99,15 +106,22 @@ public class RigClawParrent : MonoBehaviour
         {
             grabbedObject.SetParent(null);
             ObjectGrabbed.transform.SetParent(null);
-             if (ObjectGrabbed.GetComponent<Rigidbody>() != null)
+            if (ObjectGrabbed.GetComponent<Rigidbody>() != null)
+            {
+                if (preGrabRigid.GetComponent<Rigidbody>().isKinematic)
                 {
-                    ObjectGrabbed.GetComponent<Rigidbody>().isKinematic = false;
-
+                    ObjectGrabbed.GetComponent<Rigidbody>().isKinematic = true;
+                }
+                if (preGrabRigid.GetComponent<Rigidbody>().useGravity)
+                {
+                    ObjectGrabbed.GetComponent<Rigidbody>().useGravity = true;
                 }
 
-            grabbedObject = null;
-            ObjectGrabbed = null;
-            detectedBasket = null;
+                grabbedObject = null;
+                ObjectGrabbed = null;
+                detectedBasket = null;
+                preGrabRigid = null;
+            }
         }
     }
 

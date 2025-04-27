@@ -76,7 +76,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6826864931715088220, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
   m_Bones:
@@ -780,7 +780,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 9092186160940321496, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
   m_Bones:
@@ -916,7 +916,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6478862610597270168, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
   m_Bones:
@@ -1142,7 +1142,7 @@ PositionConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_TranslationAtRest: {x: 0.000000016763806, y: 0.08404103, z: 0.04539717}
-  m_TranslationOffset: {x: 0.001555039, y: -0.0020885915, z: 0.00008678064}
+  m_TranslationOffset: {x: 0.0015550387, y: -0.0020885915, z: 0.00008679554}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -1953,7 +1953,7 @@ AimConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: -7.1590548, y: 1.1055522, z: -0.10638707}
-  m_RotationOffset: {x: -67.48944, y: 5.243755, z: -4.6596346}
+  m_RotationOffset: {x: -67.48945, y: 5.2437534, z: -4.659626}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
@@ -2414,6 +2414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 8839685165150919215}
+  IK_Debug_X: {fileID: 0}
+  IK_Debug_Y: {fileID: 0}
+  IK_Debug_Z: {fileID: 0}
+  VisualDebug: {fileID: 0}
   IK_Target: {fileID: 2174509713913790624}
   IK_Target_Still_In_Range: 1
   the_claw_jnt: {fileID: 4347130174943177865}
@@ -3186,7 +3190,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -8028643424785502220, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
   m_Bones:
@@ -3504,7 +3508,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 5837119013110923338, guid: 79ce43d63b0585b4bb02ed7f71113479, type: 3}
   m_Bones:
@@ -3576,7 +3580,7 @@ PositionConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_TranslationAtRest: {x: 0.001457144, y: -0.09458971, z: 0.01772153}
-  m_TranslationOffset: {x: -0.00033211964, y: -0.000013388693, z: -0.0001584813}
+  m_TranslationOffset: {x: -0.00033211964, y: -0.000013388693, z: -0.0001585111}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -4663,6 +4667,8 @@ MonoBehaviour:
   gantryMaxX: 5
   clawVerticalInput: 0
   holdTime: 2
+  circleMeter: {fileID: 0}
+  hightMultiplier: 0
 --- !u!114 &5159419887034925467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4679,6 +4685,8 @@ MonoBehaviour:
   wristCollider: {fileID: 2354823509807270747}
   clawController: {fileID: 4678805858062066026}
   heldItemParent: {fileID: 2256653769447414955}
+  detectedBasket: {fileID: 0}
+  ObjectGrabbed: {fileID: 0}
 --- !u!114 &4678805858062066026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4856,7 +4864,7 @@ AimConstraint:
   serializedVersion: 2
   m_Weight: 1
   m_RotationAtRest: {x: -8.630002, y: -0, z: 0}
-  m_RotationOffset: {x: 49.335373, y: -177.8574, z: 2.2730818}
+  m_RotationOffset: {x: 49.335377, y: -177.8574, z: 2.2730753}
   m_AimVector: {x: 0, y: 0, z: 1}
   m_UpVector: {x: 0, y: 1, z: 0}
   m_WorldUpVector: {x: 0, y: 1, z: 0}
