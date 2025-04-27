@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using FMODUnity;
 
 /// <summary>
 /// This script is the primary interface between designer and programmer.
@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     private FontRandomizer fontRandomizer;
         // Controls
     private ClawControls controls;
+        // Sound
+    private AudioHandler audioHandler;
 
     // Public
     public enum Speaker 
@@ -92,6 +94,12 @@ public class GameManager : MonoBehaviour
         controls = new ClawControls(); // The constructor for ClawControls.cs retrieves the associated input actions.
         controls.Player.Pause.performed += ctx => TogglePause();
         controls.UI.Pause.performed += ctx => TogglePause();
+        
+        // Init Sound
+        audioHandler = gameObject.GetComponentInChildren<AudioHandler>();
+        controls.UI.Navigate.performed += ctx => UIMoveSound();
+        controls.UI.Submit.performed += ctx => UISelectSound();
+        controls.UI.Cancel.performed += ctx => UIBackSound();
 
         
         // Check for pre-existing happiness manager. Update our current happiness with its value.
@@ -138,15 +146,15 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable() 
     {
-        controls.Player.Pause.Enable();
-        controls.UI.Pause.Disable();
+        controls.Player.Enable();
+        controls.UI.Disable();
         // Assign callback to scene manager
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
     private void OnDisable()
     {
-        controls.Player.Pause.Disable();
-        controls.UI.Pause.Disable();
+        controls.Player.Disable();
+        controls.UI.Disable();
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
 
@@ -278,5 +286,22 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
+    }
+
+    // UI Sound
+    private void UIMoveSound()
+    {
+        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
+        audioHandler.PlaySFX(AudioHandler.SFX.UI_Move);
+    }
+    private void UISelectSound()
+    {
+        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
+        audioHandler.PlaySFX(AudioHandler.SFX.UI_Select);
+    }
+    private void UIBackSound()
+    {
+        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
+        audioHandler.PlaySFX(AudioHandler.SFX.UI_Back);
     }
 }
