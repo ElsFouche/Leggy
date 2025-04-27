@@ -5,7 +5,7 @@
 			<value>Arm_Lockout</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -188,6 +188,7 @@
 	<object class="MixerBusEffectChain" id="{7b8790bd-ef4c-4f4b-827f-42a62b7f8d85}">
 		<relationship name="effects">
 			<destination>{5994580c-9084-4a56-8b79-274158dd66fc}</destination>
+			<destination>{eee01328-9fb2-4b84-8ef8-07d49837fdc6}</destination>
 			<destination>{29038a70-9dc5-49d7-8b8c-acabd49d7c44}</destination>
 			<destination>{a1e9191f-fbc5-4b90-9227-f390f6077cab}</destination>
 		</relationship>
@@ -222,12 +223,13 @@
 			<value>0</value>
 		</property>
 	</object>
+	<object class="SpatialiserEffect" id="{eee01328-9fb2-4b84-8ef8-07d49837fdc6}" />
 	<object class="MixerSend" id="{29038a70-9dc5-49d7-8b8c-acabd49d7c44}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>

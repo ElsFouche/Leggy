@@ -5,7 +5,7 @@
 			<value>Gantry_Lockout</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -184,6 +184,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{9a56e1ae-7769-466a-8294-8740b5381049}">
 		<relationship name="effects">
+			<destination>{745f00fb-5726-4386-b239-2b8db603f115}</destination>
 			<destination>{c11f46d4-b58c-45aa-ae29-82d00dbf199e}</destination>
 			<destination>{e46ba446-e835-4cf6-b0e9-a047c4c2c8ae}</destination>
 		</relationship>
@@ -201,12 +202,13 @@
 			<value>1</value>
 		</property>
 	</object>
+	<object class="SpatialiserEffect" id="{745f00fb-5726-4386-b239-2b8db603f115}" />
 	<object class="MixerSend" id="{c11f46d4-b58c-45aa-ae29-82d00dbf199e}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>

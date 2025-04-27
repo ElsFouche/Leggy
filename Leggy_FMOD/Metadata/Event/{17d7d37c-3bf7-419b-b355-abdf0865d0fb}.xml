@@ -5,7 +5,7 @@
 			<value>Claw_Lockout</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -180,6 +180,8 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{741639fa-16cc-4b71-b914-b7dc994f92da}">
 		<relationship name="effects">
+			<destination>{df7605c5-8614-45f5-8726-791ad710ed6d}</destination>
+			<destination>{fb85505f-73a8-4a29-baf4-81e329d6cc40}</destination>
 			<destination>{47edadd2-feec-4e2a-b654-78e1c81715aa}</destination>
 		</relationship>
 	</object>
@@ -189,12 +191,24 @@
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{2c8eb8df-0d2a-41f2-bde2-d90d7f883252}" />
+	<object class="SpatialiserEffect" id="{df7605c5-8614-45f5-8726-791ad710ed6d}" />
+	<object class="MixerSend" id="{fb85505f-73a8-4a29-baf4-81e329d6cc40}">
+		<property name="level">
+			<value>0</value>
+		</property>
+		<property name="inputFormat">
+			<value>2</value>
+		</property>
+		<relationship name="mixerReturn">
+			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{47edadd2-feec-4e2a-b654-78e1c81715aa}" />
 </objects>
