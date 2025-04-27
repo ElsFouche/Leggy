@@ -5,7 +5,7 @@
 			<value>Gantry_Depth</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -222,6 +222,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{dfdb8b6d-289b-438a-b890-4ea76ffb624e}">
 		<relationship name="effects">
+			<destination>{9d51c31c-30c0-48a6-9cc0-1c424a1aa1c9}</destination>
 			<destination>{ca9eb497-148c-4c7f-96b0-d7a87ad91ab1}</destination>
 			<destination>{1827ee41-74c9-41bc-b3cb-256456b7054c}</destination>
 		</relationship>
@@ -272,12 +273,13 @@
 			<destination>{a884b402-39f2-44fa-8689-38499735a2e5}</destination>
 		</relationship>
 	</object>
+	<object class="SpatialiserEffect" id="{9d51c31c-30c0-48a6-9cc0-1c424a1aa1c9}" />
 	<object class="MixerSend" id="{ca9eb497-148c-4c7f-96b0-d7a87ad91ab1}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>

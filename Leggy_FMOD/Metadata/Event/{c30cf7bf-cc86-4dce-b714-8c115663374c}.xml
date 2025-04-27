@@ -5,7 +5,7 @@
 			<value>Collision_General</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ee5a5abd-3410-415e-b0f5-c3c4014b42c9}</destination>
@@ -98,6 +98,7 @@
 	<object class="MixerBusPanner" id="{9c184819-c65b-456c-b061-702e71f6afe3}" />
 	<object class="MixerBusEffectChain" id="{3fe973c8-44e4-4f57-8219-d92bce4b4d59}">
 		<relationship name="effects">
+			<destination>{9de02bd0-237e-4ebe-9f0b-71d7333aaaeb}</destination>
 			<destination>{c5900511-605a-4c22-8fa6-f29ad5c6ca23}</destination>
 		</relationship>
 	</object>
@@ -118,6 +119,7 @@
 		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{413f3e79-7235-48fb-a7b4-74f731d31970}" />
+	<object class="SpatialiserEffect" id="{9de02bd0-237e-4ebe-9f0b-71d7333aaaeb}" />
 	<object class="MixerBusFader" id="{c5900511-605a-4c22-8fa6-f29ad5c6ca23}" />
 	<object class="RandomizerModulator" id="{8bf26f16-d5c7-4be2-b48c-3c492c2b5dd0}">
 		<property name="nameOfPropertyBeingModulated">

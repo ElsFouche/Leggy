@@ -5,7 +5,7 @@
 			<value>Wrist_Movement</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -260,6 +260,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{f8915bea-a53e-4d53-bb3d-252fe743940c}">
 		<relationship name="effects">
+			<destination>{a6c47775-8793-4a81-91ae-75eca7fa0924}</destination>
 			<destination>{7f9f9ef4-b054-46a9-9b49-f4c21365854b}</destination>
 			<destination>{874bde17-7f4d-449c-bfe1-c13939213924}</destination>
 		</relationship>
@@ -326,12 +327,13 @@
 			<destination>{d949ce28-1460-46c8-81ba-94922230f677}</destination>
 		</relationship>
 	</object>
+	<object class="SpatialiserEffect" id="{a6c47775-8793-4a81-91ae-75eca7fa0924}" />
 	<object class="MixerSend" id="{7f9f9ef4-b054-46a9-9b49-f4c21365854b}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>

@@ -5,7 +5,7 @@
 			<value>Claw_OpenClose</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -225,6 +225,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{370e7df3-db89-4590-81b6-20373eb51110}">
 		<relationship name="effects">
+			<destination>{a16e84f7-93bd-4e6e-8ea9-6d509083092f}</destination>
 			<destination>{17900af0-65fc-47bc-a21a-8ff8afdd57dd}</destination>
 			<destination>{be60247a-0351-4c4c-853a-3c14af2fce0c}</destination>
 		</relationship>
@@ -275,12 +276,13 @@
 			<destination>{dd52ef27-4470-4cc6-acd2-3cd99dbc1c2a}</destination>
 		</relationship>
 	</object>
+	<object class="SpatialiserEffect" id="{a16e84f7-93bd-4e6e-8ea9-6d509083092f}" />
 	<object class="MixerSend" id="{17900af0-65fc-47bc-a21a-8ff8afdd57dd}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>

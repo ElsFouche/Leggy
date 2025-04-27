@@ -5,7 +5,7 @@
 			<value>Arm_Height</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe7acbc-cdb4-4099-a366-3c023ae2bbcf}</destination>
@@ -223,6 +223,7 @@
 	<object class="MixerBusEffectChain" id="{dab6b07c-5f35-45c8-931c-a607ab993039}">
 		<relationship name="effects">
 			<destination>{7bc3615d-8810-442e-b628-c8b4bf791dc9}</destination>
+			<destination>{0970b571-f0bc-439a-a8fc-a9f5bf01b4e4}</destination>
 			<destination>{8f664b58-c69f-4bcb-9821-4f040cfb06c8}</destination>
 			<destination>{47ac5be9-f195-4659-87e5-decdc0f47d7d}</destination>
 		</relationship>
@@ -290,12 +291,13 @@
 			<value>0</value>
 		</property>
 	</object>
+	<object class="SpatialiserEffect" id="{0970b571-f0bc-439a-a8fc-a9f5bf01b4e4}" />
 	<object class="MixerSend" id="{8f664b58-c69f-4bcb-9821-4f040cfb06c8}">
 		<property name="level">
 			<value>0</value>
 		</property>
 		<property name="inputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="mixerReturn">
 			<destination>{b0cc1e19-c26b-40d3-841c-eadb1fbbac58}</destination>
