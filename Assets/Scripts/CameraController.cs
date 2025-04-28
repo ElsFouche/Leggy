@@ -67,6 +67,7 @@ public class CameraController : MonoBehaviour
     public void SwitchCamera(InputAction.CallbackContext context)
     {
         canSwitch = false;
+        if (Time.timeScale <= 0.01f) { return; }
         StartCoroutine(CameraSwitchDelay(switchDelay));
         // lastSwitchTime = Time.time; // Update the last switch time
         Vector2 value = context.ReadValue<Vector2>();

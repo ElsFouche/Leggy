@@ -22,6 +22,13 @@ public class RigClawParrent : MonoBehaviour
     private bool kinematicBeforeParrent = false;
     private Rigidbody preGrabRigid;
 
+    private LeggyAudio leggyAudio;
+
+    private void Start()
+    {
+        leggyAudio = GetComponent<LeggyAudio>();
+    }
+
     private void Update()
     {
         // Only detect objects when grip pressure is NOT too high (claw isn't wide open)
@@ -57,6 +64,7 @@ public class RigClawParrent : MonoBehaviour
 
         if (ObjectGrabbed != null && WristMouth.ObjectDetected == null)
         {
+            Debug.Log("Dropping object (dirty).");
             ObjectGrabbed.transform.parent = null;
         }
     }
@@ -97,6 +105,7 @@ public class RigClawParrent : MonoBehaviour
             {
                 basket.objectRigidbody.isKinematic = true;
             }
+            PlayGrabSFX();
         }
     }
 
@@ -105,16 +114,16 @@ public class RigClawParrent : MonoBehaviour
         if (grabbedObject != null)
         {
             grabbedObject.SetParent(null);
-            ObjectGrabbed.transform.SetParent(null);
-            if (ObjectGrabbed.GetComponent<Rigidbody>() != null)
+            // ObjectGrabbed.transform.SetParent(null);
+            if (preGrabRigid != null)
             {
-                if (preGrabRigid.GetComponent<Rigidbody>().isKinematic)
+                if (preGrabRigid.isKinematic)
                 {
-                    ObjectGrabbed.GetComponent<Rigidbody>().isKinematic = true;
+                    preGrabRigid.isKinematic = false;
                 }
-                if (preGrabRigid.GetComponent<Rigidbody>().useGravity)
+                if (preGrabRigid.useGravity)
                 {
-                    ObjectGrabbed.GetComponent<Rigidbody>().useGravity = true;
+                    preGrabRigid.useGravity = true;
                 }
 
                 grabbedObject = null;
@@ -143,5 +152,11 @@ public class RigClawParrent : MonoBehaviour
             grabbedObject = null;
             detectedBasket = null;
         }
+    }
+
+    private void PlayGrabSFX()
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        leggyAudio.LeggyGrabSFX();
     }
 }

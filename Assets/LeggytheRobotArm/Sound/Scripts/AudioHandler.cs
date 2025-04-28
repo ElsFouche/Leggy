@@ -23,6 +23,8 @@ public class AudioHandler : MonoBehaviour
     [SerializeField] EventReference uiBack;
     [SerializeField] EventReference uiMove;
     [SerializeField] EventReference uiSelect;
+    [SerializeField] EventReference gainHappiness;
+    [SerializeField] EventReference loseHappiness;
 
 
     // Public
@@ -31,7 +33,9 @@ public class AudioHandler : MonoBehaviour
         none,
         UI_Back,
         UI_Move,
-        UI_Select
+        UI_Select,
+        HappinessGain,
+        HappinessLoss
     }
 
     // Singleton
@@ -107,6 +111,7 @@ public class AudioHandler : MonoBehaviour
     {
         if (!areBanksLoaded) { return; }
         musicInstance = FMODUnity.RuntimeManager.CreateInstance(mainTheme);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, this.transform);
         musicInstance.start();
 
         // Parameters
@@ -166,21 +171,27 @@ public class AudioHandler : MonoBehaviour
                 break;
             case SFX.UI_Back:
                 UnityEngine.Debug.Log("Playing UI Back sound.");
-                // RuntimeManager.PlayOneShot(uiBack);
-                sfxInstance = RuntimeManager.CreateInstance(uiBack);
-                sfxInstance.start();
+                RuntimeManager.PlayOneShot(uiBack);
+                // sfxInstance = RuntimeManager.CreateInstance(uiBack);
+                // sfxInstance.start();
                 break;
             case SFX.UI_Move:
                 UnityEngine.Debug.Log("Playing UI Move sound.");
-                // RuntimeManager.PlayOneShot("event:/SFX/UI/UI_Move");
-                sfxInstance = RuntimeManager.CreateInstance(uiMove);
-                sfxInstance.start();
+                RuntimeManager.PlayOneShot(uiMove);
+                // sfxInstance = RuntimeManager.CreateInstance(uiMove);
+                // sfxInstance.start();
                 break;
             case SFX.UI_Select:
                 UnityEngine.Debug.Log("Playing UI Select sound.");
-                // RuntimeManager.PlayOneShot(uiSelect);
-                sfxInstance = RuntimeManager.CreateInstance(uiSelect);
-                sfxInstance.start();
+                RuntimeManager.PlayOneShot(uiSelect);
+                // sfxInstance = RuntimeManager.CreateInstance(uiSelect);
+                // sfxInstance.start();
+                break;
+            case SFX.HappinessGain:
+                RuntimeManager.PlayOneShot(gainHappiness);
+                break;
+            case SFX.HappinessLoss:
+                RuntimeManager.PlayOneShot(loseHappiness);
                 break;
             default:
                 break;

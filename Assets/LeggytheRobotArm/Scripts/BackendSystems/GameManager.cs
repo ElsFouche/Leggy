@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using FMODUnity;
+using System;
 
 /// <summary>
 /// This script is the primary interface between designer and programmer.
@@ -96,12 +97,13 @@ public class GameManager : MonoBehaviour
         controls.UI.Pause.performed += ctx => TogglePause();
         
         // Init Sound
-        audioHandler = gameObject.GetComponentInChildren<AudioHandler>();
-        controls.UI.Navigate.performed += ctx => UIMoveSound();
-        controls.UI.Submit.performed += ctx => UISelectSound();
-        controls.UI.Cancel.performed += ctx => UIBackSound();
+        controls.UI.Navigate.performed += ctx => PlayUISFXMove(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Navigate.started += ctx => PlayUISFXMove(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Submit.performed += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Submit.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Cancel.performed += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
+        controls.UI.Cancel.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
 
-        
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
         if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.transform.root.GetInstanceID()); }
@@ -173,6 +175,7 @@ public class GameManager : MonoBehaviour
         pauseMenuHolder.SetActive(false);
         pauseUICG = pauseMenuHolder.GetComponent<CanvasGroup>();
         mainUICG = mainUIHolder.GetComponent<CanvasGroup>();
+        audioHandler = AudioHandler._AudioHandlerInstance;
         // Initialize level variables if unmodified by Level Designers
         if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
         if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
@@ -232,7 +235,6 @@ public class GameManager : MonoBehaviour
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
 
-        audioHandler = AudioHandler._AudioHandlerInstance;
         StartCoroutine(AfterStart());
     }
 
@@ -299,19 +301,21 @@ public class GameManager : MonoBehaviour
     }
 
     // UI Sound
-    private void UIMoveSound()
+    private void PlayUISFXButton(InputAction.CallbackContext context, AudioHandler.SFX playSFX)
     {
         if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
-        audioHandler.PlaySFX(AudioHandler.SFX.UI_Move);
+        
+        if (context.started && context.action.type == InputActionType.Button)
+        {
+           audioHandler.PlaySFX(playSFX);
+        }
     }
-    private void UISelectSound()
+
+    private void PlayUISFXMove(InputAction.CallbackContext context, AudioHandler.SFX moveSFX) 
     {
-        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
-        audioHandler.PlaySFX(AudioHandler.SFX.UI_Select);
-    }
-    private void UIBackSound()
-    {
-        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
-        audioHandler.PlaySFX(AudioHandler.SFX.UI_Back);
+        if (context.performed && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.1f)
+        {
+            audioHandler.PlaySFX(moveSFX);
+        }
     }
 }

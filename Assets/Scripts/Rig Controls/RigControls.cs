@@ -57,6 +57,7 @@ public class RigControls : MonoBehaviour
     public float hightMultiplier;
 
     private LeggyAudio leggyAudio;
+    private bool isPlayingAudio = false;
 
     private void Awake()
     {
@@ -74,15 +75,24 @@ public class RigControls : MonoBehaviour
 
         controls.Player.RotateLeft.performed += ctx => bodyRotationInput = -1f;
         controls.Player.RotateLeft.canceled += ctx => bodyRotationInput = 0f;
+        controls.Player.RotateLeft.started += ctx => RotationSFX(ctx);
+        controls.Player.RotateLeft.canceled += ctx => RotationSFX(ctx);
 
         controls.Player.RotateRight.performed += ctx => bodyRotationInput = 1f;
         controls.Player.RotateRight.canceled += ctx => bodyRotationInput = 0f;
+        controls.Player.RotateRight.started += ctx => RotationSFX(ctx);
+        controls.Player.RotateRight.canceled += ctx => RotationSFX(ctx);
 
         controls.Player.ClawVerticalUp.performed += ctx => clawVerticalInput = 1f;
         controls.Player.ClawVerticalUp.canceled += ctx => clawVerticalInput = 0f;
+        controls.Player.ClawVerticalUp.started += ctx => ArmHeightSFX(ctx);
+        controls.Player.ClawVerticalUp.canceled += ctx => ArmHeightSFX(ctx);
 
         controls.Player.ClawVerticalDown.performed += ctx => clawVerticalInput = -1f;
         controls.Player.ClawVerticalDown.canceled += ctx => clawVerticalInput = 0f;
+        controls.Player.ClawVerticalDown.started += ctx => ArmHeightSFX(ctx);
+        controls.Player.ClawVerticalDown.canceled += ctx => ArmHeightSFX(ctx);
+
 
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
@@ -218,16 +228,14 @@ public class RigControls : MonoBehaviour
 
     private void MoveSFX(InputAction.CallbackContext callback)
     {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         Vector2 moveValue = callback.ReadValue<Vector2>();
-        // Do checking for joystick
 
         if (callback.started && Mathf.Abs(moveValue.y) > 0.1f)
         {
-            Debug.Log("Playing forward movement sound.");
             leggyAudio.PlaySound(LeggyAudio.LeggySFX.ArmDepth);
         } else if (callback.canceled)
         {
-            Debug.Log("Stopping sound.");
             leggyAudio.StopSound(LeggyAudio.LeggySFX.ArmDepth);
         }
 
@@ -241,18 +249,21 @@ public class RigControls : MonoBehaviour
     }
     private void ArmHeightSFX(InputAction.CallbackContext callback)
     {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started)
         {
-
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.ArmHeight);
         }
-        else if (callback.canceled)
+        
+        if (callback.canceled)
         {
-
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.ArmHeight);
         }
     }
 
     private void WristSFX(InputAction.CallbackContext callback) 
     {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started) 
         {
             leggyAudio.PlaySound(LeggyAudio.LeggySFX.WristMovement);
@@ -264,23 +275,27 @@ public class RigControls : MonoBehaviour
 
     private void RotationSFX(InputAction.CallbackContext callback) 
     { 
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started)
         {
-
-        } else if (callback.canceled)
+            if (isPlayingAudio)
+            {
+                StopSound(LeggyAudio.LeggySFX.Rotation);
+            }
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.Rotation);
+            isPlayingAudio = true;
+        } 
+        
+        if (callback.canceled)
         {
-
+            StopSound(LeggyAudio.LeggySFX.Rotation);
         }
     }
-    private void ClawOpenCloseSFX(InputAction.CallbackContext callback)
+
+    private void StopSound(LeggyAudio.LeggySFX leggySFX)
     {
-        if (callback.started)
-        {
-
-        }
-        else if (callback.canceled)
-        {
-
-        }
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        isPlayingAudio = false;
+        leggyAudio.StopSound(leggySFX);
     }
 }

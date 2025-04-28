@@ -112,48 +112,78 @@ public class LeggyAudio : MonoBehaviour
 
     public void PlaySound(LeggySFX playSFX)
     {
+        PLAYBACK_STATE currPlaybackState;
+
         switch (playSFX)
         {
             case LeggySFX.none:
                 break;
             case LeggySFX.ArmDepth:
+                armDepthInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 armDepthInst = RuntimeManager.CreateInstance(ArmDepth);
                 FMODUnity.RuntimeManager.AttachInstanceToGameObject(armDepthInst, GetComponent<Transform>());
                 armDepthInst.start();
                 break;
             case LeggySFX.ArmHeight:
+                armHeightInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 armHeightInst = RuntimeManager.CreateInstance(ArmHeight);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(armHeightInst, GetComponent<Transform>());
                 armHeightInst.start();
                 break;
             case LeggySFX.ArmLockout:
+                armLockoutInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 armLockoutInst = RuntimeManager.CreateInstance(ArmLockout);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(armLockoutInst, GetComponent<Transform>());
                 armLockoutInst.start();
                 break;
             case LeggySFX.ClawOpen:
+                clawOpenInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 clawOpenInst = RuntimeManager.CreateInstance(ClawOpen);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(clawOpenInst, GetComponent<Transform>());
                 clawOpenInst.start();
                 break;
             case LeggySFX.ClawLockout:
+                clawLockoutInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 clawLockoutInst = RuntimeManager.CreateInstance(ClawLockout);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(clawLockoutInst, GetComponent<Transform>());
                 clawLockoutInst.start();
                 break;
             case LeggySFX.Gantry:
+                gantryInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 gantryInst = RuntimeManager.CreateInstance(Gantry);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(gantryInst, GetComponent<Transform>());
                 gantryInst.start();
                 break;
             case LeggySFX.GantryLockout:
+                gantryLockoutInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 gantryLockoutInst = RuntimeManager.CreateInstance(GantryLockout);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(gantryLockoutInst, GetComponent<Transform>());
                 gantryLockoutInst.start();
                 break;
             case LeggySFX.Rotation:
+                rotationInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 rotationInst = RuntimeManager.CreateInstance(Rotation);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(rotationInst, GetComponent<Transform>());
                 rotationInst.start();
                 break;
             case LeggySFX.RotationLockout:
+                rotationLockoutInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 rotationLockoutInst = RuntimeManager.CreateInstance(RotationLockout);
+                FMODUnity.RuntimeManager.AttachInstanceToGameObject(rotationLockoutInst, GetComponent<Transform>());
                 rotationLockoutInst.start();
                 break;
             case LeggySFX.WristMovement:
+                wristMovementInst.getPlaybackState(out currPlaybackState);
+                if (currPlaybackState == PLAYBACK_STATE.PLAYING) { return; }
                 wristMovementInst = RuntimeManager.CreateInstance(WristMovement);
                 FMODUnity.RuntimeManager.AttachInstanceToGameObject(wristMovementInst, GetComponent<Transform>());
                 wristMovementInst.start();
