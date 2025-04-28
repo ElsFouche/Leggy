@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using FMODUnity;
+using System;
 
 /// <summary>
 /// This script is the primary interface between designer and programmer.
@@ -44,6 +45,8 @@ public class GameManager : MonoBehaviour
     private FontRandomizer fontRandomizer;
         // Controls
     private ClawControls controls;
+        // Sound
+    private AudioHandler audioHandler;
 
     // Public
     public enum Speaker 
@@ -92,8 +95,15 @@ public class GameManager : MonoBehaviour
         controls = new ClawControls(); // The constructor for ClawControls.cs retrieves the associated input actions.
         controls.Player.Pause.performed += ctx => TogglePause();
         controls.UI.Pause.performed += ctx => TogglePause();
-
         
+        // Init Sound
+        controls.UI.Navigate.performed += ctx => PlayUISFXMove(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Navigate.started += ctx => PlayUISFXMove(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Submit.performed += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Submit.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Cancel.performed += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
+        controls.UI.Cancel.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
+
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         previousManager = FindObjectOfType<HappinessManager>(); 
         if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.transform.root.GetInstanceID()); }
@@ -138,15 +148,15 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable() 
     {
-        controls.Player.Pause.Enable();
-        controls.UI.Pause.Disable();
+        controls.Player.Enable();
+        controls.UI.Disable();
         // Assign callback to scene manager
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
     private void OnDisable()
     {
-        controls.Player.Pause.Disable();
-        controls.UI.Pause.Disable();
+        controls.Player.Disable();
+        controls.UI.Disable();
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
 
@@ -165,6 +175,7 @@ public class GameManager : MonoBehaviour
         pauseMenuHolder.SetActive(false);
         pauseUICG = pauseMenuHolder.GetComponent<CanvasGroup>();
         mainUICG = mainUIHolder.GetComponent<CanvasGroup>();
+        audioHandler = AudioHandler._AudioHandlerInstance;
         // Initialize level variables if unmodified by Level Designers
         if (happinessLossTickSpeed <= 0) happinessLossTickSpeed = 1;
         if (maxHappinessLostPerTick < 50) maxHappinessLostPerTick = 50;
@@ -223,6 +234,17 @@ public class GameManager : MonoBehaviour
         transitionManager.blackFadeInTime = fadeToBlackTime;
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
+
+        StartCoroutine(AfterStart());
+    }
+
+    private IEnumerator AfterStart()
+    {
+        yield return new WaitForEndOfFrame();
+        if (audioHandler != null)
+        {
+            audioHandler.PlayMusic();
+        }
     }
 
     // Pause functionality 
@@ -248,6 +270,7 @@ public class GameManager : MonoBehaviour
                 controls.UI.Disable();
                 break;
         }
+        audioHandler.SetPauseMusic(paused);
     }
 
     // UI button functionality
@@ -259,7 +282,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartTask()
     {
-        Time.timeScale = 1.0f;
+        TogglePause();
         happinessManager.happinessCount = levelStartHappiness;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -278,5 +301,24 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
+    }
+
+    // UI Sound
+    private void PlayUISFXButton(InputAction.CallbackContext context, AudioHandler.SFX playSFX)
+    {
+        if (audioHandler == null) { Debug.Log("Audio handler is null."); return; }
+        
+        if (context.started && context.action.type == InputActionType.Button)
+        {
+           audioHandler.PlaySFX(playSFX);
+        }
+    }
+
+    private void PlayUISFXMove(InputAction.CallbackContext context, AudioHandler.SFX moveSFX) 
+    {
+        if (context.performed && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.1f)
+        {
+            audioHandler.PlaySFX(moveSFX);
+        }
     }
 }

@@ -36,6 +36,7 @@ public class GoalZone : MonoBehaviour
     private int instanceID;
     private bool collisionEnterChecking = false;
     private bool collisionExitChecking = false;
+    private AudioHandler audioHandler;
 
     public enum HappinessValues
     {
@@ -71,6 +72,7 @@ public class GoalZone : MonoBehaviour
 
     void Start()
     {
+        audioHandler = AudioHandler._AudioHandlerInstance;
         // If a level designer has not adjusted the slider values they will stay 0
         // even if set during the initialization above. Initialize here instead:
         if (minNumMatchingObjects <= 0) minNumMatchingObjects = 1;
@@ -127,6 +129,17 @@ public class GoalZone : MonoBehaviour
         // Check for lock
         if (collisionEnterChecking) return;
         collisionEnterChecking = true;
+
+        // Exit if Leggy triggered this code.
+        if (other.transform.root.GetComponent<TagManager>() != null)
+        {
+            if (other.transform.root.GetComponent<TagManager>().mainTag == TagManager.MainTag.PlayerBody)
+            {
+                collisionEnterChecking = false;
+                return;
+            }
+        }
+
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -335,8 +348,6 @@ public class GoalZone : MonoBehaviour
     {
         happinessManager.gainHappiness(happinessToGain);
 
-        //add vfx activation
-
         Debug.Log(inputObject.name + " grabbable has reached goal: " + this.name);
 
         if (inputObject != null)
@@ -354,10 +365,12 @@ public class GoalZone : MonoBehaviour
         {
             Debug.Log("Input is null");
         }
+        audioHandler.PlaySFX(AudioHandler.SFX.HappinessGain);
     }
 
     private void loseHappiness(int happinessToLose)
     {
         happinessManager.loseHappiness(happinessToLose);
+        audioHandler.PlaySFX(AudioHandler.SFX.HappinessLoss);
     }
 }

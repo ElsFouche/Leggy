@@ -31,6 +31,9 @@ public class RigClawController : MonoBehaviour
     private InputAction openClawAction;
     private InputAction closeClawAction;
 
+    private LeggyAudio leggyAudio;
+    private bool isPlayingAudio;
+
     private void Awake()
     {
         B_ClawIK_target = GameObject.Find("B_ClawIK_target");
@@ -42,9 +45,13 @@ public class RigClawController : MonoBehaviour
 
         openClawAction.performed += ctx => openClawInput = true;
         openClawAction.canceled += ctx => openClawInput = false;
+        openClawAction.started += ctx => ClawOpenCloseSFX(ctx);
+        openClawAction.canceled += ctx => ClawOpenCloseSFX(ctx);
 
         closeClawAction.performed += ctx => closeClawInput = true;
         closeClawAction.canceled += ctx => closeClawInput = false;
+        closeClawAction.started += ctx => ClawOpenCloseSFX(ctx);
+        closeClawAction.canceled += ctx => ClawOpenCloseSFX(ctx);
 
         controls.Enable();
 
@@ -78,6 +85,8 @@ public class RigClawController : MonoBehaviour
         gripPreassure = (bottomGrip + topGrip) / 2f;
 
         Debug.Log($"Initial Grip Pressure: {gripPreassure}");
+
+        leggyAudio = GetComponent<LeggyAudio>();
     }
 
     void Update()
@@ -114,5 +123,31 @@ public class RigClawController : MonoBehaviour
             newGaugePosition.x = gaugePosition;
             gaugeIndicatorObject.transform.position = newGaugePosition;
         }
+    }
+    private void ClawOpenCloseSFX(InputAction.CallbackContext callback)
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+
+        if (callback.started)
+        {
+            if (isPlayingAudio)
+            {
+                StopClawSound();
+            }
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.ClawOpen);
+            isPlayingAudio = true;
+        }
+        
+        if (callback.canceled)
+        {
+            StopClawSound();
+        }
+    }
+
+    private void StopClawSound()
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        isPlayingAudio = false;
+        leggyAudio.StopSound(LeggyAudio.LeggySFX.ClawOpen);
     }
 }
