@@ -172,13 +172,15 @@ public class AudioHandler : MonoBehaviour
                 break;
             case SFX.UI_Move:
                 UnityEngine.Debug.Log("Playing UI Move sound.");
-                RuntimeManager.PlayOneShot("event:/SFX/UI/UI_Move");
-                // sfxInstance = RuntimeManager.CreateInstance(uiMove);
-                // sfxInstance.start();
+                // RuntimeManager.PlayOneShot("event:/SFX/UI/UI_Move");
+                sfxInstance = RuntimeManager.CreateInstance(uiMove);
+                sfxInstance.start();
                 break;
             case SFX.UI_Select:
                 UnityEngine.Debug.Log("Playing UI Select sound.");
-                RuntimeManager.PlayOneShot(uiSelect);
+                // RuntimeManager.PlayOneShot(uiSelect);
+                sfxInstance = RuntimeManager.CreateInstance(uiSelect);
+                sfxInstance.start();
                 break;
             default:
                 break;

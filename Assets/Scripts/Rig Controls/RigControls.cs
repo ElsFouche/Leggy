@@ -56,15 +56,21 @@ public class RigControls : MonoBehaviour
 
     public float hightMultiplier;
 
+    private LeggyAudio leggyAudio;
+
     private void Awake()
     {
         controls = new ClawControls();
 
         controls.Player.Move.performed += ctx => leftStickInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => leftStickInput = Vector2.zero;
+        controls.Player.Move.started += ctx => MoveSFX(ctx);
+        controls.Player.Move.canceled += ctx => MoveSFX(ctx);
 
         controls.Player.MoveRightStick.performed += ctx => rightStickInput = new Vector2(-ctx.ReadValue<Vector2>().x, ctx.ReadValue<Vector2>().y);
         controls.Player.MoveRightStick.canceled += ctx => rightStickInput = Vector2.zero;
+        controls.Player.MoveRightStick.started += ctx => WristSFX(ctx);
+        controls.Player.MoveRightStick.canceled += ctx => WristSFX(ctx);
 
         controls.Player.RotateLeft.performed += ctx => bodyRotationInput = -1f;
         controls.Player.RotateLeft.canceled += ctx => bodyRotationInput = 0f;
@@ -92,6 +98,7 @@ public class RigControls : MonoBehaviour
     private void Start()
     {
         circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
+        leggyAudio = GetComponent<LeggyAudio>();
     }
 
     private void OnEnable() => controls.Enable();
@@ -207,5 +214,73 @@ public class RigControls : MonoBehaviour
         ArmIK_target.transform.position = ArmIKFallback.transform.position;
         yield return new WaitForSeconds(ArmIK_target_ResetInterval);
         ArmFallbackTriggered = false;
+    }
+
+    private void MoveSFX(InputAction.CallbackContext callback)
+    {
+        Vector2 moveValue = callback.ReadValue<Vector2>();
+        // Do checking for joystick
+
+        if (callback.started && Mathf.Abs(moveValue.y) > 0.1f)
+        {
+            Debug.Log("Playing forward movement sound.");
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.ArmDepth);
+        } else if (callback.canceled)
+        {
+            Debug.Log("Stopping sound.");
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.ArmDepth);
+        }
+
+        if (callback.started && Mathf.Abs(moveValue.x) > 0.1f)
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.Gantry);
+        } else if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.Gantry);
+        }
+    }
+    private void ArmHeightSFX(InputAction.CallbackContext callback)
+    {
+        if (callback.started)
+        {
+
+        }
+        else if (callback.canceled)
+        {
+
+        }
+    }
+
+    private void WristSFX(InputAction.CallbackContext callback) 
+    {
+        if (callback.started) 
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.WristMovement);
+        } else if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.WristMovement);
+        }
+    }
+
+    private void RotationSFX(InputAction.CallbackContext callback) 
+    { 
+        if (callback.started)
+        {
+
+        } else if (callback.canceled)
+        {
+
+        }
+    }
+    private void ClawOpenCloseSFX(InputAction.CallbackContext callback)
+    {
+        if (callback.started)
+        {
+
+        }
+        else if (callback.canceled)
+        {
+
+        }
     }
 }
