@@ -241,7 +241,10 @@ public class GameManager : MonoBehaviour
     private IEnumerator AfterStart()
     {
         yield return new WaitForEndOfFrame();
-        audioHandler.PlayMusic();
+        if (audioHandler != null)
+        {
+            audioHandler.PlayMusic();
+        }
     }
 
     // Pause functionality 
