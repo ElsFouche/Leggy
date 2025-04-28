@@ -231,6 +231,15 @@ public class GameManager : MonoBehaviour
         transitionManager.blackFadeInTime = fadeToBlackTime;
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
+
+        audioHandler = AudioHandler._AudioHandlerInstance;
+        StartCoroutine(AfterStart());
+    }
+
+    private IEnumerator AfterStart()
+    {
+        yield return new WaitForEndOfFrame();
+        audioHandler.PlayMusic();
     }
 
     // Pause functionality 
@@ -256,6 +265,7 @@ public class GameManager : MonoBehaviour
                 controls.UI.Disable();
                 break;
         }
+        audioHandler.SetPauseMusic(paused);
     }
 
     // UI button functionality
@@ -267,7 +277,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartTask()
     {
-        Time.timeScale = 1.0f;
+        TogglePause();
         happinessManager.happinessCount = levelStartHappiness;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

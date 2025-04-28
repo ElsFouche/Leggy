@@ -4764,6 +4764,7 @@ GameObject:
   - component: {fileID: 4678805858062066026}
   - component: {fileID: 5320889446076512259}
   - component: {fileID: 604664367130519098}
+  - component: {fileID: -747761604164377591}
   m_Layer: 0
   m_Name: LeggyPlayerV7
   m_TagString: Untagged
@@ -4898,6 +4899,95 @@ MonoBehaviour:
   onLeftView: 0
   onLeftShoulder: 0
   switchDelay: 0.1
+--- !u!114 &-747761604164377591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8839685165150919215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 983063f5e8652aa47a50e8281ddcffd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArmDepth:
+    Guid:
+      Data1: -61041604
+      Data2: 1298415717
+      Data3: 1737611925
+      Data4: 1000945530
+    Path: event:/SFX/Movement/Arm_Depth
+  ArmHeight:
+    Guid:
+      Data1: 2088153213
+      Data2: 1139669341
+      Data3: -1359339386
+      Data4: -1297504560
+    Path: event:/SFX/Movement/Arm_Height
+  ArmLockout:
+    Guid:
+      Data1: -1238671348
+      Data2: 1104750554
+      Data3: 919734404
+      Data4: 1764280991
+    Path: event:/SFX/Movement/Arm_Lockout
+  ClawOpen:
+    Guid:
+      Data1: -896450500
+      Data2: 1180115687
+      Data3: -472219771
+      Data4: 1335373126
+    Path: event:/SFX/Movement/Claw_OpenClose
+  ClawLockout:
+    Guid:
+      Data1: 400020348
+      Data2: 1100692471
+      Data3: -542419533
+      Data4: -70228728
+    Path: event:/SFX/Movement/Claw_Lockout
+  Gantry:
+    Guid:
+      Data1: -1447206345
+      Data2: 1224923427
+      Data3: -1798438977
+      Data4: 1631609043
+    Path: event:/SFX/Movement/Gantry_Depth
+  GantryLockout:
+    Guid:
+      Data1: 2097593635
+      Data2: 1193198991
+      Data3: -769641046
+      Data4: -997621547
+    Path: event:/SFX/Movement/Gantry_Lockout
+  Rotation:
+    Guid:
+      Data1: 1333509320
+      Data2: 1253616164
+      Data3: -315702354
+      Data4: -1835070429
+    Path: event:/SFX/Movement/Rotation
+  RotationLockout:
+    Guid:
+      Data1: 320189890
+      Data2: 1093270169
+      Data3: 317423269
+      Data4: 599932399
+    Path: event:/SFX/Movement/Rotation_Lockout
+  WristMovement:
+    Guid:
+      Data1: -1655008352
+      Data2: 1257661551
+      Data3: 1451852968
+      Data4: -1957469239
+    Path: event:/SFX/Movement/Wrist_Movement
+  Grab:
+    Guid:
+      Data1: -455247618
+      Data2: 1176433802
+      Data3: -572434281
+      Data4: -1348329815
+    Path: event:/SFX/Grab
 --- !u!1 &8890929809077223547
 GameObject:
   m_ObjectHideFlags: 0
