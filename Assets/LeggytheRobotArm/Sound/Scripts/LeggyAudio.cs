@@ -88,22 +88,22 @@ public class LeggyAudio : MonoBehaviour
                 firstPersonListener.enabled = false;
                 break;
             case CameraView.LeftShoulder:
-                topDownListener.enabled = false;
                 leftListener.enabled = true;
+                topDownListener.enabled = false;
                 rightListener.enabled = false;
                 firstPersonListener.enabled = false;
                 break;
             case CameraView.RightShoulder:
+                rightListener.enabled = true;
                 topDownListener.enabled = false;
                 leftListener.enabled = false;
-                rightListener.enabled = true;
                 firstPersonListener.enabled = false;
                 break;
             case CameraView.FirstPerson:
+                firstPersonListener.enabled = true;
                 topDownListener.enabled = false;
                 leftListener.enabled = false;
                 rightListener.enabled = false;
-                firstPersonListener.enabled = true;
                 break;
             default:
                 break;

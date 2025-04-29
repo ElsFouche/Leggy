@@ -1,6 +1,7 @@
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioHandler : MonoBehaviour
@@ -110,6 +111,16 @@ public class AudioHandler : MonoBehaviour
     public void PlayMusic()
     {
         if (!areBanksLoaded) { return; }
+        PLAYBACK_STATE temp;
+        if (musicInstance.isValid())
+        {
+            musicInstance.getPlaybackState(out temp);
+        } else {
+            temp = PLAYBACK_STATE.STOPPED;
+        }
+
+        if (temp == PLAYBACK_STATE.PLAYING) { return; }
+
         musicInstance = FMODUnity.RuntimeManager.CreateInstance(mainTheme);
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, this.transform);
         musicInstance.start();
