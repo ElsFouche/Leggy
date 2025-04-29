@@ -92,19 +92,19 @@ public class CameraController : MonoBehaviour
 
         if (value.x < 0)
         {
+            leftShoulder.enabled = true;
             topDown.enabled = false;
             firstPerson.enabled = false;
-            leftShoulder.enabled = true;
             rightShoulder.enabled = false;
             if (leggyAudio != null) { leggyAudio.SetListener(LeggyAudio.CameraView.LeftShoulder); }
         }
 
         if (value.x > 0)
         {
+            rightShoulder.enabled = true;
             topDown.enabled = false;
             firstPerson.enabled = false;
             leftShoulder.enabled = false;
-            rightShoulder.enabled = true;
             if (leggyAudio != null) { leggyAudio.SetListener(LeggyAudio.CameraView.RightShoulder); }
         }
     }

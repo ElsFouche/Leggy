@@ -5,7 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 using FMODUnity;
 using System;
 
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     // Private
     private HappinessManager happinessManager;
     private HappinessManager previousManager;
+    private List<HappinessManager> currManagers;
     private TransitionManager transitionManager;
     private ObjectiveTracker objectiveTracker;
     private int currHappiness = 30000; 
@@ -105,17 +108,26 @@ public class GameManager : MonoBehaviour
         controls.UI.Cancel.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
 
         // Check for pre-existing happiness manager. Update our current happiness with its value.
-        previousManager = FindObjectOfType<HappinessManager>(); 
-        if (previousManager != null) { Debug.Log("Happiness manager found with ID: " +  previousManager.transform.root.GetInstanceID()); }
-        if (previousManager != null && previousManager.transform.root.gameObject != this.transform.root.gameObject) 
+        currManagers = new List<HappinessManager>(FindObjectsOfType<HappinessManager>());
+        foreach(HappinessManager manager in currManagers)
         {
-            Debug.Log("Found previous happiness manager with ID: " +  previousManager.transform.root.GetInstanceID());
-            Debug.Log("Updating local variables with existing values.");
-            // TODO: Modify this so that currHappiness is pulled from save file when loading a level from level select
-            currHappiness = previousManager.happinessCount;
-            Debug.Log("Deconstructing old game manager.");  
-            Destroy(previousManager.transform.root.gameObject);
-            previousManager = null;
+            Debug.Log("Happiness manager found with ID: " +  manager.transform.root.GetInstanceID()); 
+            if (manager.gameObject.transform.root.GetInstanceID() != this.transform.root.GetInstanceID())
+            {
+                previousManager = manager;
+            } else { previousManager = null; }
+            
+            // Found
+            if (previousManager != null) 
+            { 
+                Debug.Log("Found previous happiness manager with ID: " +  previousManager.transform.root.GetInstanceID());
+                Debug.Log("Updating local variables with existing values.");
+                // TODO: Modify this so that currHappiness is pulled from save file when loading a level from level select
+                currHappiness = previousManager.happinessCount;
+                Debug.Log("Deconstructing old game manager.");  
+                Destroy(previousManager.gameObject.transform.root.gameObject);
+                previousManager = null;
+            }
         }
         
         // Store reference to components
@@ -259,6 +271,10 @@ public class GameManager : MonoBehaviour
         mainUICG.interactable = !paused;
         mainUICG.blocksRaycasts = !paused;
         mainUIHolder.SetActive(!paused);
+        if (paused)
+        {
+            EventSystem.current.SetSelectedGameObject(pauseMenuHolder.GetComponentInChildren<UnityEngine.UI.Button>().gameObject);
+        }
         switch (paused)
         {
             case true:
