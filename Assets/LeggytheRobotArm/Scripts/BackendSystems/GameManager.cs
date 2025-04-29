@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     /// The first created game manager will persist into a new scene. It will contribute the current
     /// happiness value to the newly created game manager, overwriting it, then delete itself. 
     /// </summary>
+    // Constants
+    const int MaxHappiness = 30000;
 
     // Private
     private HappinessManager happinessManager;
@@ -256,6 +258,16 @@ public class GameManager : MonoBehaviour
         if (audioHandler != null)
         {
             audioHandler.PlayMusic();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        float timeInLevel = Mathf.Clamp01(happinessManager.sigmoidMultiplier);
+        float happinessPercent = Mathf.Clamp01(happinessManager.happinessCount / MaxHappiness);
+        if (audioHandler != null) 
+        {
+            audioHandler.UpdateMainTheme(happinessPercent, timeInLevel);
         }
     }
 
