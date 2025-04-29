@@ -29,8 +29,10 @@ public class RigControls : MonoBehaviour
 
     public float ikMinZ = -1.53f;
     public float ikMaxZ = -0.2f;
-    public float ikMinY = 0.42f;
-    public float ikMaxY = 2.12f;
+    public float ikMinY;
+    public float ikMaxY;
+    private float ikModifiedMinX;
+    private float ikModifiedMaxX;
 
     public float baseMinRotation = -45f;
     public float baseMaxRotation = 45f;
@@ -52,27 +54,45 @@ public class RigControls : MonoBehaviour
 
     public GameObject circleMeter;
 
+    public float hightMultiplier;
+
+    private LeggyAudio leggyAudio;
+    private bool isPlayingAudio = false;
+
     private void Awake()
     {
         controls = new ClawControls();
 
         controls.Player.Move.performed += ctx => leftStickInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => leftStickInput = Vector2.zero;
+        controls.Player.Move.started += ctx => MoveSFX(ctx);
+        controls.Player.Move.canceled += ctx => MoveSFX(ctx);
 
         controls.Player.MoveRightStick.performed += ctx => rightStickInput = new Vector2(-ctx.ReadValue<Vector2>().x, ctx.ReadValue<Vector2>().y);
         controls.Player.MoveRightStick.canceled += ctx => rightStickInput = Vector2.zero;
+        controls.Player.MoveRightStick.started += ctx => WristSFX(ctx);
+        controls.Player.MoveRightStick.canceled += ctx => WristSFX(ctx);
 
         controls.Player.RotateLeft.performed += ctx => bodyRotationInput = -1f;
         controls.Player.RotateLeft.canceled += ctx => bodyRotationInput = 0f;
+        controls.Player.RotateLeft.started += ctx => RotationSFX(ctx);
+        controls.Player.RotateLeft.canceled += ctx => RotationSFX(ctx);
 
         controls.Player.RotateRight.performed += ctx => bodyRotationInput = 1f;
         controls.Player.RotateRight.canceled += ctx => bodyRotationInput = 0f;
+        controls.Player.RotateRight.started += ctx => RotationSFX(ctx);
+        controls.Player.RotateRight.canceled += ctx => RotationSFX(ctx);
 
         controls.Player.ClawVerticalUp.performed += ctx => clawVerticalInput = 1f;
         controls.Player.ClawVerticalUp.canceled += ctx => clawVerticalInput = 0f;
+        controls.Player.ClawVerticalUp.started += ctx => ArmHeightSFX(ctx);
+        controls.Player.ClawVerticalUp.canceled += ctx => ArmHeightSFX(ctx);
 
         controls.Player.ClawVerticalDown.performed += ctx => clawVerticalInput = -1f;
         controls.Player.ClawVerticalDown.canceled += ctx => clawVerticalInput = 0f;
+        controls.Player.ClawVerticalDown.started += ctx => ArmHeightSFX(ctx);
+        controls.Player.ClawVerticalDown.canceled += ctx => ArmHeightSFX(ctx);
+
 
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
@@ -88,6 +108,7 @@ public class RigControls : MonoBehaviour
     private void Start()
     {
         circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
+        leggyAudio = GetComponent<LeggyAudio>();
     }
 
     private void OnEnable() => controls.Enable();
@@ -95,6 +116,10 @@ public class RigControls : MonoBehaviour
 
     void Update()
     {
+        hightMultiplier = ArmIK_target.transform.localPosition.y / ikMaxY;
+        // Debug.Log(hightMultiplier + " " + ArmIK_target.transform.localPosition.y + " " + ikMaxY);
+        ikModifiedMinX = ikMinRotationX * hightMultiplier * 1.2f;
+        ikModifiedMaxX = ikMaxRotationX * hightMultiplier * 1.2f;
 
 
         if (ArmIK_target == null || parentGameObject == null) return;
@@ -125,14 +150,14 @@ public class RigControls : MonoBehaviour
         float targetRotationX = currentRotation.eulerAngles.x + (rightStickInput.y * rotationSpeed * Time.deltaTime);
         if (targetRotationX > 180f) targetRotationX -= 360f;
         //bool reachedXLimit = targetRotationX <= ikMinRotationX || targetRotationX >= ikMaxRotationX;
-        targetRotationX = Mathf.Clamp(targetRotationX, ikMinRotationX, ikMaxRotationX);
+        targetRotationX = Mathf.Clamp(targetRotationX, ikModifiedMinX, ikModifiedMaxX);
 
         float targetRotationZ = currentRotation.eulerAngles.z + (rightStickInput.x * rotationSpeed * Time.deltaTime);
         if (targetRotationZ > 180f) targetRotationZ -= 360f;
         //bool reachedZLimit = targetRotationZ <= ikMinRotationZ || targetRotationZ >= ikMaxRotationZ;
         targetRotationZ = Mathf.Clamp(targetRotationZ, ikMinRotationZ, ikMaxRotationZ);
 
-        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.eulerAngles.y, targetRotationZ);
+        ArmIK_target.transform.localRotation = Quaternion.Euler(targetRotationX, currentRotation.y, targetRotationZ);
 
         /* Base rotation adjustments if IK reaches limits
         if (reachedZLimit && rightStickInput.x != 0)
@@ -199,5 +224,78 @@ public class RigControls : MonoBehaviour
         ArmIK_target.transform.position = ArmIKFallback.transform.position;
         yield return new WaitForSeconds(ArmIK_target_ResetInterval);
         ArmFallbackTriggered = false;
+    }
+
+    private void MoveSFX(InputAction.CallbackContext callback)
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        Vector2 moveValue = callback.ReadValue<Vector2>();
+
+        if (callback.started && Mathf.Abs(moveValue.y) > 0.1f)
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.ArmDepth);
+        } else if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.ArmDepth);
+        }
+
+        if (callback.started && Mathf.Abs(moveValue.x) > 0.1f)
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.Gantry);
+        } else if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.Gantry);
+        }
+    }
+    private void ArmHeightSFX(InputAction.CallbackContext callback)
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        if (callback.started)
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.ArmHeight);
+        }
+        
+        if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.ArmHeight);
+        }
+    }
+
+    private void WristSFX(InputAction.CallbackContext callback) 
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        if (callback.started) 
+        {
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.WristMovement);
+        } else if (callback.canceled)
+        {
+            leggyAudio.StopSound(LeggyAudio.LeggySFX.WristMovement);
+        }
+    }
+
+    private void RotationSFX(InputAction.CallbackContext callback) 
+    { 
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        if (callback.started)
+        {
+            if (isPlayingAudio)
+            {
+                StopSound(LeggyAudio.LeggySFX.Rotation);
+            }
+            leggyAudio.PlaySound(LeggyAudio.LeggySFX.Rotation);
+            isPlayingAudio = true;
+        } 
+        
+        if (callback.canceled)
+        {
+            StopSound(LeggyAudio.LeggySFX.Rotation);
+        }
+    }
+
+    private void StopSound(LeggyAudio.LeggySFX leggySFX)
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        isPlayingAudio = false;
+        leggyAudio.StopSound(leggySFX);
     }
 }

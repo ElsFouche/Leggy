@@ -5,48 +5,72 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// This is the graphical game over and menu handler.
+/// Modified by Els 04/25/2025
+/// </summary>
+
 public class GameOverManager : MonoBehaviour
 {
-    public bool fullyDepressed;
-    float test;
-    public HappinessManager happinessManager;
-
+    // Private
+    private float test = 0.0f;
+    private EventSystem eventSystem;
+    private CanvasGroup gameOverUICG;
+    // private bool fullyDepressed;
+    
+    // Serialized
+    
+    // Public
+    // public HappinessManager happinessManager;
     public GameObject fadeBlackTop;
     public GameObject fadeBlackBottom;
     public GameObject vignette;
     public GameObject gameOverMenu;
 
-    public EventSystem eventSystem;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        happinessManager = FindObjectOfType<HappinessManager>();
+        gameOverUICG = gameOverMenu.GetComponent<CanvasGroup>();
+        // happinessManager = FindObjectOfType<HappinessManager>();
         eventSystem = FindObjectOfType<EventSystem>();
-        test = 0f;
+        // test = 0f;
+        if (eventSystem == null) { Debug.Log("No event system present in scene."); Destroy(gameObject); }
 
+        if (fadeBlackTop == null) { return; }
         fadeBlackTop.GetComponent<Image>().fillAmount = 0;
+        if (fadeBlackBottom == null) { return; }
         fadeBlackBottom.GetComponent<Image>().fillAmount = 0;
+        if (vignette == null) { return; }
         vignette.GetComponent<Image>().color = new Color(1, 0, 0, 0);
+        if (gameOverMenu == null) { return; }
+        if (gameOverUICG == null) { return; }
+        gameOverUICG.interactable = false;
+        gameOverUICG.blocksRaycasts = false;
         gameOverMenu.SetActive(false);
 
-        eventSystem.GetComponent<EventSystem>().enabled = false;
-        eventSystem.GetComponent<StandaloneInputModule>().enabled = false;
+        // eventSystem.GetComponent<EventSystem>().enabled = false;
+        // eventSystem.GetComponent<StandaloneInputModule>().enabled = false;
+
     }
 
-// Update is called once per frame
-void Update()
+    // Update is called once per frame
+    void Update()
     {
+/*
         if (happinessManager.happinessCount <= 0 && !fullyDepressed)
         {
             happinessManager.isVisible = false;
             fullyDepressed = true;
             StartCoroutine(gameOverTransition());
         }
+*/
+    }
+    public void GameOver()
+    {
+        StartCoroutine(gameOverTransition());
     }
 
-    public IEnumerator gameOverTransition()
+    private IEnumerator gameOverTransition()
     {
         Debug.Log("Emergency Shutdown");
         while (!Mathf.Approximately(fadeBlackTop.GetComponent<Image>().fillAmount, 1f))
@@ -68,13 +92,17 @@ void Update()
 
         yield return new WaitForSeconds(0.25f);
         Debug.Log("Retry?");
+        Time.timeScale = 0.0f;
         gameOverMenu.SetActive(true);
-        eventSystem.GetComponent<EventSystem>().enabled = true;
-        eventSystem.GetComponent<StandaloneInputModule>().enabled = true;
+        gameOverUICG.interactable = true;
+        gameOverUICG.blocksRaycasts = true;
+        EventSystem.current.SetSelectedGameObject(gameOverMenu.GetComponentInChildren<Button>().gameObject);
+        // eventSystem.GetComponent<EventSystem>().enabled = true;
+        // eventSystem.GetComponent<StandaloneInputModule>().enabled = true;
         yield return null;
-
     }
 
+/*
     public void retryLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -84,4 +112,5 @@ void Update()
     {
         SceneManager.LoadScene(0);
     }
+*/
 }

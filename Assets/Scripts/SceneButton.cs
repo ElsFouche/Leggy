@@ -11,7 +11,7 @@ public class SceneButton : MonoBehaviour
         TransitionManager transitionManager = FindObjectOfType<TransitionManager>();
         if (transitionManager != null)
         {
-            transitionManager.TransitionToScene(sceneIndex);
+            transitionManager.TransitionToSceneWrapper(sceneIndex);
         }
     }
 }

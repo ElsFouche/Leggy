@@ -1,0 +1,771 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4902108449969336316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Happiness_Gained
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Happiness_Gained
+  Guid:
+    Data1: -62530327
+    Data2: 1106527850
+    Data3: 1388121494
+    Data4: 86112336
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-4889168701830371708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/UI_Select
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/UI_Select
+  Guid:
+    Data1: -1516242514
+    Data2: 1204385101
+    Data3: 823909000
+    Data4: -993780259
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-4198333966307215622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Rotation_Lockout
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Rotation_Lockout
+  Guid:
+    Data1: 320189890
+    Data2: 1093270169
+    Data3: 317423269
+    Data4: 599932399
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1500
+--- !u!114 &-4029279597838445422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Wrist_Tilt
+  m_EditorClassIdentifier: 
+  Name: Wrist_Tilt
+  StudioPath: parameter:/Wrist_Tilt
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2020250223
+    data2: 3461157115
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-3985512534087644471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayMusic/Happiness
+  m_EditorClassIdentifier: 
+  Name: Happiness
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 718496030
+    data2: 2584458179
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-3933622631553730787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Leggy_FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638815239638302687
+  FileSizes:
+  - Name: 
+    Value: 1758
+  Exists: 1
+--- !u!114 &-3749469030807053564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Arm_Height
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Arm_Height
+  Guid:
+    Data1: 2088153213
+    Data2: 1139669341
+    Data3: -1359339386
+    Data4: -1297504560
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &-3720148755476961872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayMusic/LevelTimeSpent
+  m_EditorClassIdentifier: 
+  Name: LevelTimeSpent
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3674337743
+    data2: 3745636146
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-3335042992174782689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Claw_Lockout
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Claw_Lockout
+  Guid:
+    Data1: 400020348
+    Data2: 1100692471
+    Data3: -542419533
+    Data4: -70228728
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1500
+--- !u!114 &-707100013089807708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Gantry_Lockout
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Gantry_Lockout
+  Guid:
+    Data1: 2097593635
+    Data2: 1193198991
+    Data3: -769641046
+    Data4: -997621547
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1500
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: 
+  EditorBanks:
+  - {fileID: -3933622631553730787}
+  - {fileID: 1326446684069799989}
+  EditorEvents:
+  - {fileID: 1234949518094615496}
+  - {fileID: 6243441662166468672}
+  - {fileID: 4912045756074315463}
+  - {fileID: -707100013089807708}
+  - {fileID: 5654082761629054364}
+  - {fileID: 1832932384506978007}
+  - {fileID: 5897513184614628451}
+  - {fileID: -3335042992174782689}
+  - {fileID: -3749469030807053564}
+  - {fileID: 7194385845204041070}
+  - {fileID: -4889168701830371708}
+  - {fileID: 464485799126078679}
+  - {fileID: -4198333966307215622}
+  - {fileID: 7795134344496309861}
+  - {fileID: -4902108449969336316}
+  - {fileID: 5173156645346350371}
+  - {fileID: 6031975874738598286}
+  - {fileID: 208641183772381114}
+  EditorParameters:
+  - {fileID: 1587692608936144023}
+  - {fileID: 558342042494633851}
+  - {fileID: 3652916013283117143}
+  - {fileID: -4029279597838445422}
+  MasterBanks:
+  - {fileID: 1326446684069799989}
+  StringsBanks:
+  - {fileID: -3933622631553730787}
+  cacheTime: 638815239638302687
+  cacheVersion: 131590
+--- !u!114 &208641183772381114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Grab
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Grab
+  Guid:
+    Data1: -455247618
+    Data2: 1176433802
+    Data3: -572434281
+    Data4: -1348329815
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &464485799126078679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Collision_General
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Collision_General
+  Guid:
+    Data1: -1022560321
+    Data2: 1305398406
+    Data3: 294393015
+    Data4: 1278698326
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &558342042494633851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/LevelTimeSpent
+  m_EditorClassIdentifier: 
+  Name: LevelTimeSpent
+  StudioPath: parameter:/LevelTimeSpent
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3674337743
+    data2: 3745636146
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &1234949518094615496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/PlayMusic
+  m_EditorClassIdentifier: 
+  Path: event:/Music/PlayMusic
+  Guid:
+    Data1: 422189859
+    Data2: 1139469502
+    Data3: -743683927
+    Data4: 1655880798
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -3985512534087644471}
+  - {fileID: -3720148755476961872}
+  - {fileID: 3977165235963618077}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 96000
+--- !u!114 &1326446684069799989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Leggy_FMOD/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638815239638302687
+  FileSizes: []
+  Exists: 1
+--- !u!114 &1587692608936144023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Happiness
+  m_EditorClassIdentifier: 
+  Name: Happiness
+  StudioPath: parameter:/Happiness
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 718496030
+    data2: 2584458179
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &1832932384506978007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Claw_OpenClose
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Claw_OpenClose
+  Guid:
+    Data1: -896450500
+    Data2: 1180115687
+    Data3: -472219771
+    Data4: 1335373126
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &3652916013283117143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GameState
+  m_EditorClassIdentifier: 
+  Name: GameState
+  StudioPath: parameter:/GameState
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 4219002288
+    data2: 543537318
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - Pause Menu
+  - In Game
+  Exists: 1
+--- !u!114 &3977165235963618077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayMusic/GameState
+  m_EditorClassIdentifier: 
+  Name: GameState
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 4219002288
+    data2: 543537318
+  Type: 2
+  IsGlobal: 1
+  Labels:
+  - Pause Menu
+  - In Game
+  Exists: 1
+--- !u!114 &4750469504518943664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Wrist_Movement/Wrist_Tilt
+  m_EditorClassIdentifier: 
+  Name: Wrist_Tilt
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2020250223
+    data2: 3461157115
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &4912045756074315463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/UI_Back
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/UI_Back
+  Guid:
+    Data1: -1049177316
+    Data2: 1135246259
+    Data3: -914426976
+    Data4: -201852804
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5173156645346350371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/UI_Move
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/UI_Move
+  Guid:
+    Data1: 433616889
+    Data2: 1155668713
+    Data3: 1449372342
+    Data4: 244566049
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5654082761629054364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Gantry_Depth
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Gantry_Depth
+  Guid:
+    Data1: -1447206345
+    Data2: 1224923427
+    Data3: -1798438977
+    Data4: 1631609043
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &5897513184614628451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Arm_Depth
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Arm_Depth
+  Guid:
+    Data1: -61041604
+    Data2: 1298415717
+    Data3: 1737611925
+    Data4: 1000945530
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &6031975874738598286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Happiness_Loss
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Happiness_Loss
+  Guid:
+    Data1: -111193348
+    Data2: 1254163684
+    Data3: 1121304506
+    Data4: -1615461467
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &6243441662166468672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Arm_Lockout
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Arm_Lockout
+  Guid:
+    Data1: -1238671348
+    Data2: 1104750554
+    Data3: 919734404
+    Data4: 1764280991
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1500
+--- !u!114 &7194385845204041070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Wrist_Movement
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Wrist_Movement
+  Guid:
+    Data1: -1655008352
+    Data2: 1257661551
+    Data3: 1451852968
+    Data4: -1957469239
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 4750469504518943664}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &7795134344496309861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Movement/Rotation
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Movement/Rotation
+  Guid:
+    Data1: 1333509320
+    Data2: 1253616164
+    Data3: -315702354
+    Data4: -1835070429
+  Banks:
+  - {fileID: 1326446684069799989}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500

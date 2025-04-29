@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,17 @@ public class RigClawParrent : MonoBehaviour
     public GameObject ObjectGrabbed;
     private Transform grabbedObject;
     private float overpressureMultiplier = 0.2f;
+
+    private bool gravityBeforeParrent = false;
+    private bool kinematicBeforeParrent = false;
+    private Rigidbody preGrabRigid;
+
+    private LeggyAudio leggyAudio;
+
+    private void Start()
+    {
+        leggyAudio = GetComponent<LeggyAudio>();
+    }
 
     private void Update()
     {
@@ -52,6 +64,7 @@ public class RigClawParrent : MonoBehaviour
 
         if (ObjectGrabbed != null && WristMouth.ObjectDetected == null)
         {
+            Debug.Log("Dropping object (dirty).");
             ObjectGrabbed.transform.parent = null;
         }
     }
@@ -60,8 +73,10 @@ public class RigClawParrent : MonoBehaviour
     {
         if (grabbedObject == null && WristMouth.ObjectInClawMouth && clawController.gripPreassure <= basket.requiredGripPressure)
         {
+           
             grabbedObject = basketRootParrent.transform;
             ObjectGrabbed = basketRootParrent.gameObject;
+            preGrabRigid = ObjectGrabbed.GetComponent<Rigidbody>();
             InteractableData rootTransforms = ObjectGrabbed.GetComponent<InteractableData>();
 
             // Store world position/rotation before parenting
@@ -90,6 +105,7 @@ public class RigClawParrent : MonoBehaviour
             {
                 basket.objectRigidbody.isKinematic = true;
             }
+            PlayGrabSFX();
         }
     }
 
@@ -98,16 +114,23 @@ public class RigClawParrent : MonoBehaviour
         if (grabbedObject != null)
         {
             grabbedObject.SetParent(null);
-            ObjectGrabbed.transform.SetParent(null);
-             if (ObjectGrabbed.GetComponent<Rigidbody>() != null)
+            // ObjectGrabbed.transform.SetParent(null);
+            if (preGrabRigid != null)
+            {
+                if (preGrabRigid.isKinematic)
                 {
-                    ObjectGrabbed.GetComponent<Rigidbody>().isKinematic = false;
-
+                    preGrabRigid.isKinematic = false;
+                }
+                if (preGrabRigid.useGravity)
+                {
+                    preGrabRigid.useGravity = true;
                 }
 
-            grabbedObject = null;
-            ObjectGrabbed = null;
-            detectedBasket = null;
+                grabbedObject = null;
+                ObjectGrabbed = null;
+                detectedBasket = null;
+                preGrabRigid = null;
+            }
         }
     }
 
@@ -129,5 +152,11 @@ public class RigClawParrent : MonoBehaviour
             grabbedObject = null;
             detectedBasket = null;
         }
+    }
+
+    private void PlayGrabSFX()
+    {
+        if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
+        leggyAudio.LeggyGrabSFX();
     }
 }

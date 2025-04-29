@@ -11,6 +11,13 @@ public class BasketData : MonoBehaviour
         RootRigidBodyGameObject = transform.root.gameObject;
 
         if (objectRigidbody == null)
+        {
+            objectRigidbody = GetComponent<Rigidbody>();
+        }
+        
+        if (objectRigidbody == null) 
+        {
             objectRigidbody = this.transform.root.GetComponentInChildren<Rigidbody>();
+        }
     }
 }
