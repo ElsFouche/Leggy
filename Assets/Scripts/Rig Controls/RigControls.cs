@@ -57,6 +57,8 @@ public class RigControls : MonoBehaviour
     public float hightMultiplier;
 
     private LeggyAudio leggyAudio;
+    private GameManager gameManager;
+    private float afterStartChecks = 0.2f;
 
     private void Awake()
     {
@@ -109,7 +111,16 @@ public class RigControls : MonoBehaviour
     private void Start()
     {
         circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
+        // This does not use RequireComponent due to needing a specific prefab
+        // which has audio events mapped. 
         leggyAudio = GetComponent<LeggyAudio>();
+        StartCoroutine(AfterStart());
+    }
+
+    private IEnumerator AfterStart()
+    {
+        yield return new WaitForSeconds(afterStartChecks);
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     private void OnEnable() => controls.Enable();
@@ -193,7 +204,8 @@ public class RigControls : MonoBehaviour
             circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount += (Time.deltaTime / holdTime);
             if (timeHeld >= holdTime)
             {
-                ResetLevel();
+                // ResetLevel();
+                EndLevel();
                 timeHeld = 0f;
                 circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
             }
@@ -218,6 +230,11 @@ public class RigControls : MonoBehaviour
     {
         Debug.Log("Resetting the level...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    private void EndLevel()
+    {
+        gameManager.FinishLevel();
     }
 
     public IEnumerator ResetArmIK()

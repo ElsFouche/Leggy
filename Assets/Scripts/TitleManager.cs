@@ -61,7 +61,8 @@ public class TitleManager : MonoBehaviour
     {
         if (audioHandler == null) {  return; }
 
-        if (context.started || Mathf.Abs(context.ReadValue<Vector2>().y) > 0.1f)
+        if (context.started || 
+            (Mathf.Abs(context.ReadValue<Vector2>().y) > 0.3f && context.action.WasPressedThisFrame()))
         {
             audioHandler.PlaySFX(sfxName);
         }
