@@ -353,6 +353,8 @@ public class GoalZone : MonoBehaviour
         if (inputObject != null)
         {
             GameObject visualEffects;
+            // Poor performance: Multiple finds in a row which are unnecessary. 
+            // Error prone: Multiple finds in a row, each can throw compiler errors. 
             visualEffects = inputObject.Find("BinaryFollowsPlayer").Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
 
             if (visualEffects != null)
