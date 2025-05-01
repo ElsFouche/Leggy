@@ -79,29 +79,30 @@ public class AudioHandler : MonoBehaviour
     private void AfterBankLoad()
     {
         Debug.Log("Banks were loaded successfully.");
-/*
-        mainTheme = new EventReference();
-        uiBack = new EventReference();
-        uiMove = new EventReference();
-        uiSelect = new EventReference();
-        // Music & UI
-        mainTheme = EventReference.Find("event:/Music/PlayMusic");
-        // System.Guid mainThemeGUID = new System.Guid("cc98e317-026f-42a6-870d-a45dd3f3d19b");
-        Debug.Log("GUID: mainTheme.Guid: " + mainTheme.Guid);
+        /*
+                mainTheme = new EventReference();
+                uiBack = new EventReference();
+                uiMove = new EventReference();
+                uiSelect = new EventReference();
+                // Music & UI
+                mainTheme = EventReference.Find("event:/Music/PlayMusic");
+                // System.Guid mainThemeGUID = new System.Guid("cc98e317-026f-42a6-870d-a45dd3f3d19b");
+                Debug.Log("GUID: mainTheme.Guid: " + mainTheme.Guid);
 
-        uiBack.Path = "event:/SFX/UI/UI_Back";
-        // System.Guid uiBackGUID = new System.Guid("8c11eae2-838c-453f-9d40-27b3cf621e68");
-        Debug.Log("GUID: uiBack.Guid: " + uiBack.Guid);
+                uiBack.Path = "event:/SFX/UI/UI_Back";
+                // System.Guid uiBackGUID = new System.Guid("8c11eae2-838c-453f-9d40-27b3cf621e68");
+                Debug.Log("GUID: uiBack.Guid: " + uiBack.Guid);
 
-        uiMove.Path = "event:/SFX/UI/UI_Move";
-        // System.Guid uiMoveGUID = new System.Guid("a374db4e-69fa-4811-a2ae-bb504b86e5be");
-        Debug.Log("GUID: uiMove.Guid: " + uiMove.Guid);
+                uiMove.Path = "event:/SFX/UI/UI_Move";
+                // System.Guid uiMoveGUID = new System.Guid("a374db4e-69fa-4811-a2ae-bb504b86e5be");
+                Debug.Log("GUID: uiMove.Guid: " + uiMove.Guid);
 
-        uiSelect.Path = "event:/SFX/UI/UI_Select";
-        System.Guid uiSelectGUID = new System.Guid("20746b7a-c864-4f86-bfa2-07e240796a87");
-        uiSelect.Guid = new FMOD.GUID(uiSelectGUID);
-*/
+                uiSelect.Path = "event:/SFX/UI/UI_Select";
+                System.Guid uiSelectGUID = new System.Guid("20746b7a-c864-4f86-bfa2-07e240796a87");
+                uiSelect.Guid = new FMOD.GUID(uiSelectGUID);
+        */
     }
+    public bool BanksLoaded() { return areBanksLoaded; }
 /*
     public void PlayUISound(FMODUnity.EventReference soundEvent)
     {
