@@ -2447,6 +2447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7977780271822771782}
   - component: {fileID: 210108486114279306}
+  - component: {fileID: 3852789249693235994}
   m_Layer: 0
   m_Name: BaseArm_Rotate_jnt
   m_TagString: Untagged
@@ -2490,6 +2491,27 @@ RotationConstraint:
   m_Sources:
   - sourceTransform: {fileID: 1399567992906051458}
     weight: 1
+--- !u!135 &3852789249693235994
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4578607299206266971}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.78
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4721642481671590269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2557,9 +2579,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 8839685165150919215}
-  IK_Debug_X: {fileID: 0}
-  IK_Debug_Y: {fileID: 0}
-  IK_Debug_Z: {fileID: 0}
   VisualDebug: {fileID: 0}
   IK_Target: {fileID: 2174509713913790624}
   IK_Target_Still_In_Range: 1

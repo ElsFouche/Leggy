@@ -9,6 +9,13 @@ public class RigControls : MonoBehaviour
     public GameObject armRotationObject;
     public GameObject ArmIK;
 
+    public GameObject jointPivot;
+    public GameObject wristPivot;
+    public GameObject basePivot;
+    public GameObject spinePivot;
+    public GameObject RotationCalcAssistant;
+
+
     [Header("Reset Interval For IK Target")]
     [SerializeField] IkTargetFallback ikTargetFallback;
     public GameObject ArmIKFallback;
@@ -35,7 +42,7 @@ public class RigControls : MonoBehaviour
     private float ikModifiedMaxX;
 
     public float baseMinRotation = -45f;
-    public float baseMaxRotation = 45f;
+    public float baseMaxRotation = 45f; 
 
     public float gantryMinX = -2.0f; 
     public float gantryMaxX = 2.0f;
@@ -58,6 +65,8 @@ public class RigControls : MonoBehaviour
 
     private LeggyAudio leggyAudio;
     private bool isPlayingAudio = false;
+
+    private float LeggyLimitsRadius;
 
     private void Awake()
     {
@@ -109,6 +118,13 @@ public class RigControls : MonoBehaviour
     {
         circleMeter.GetComponent<UnityEngine.UI.Image>().fillAmount = 0;
         leggyAudio = GetComponent<LeggyAudio>();
+
+        float length1 = Vector3.Distance(basePivot.transform.position, jointPivot.transform.position);
+        float lenght2 = Vector3.Distance(wristPivot.transform.position, jointPivot.transform.position);
+
+        LeggyLimitsRadius = lenght2 + length1;
+
+
     }
 
     private void OnEnable() => controls.Enable();
@@ -116,6 +132,8 @@ public class RigControls : MonoBehaviour
 
     void Update()
     {
+        AdaptiveLimits(LeggyLimitsRadius, wristPivot, basePivot);
+
         hightMultiplier = ArmIK_target.transform.localPosition.y / ikMaxY;
         // Debug.Log(hightMultiplier + " " + ArmIK_target.transform.localPosition.y + " " + ikMaxY);
         ikModifiedMinX = ikMinRotationX * hightMultiplier * 1.2f;
@@ -297,5 +315,12 @@ public class RigControls : MonoBehaviour
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         isPlayingAudio = false;
         leggyAudio.StopSound(leggySFX);
+    }
+
+    private void AdaptiveLimits(float Radius, GameObject wristPivot, GameObject basePivot)
+    {
+        RotationCalcAssistant.transform.localPosition = new Vector3(0, Vector3.Distance(spinePivot.transform.position, basePivot.transform.position), -Vector3.Distance(wristPivot.transform.position, basePivot.transform.position));
+        Debug.Log(Vector3.Distance(wristPivot.transform.position, basePivot.transform.position));
+
     }
 }
