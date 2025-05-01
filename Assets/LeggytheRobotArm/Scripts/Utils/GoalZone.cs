@@ -36,6 +36,7 @@ public class GoalZone : MonoBehaviour
     private int instanceID;
     private bool collisionEnterChecking = false;
     private bool collisionExitChecking = false;
+    private AudioHandler audioHandler;
 
     public enum HappinessValues
     {
@@ -71,6 +72,7 @@ public class GoalZone : MonoBehaviour
 
     void Start()
     {
+        audioHandler = AudioHandler._AudioHandlerInstance;
         // If a level designer has not adjusted the slider values they will stay 0
         // even if set during the initialization above. Initialize here instead:
         if (minNumMatchingObjects <= 0) minNumMatchingObjects = 1;
@@ -127,6 +129,17 @@ public class GoalZone : MonoBehaviour
         // Check for lock
         if (collisionEnterChecking) return;
         collisionEnterChecking = true;
+
+        // Exit if Leggy triggered this code.
+        if (other.transform.root.GetComponent<TagManager>() != null)
+        {
+            if (other.transform.root.GetComponent<TagManager>().mainTag == TagManager.MainTag.PlayerBody)
+            {
+                collisionEnterChecking = false;
+                return;
+            }
+        }
+
         // If the tag manager is at the level of the collider, assign it
         if (other.gameObject.GetComponent<TagManager>() != null)
         {
@@ -186,7 +199,7 @@ public class GoalZone : MonoBehaviour
             if (minNumMatchingObjects != 0 && matchingCollisionNumber % minNumMatchingObjects == 0)
             {
                 Debug.Log("Gain Happiness: " + (int)matchingObjectHappiness);
-                gainHappiness((int)matchingObjectHappiness);
+                gainHappiness((int)matchingObjectHappiness, hitTags.transform);
                 goalState = ObjectiveTracker.GoalState.Perfect;
                 if (tracker) tracker.SetGoal(instanceID, goalState);
             }
@@ -200,7 +213,7 @@ public class GoalZone : MonoBehaviour
             if (minNumGeneralObjects != 0 && generalCollisionNumber % minNumGeneralObjects == 0) 
             {
                 Debug.Log("Gain Happiness: " + (int)generalObjectHappiness);
-                gainHappiness((int)generalObjectHappiness);
+                gainHappiness((int)generalObjectHappiness, hitTags.transform);
                 if (goalState != ObjectiveTracker.GoalState.Perfect)
                 {
                     goalState = ObjectiveTracker.GoalState.Satisfied;
@@ -331,13 +344,35 @@ public class GoalZone : MonoBehaviour
         collisionExitChecking= false;
     }
 
-    private void gainHappiness(int happinessToGain)
+    private void gainHappiness(int happinessToGain, Transform inputObject = null)
     {
         happinessManager.gainHappiness(happinessToGain);
+
+        Debug.Log(inputObject.name + " grabbable has reached goal: " + this.name);
+
+        if (inputObject != null)
+        {
+            GameObject visualEffects;
+            // Poor performance: Multiple finds in a row which are unnecessary. 
+            // Error prone: Multiple finds in a row, each can throw compiler errors. 
+            visualEffects = inputObject.Find("BinaryFollowsPlayer").Find("TaskCompleteVFX").GetComponent<ParticleAttractor>().gameObject;
+
+            if (visualEffects != null)
+            {
+                Debug.Log(inputObject.name + ".BinaryFollowsPlayer.TaskCompleteVFX found!");
+                visualEffects.GetComponent<ParticleAttractor>().particleStream();
+            }
+        }
+        else
+        {
+            Debug.Log("Input is null");
+        }
+        audioHandler.PlaySFX(AudioHandler.SFX.HappinessGain);
     }
 
     private void loseHappiness(int happinessToLose)
     {
         happinessManager.loseHappiness(happinessToLose);
+        audioHandler.PlaySFX(AudioHandler.SFX.HappinessLoss);
     }
 }

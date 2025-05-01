@@ -8,6 +8,11 @@ public class PaintCupDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<PaintBrush>() != null) { }
+        if (other.GetComponent<BasketData>().RootRigidBodyGameObject.GetComponent<PaintBrush>() != null) { brushInCollider = true; }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<BasketData>().RootRigidBodyGameObject.GetComponent<PaintBrush>() != null) { brushInCollider = false  ; }
     }
 }

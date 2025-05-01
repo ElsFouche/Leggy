@@ -14,9 +14,15 @@ public class ParticleAttractor : MonoBehaviour
 
     private ParticleSystem.Particle[] particles;
 
+    float speed;
+
     void Start()
     {
         pSystem = GetComponent<ParticleSystem>();
+
+        pSystem.maxParticles = 0;
+
+        speed = 5;
     }
 
     void Update()
@@ -37,9 +43,20 @@ public class ParticleAttractor : MonoBehaviour
 
             //Adjust speed
 
+            Quaternion targetRotation = Quaternion.LookRotation(target.position - particles[i].position);
+            pSystem.transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+
             particles[i].velocity = direction * 3.0f;
         }
 
         pSystem.SetParticles(particles, particleCount);
+    }
+
+    public void particleStream()
+    {
+        if (pSystem.maxParticles == 0) pSystem.maxParticles = 30;
+
+        Debug.Log("Spewing particles");
+        pSystem.Emit(30);
     }
 }
