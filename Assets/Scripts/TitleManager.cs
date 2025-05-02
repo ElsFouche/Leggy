@@ -8,9 +8,11 @@ using UnityEngine.InputSystem;
 public class TitleManager : MonoBehaviour
 {
     public GameObject transitionManager;
-    
+    [SerializeField] float afterStartDelay = 0.2f;
     private AudioHandler audioHandler;
     private ClawControls controls;
+    private const int MAXNUMREATTEMPTS = 5;
+    private int numAttempts = 0;
 
     private void Awake()
     {
@@ -42,12 +44,47 @@ public class TitleManager : MonoBehaviour
     void Start()
     {
         audioHandler = AudioHandler._AudioHandlerInstance;
-        audioHandler.PlayMusic();
+        StartCoroutine(AfterStart(afterStartDelay));
     }
 
     public void startGame()
     {
         StartCoroutine(transitionManager.GetComponent<TransitionManager>().TransitionToScene(1));
+    }
+
+    private IEnumerator AfterStart(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (audioHandler.BanksLoaded())
+        {
+            audioHandler.PlayMusic();
+            audioHandler.UpdateMainTheme(0.0f, 0.0f);
+            audioHandler.PlayMusic();
+        } else
+        {
+            ReattemptAfter(0.5f);
+        }
+    }
+
+    private IEnumerator ReattemptAfter(float seconds, int numTries = MAXNUMREATTEMPTS)
+    {
+        yield return new WaitForSeconds(seconds);
+        numAttempts++;
+        // Reattempt logic
+        if (audioHandler.BanksLoaded())
+        {
+            audioHandler.PlayMusic();
+            audioHandler.UpdateMainTheme(0.0f, 0.0f);
+            audioHandler.PlayMusic();
+        }
+        else if (numAttempts <= MAXNUMREATTEMPTS)
+        {
+            StartCoroutine(ReattemptAfter(seconds));
+        }
+        else if (numAttempts > MAXNUMREATTEMPTS)
+        {
+            numAttempts = 0;
+        }
     }
 
     public void quitGame()
