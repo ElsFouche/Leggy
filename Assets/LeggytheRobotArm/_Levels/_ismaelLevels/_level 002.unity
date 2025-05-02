@@ -4150,6 +4150,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 504871217529082217, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
+      propertyPath: minNumGeneralObjects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 504871217529082217, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
+      propertyPath: minNumMatchingObjects
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2835251106554378192, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.531
@@ -4194,9 +4202,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: cubbyModel
       objectReference: {fileID: 0}
+    - target: {fileID: 5396459174755731419, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
+      propertyPath: minNumGeneralObjects
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5962345800997029944, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187325857314276599, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
+      propertyPath: minNumGeneralObjects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187325857314276599, guid: 81a64b451a96cfa42b429b403473a7d4, type: 3}
+      propertyPath: minNumMatchingObjects
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4310,7 +4330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8455844675885177150, guid: 9d7f639a33f25934a868317f39b2fc95, type: 3}
       propertyPath: zoneTag
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4787,8 +4807,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3713001844094965315, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: 2.2729526
+      value: 2.2729435
       objectReference: {fileID: 0}
+    - target: {fileID: 4678805858062066026, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: gaugeIndicatorObject
+      value: 
+      objectReference: {fileID: 1779777280}
     - target: {fileID: 4852092354936802112, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.26
@@ -4815,11 +4839,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.y
-      value: 5.2433496
+      value: 5.2433443
       objectReference: {fileID: 0}
     - target: {fileID: 7896650998736816894, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_RotationOffset.z
-      value: -4.6592474
+      value: -4.6592393
       objectReference: {fileID: 0}
     - target: {fileID: 8207544780933824661, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5474,7 +5498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485551840874045275, guid: bb5cf7ee4d5fb714c87a39957d5b3c8d, type: 3}
       propertyPath: zoneTag
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5963,6 +5987,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5029828220496949302, guid: dbc6e0c674a696c45ad1346d5b16a86d, type: 3}
   m_PrefabInstance: {fileID: 1334542847}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1779777280 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1742930945922661630, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+  m_PrefabInstance: {fileID: 1810524389}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1794657768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6206,23 +6241,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: gracePeriod
-      value: 3
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: speakerFont
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: nextLevelIndex
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
-      propertyPath: happinessLossTickSpeed
+      propertyPath: textFadeInTime
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: transitionText
+      value: '[SYS] Sorting Protocal Complete.                         [SYS SPEECH
+        DETECTED] Leggy! Make me happy by organizing my tool box. I don''t care how,
+        JUST DO IT.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: fadeToBlackTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: textFadeOutTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: textFadeOutDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: happinessLossTickSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: maxHappinessLostPerTick
-      value: 200
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: timeUntilMaxHappinessLoss
-      value: 30
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 7254736938121586800, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: goalZones.Array.size
@@ -6291,7 +6352,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3390599132738446842, guid: aa72a33f672b9aa41958c45e80e03ede, type: 3}
       propertyPath: zoneTag
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4073475042003212148, guid: aa72a33f672b9aa41958c45e80e03ede, type: 3}
       propertyPath: m_Name
@@ -6452,7 +6513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6563440405050415588, guid: 5435efa49e897ca47bedb1c68dd3a17c, type: 3}
       propertyPath: zoneTag
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
