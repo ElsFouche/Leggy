@@ -63,11 +63,11 @@ public class LeggyAudio : MonoBehaviour
 
     private void Awake()
     {
-        cameraController = GetComponent<CameraController>();
     }
 
     private void Start()
     {
+        cameraController = GetComponent<CameraController>();
         topDownCamera = cameraController.topDown;
         leftShoulderCamera = cameraController.leftShoulder;
         rightShoulderCamera = cameraController.rightShoulder;
@@ -80,6 +80,11 @@ public class LeggyAudio : MonoBehaviour
 
     public void SetListener(CameraView cameraView)
     {
+        if (topDownListener == null
+            || leftListener == null
+            || rightListener == null
+            || firstPersonCamera == null) { return; }
+
         switch (cameraView)
         {
             case CameraView.TopDown:
