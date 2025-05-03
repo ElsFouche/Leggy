@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
     private ClawControls controls;
         // Sound
     private AudioHandler audioHandler;
+        // Inverse Singleton Pattern
+    private bool wasFirstGameManager;
 
     // Public
     public enum Speaker 
@@ -76,6 +78,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("The amount of time in seconds before Happiness begins decreasing.")]
     [Range(0, 30)]
     public int gracePeriod;
+    /*
+        // Deprecated - Use Transition Manager
         // Text
     [Header("Level Transition Settings")]
     [Tooltip("The amount of time in seconds before the black screen begins fading in.")]
@@ -86,13 +90,16 @@ public class GameManager : MonoBehaviour
     public float textFadeInTime;
     public float textFadeOutTime;
     public float levelTransitionDelay;
-    public int nextLevelIndex;
+    [Tooltip("Leave as -1 to automatically move to next level in index.")]
+    public int nextLevelIndex = -1;
     public Speaker speakerFont;
+    [TextArea]
     public string transitionText;
-
+*/
     private void Awake()
     {
         Debug.Log("Game Manager created with ID: " +  transform.root.GetInstanceID());
+        wasFirstGameManager = true;
         // Persist into new scenes.
         DontDestroyOnLoad(this);
         
@@ -121,7 +128,8 @@ public class GameManager : MonoBehaviour
             
             // Found
             if (previousManager != null) 
-            { 
+            {
+                wasFirstGameManager = false;
                 Debug.Log("Found previous happiness manager with ID: " +  previousManager.transform.root.GetInstanceID());
                 Debug.Log("Updating local variables with existing values.");
                 // TODO: Modify this so that currHappiness is pulled from save file when loading a level from level select
@@ -137,11 +145,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Objective Manager created with ID: " + objectiveTracker.GetInstanceID());
         happinessManager = GetComponentInChildren<HappinessManager>();
             Debug.Log("Happiness Manager created with ID: " + happinessManager.GetInstanceID());
-        transitionManager = GetComponentInChildren<TransitionManager>();
+        transitionManager = GetComponent<TransitionManager>();
             Debug.Log("Transition Manager created with ID: " + transitionManager.GetInstanceID());
-        fontRandomizer = GetComponentInChildren<FontRandomizer>();
-            Debug.Log("Found Font Randomizer with ID: " + fontRandomizer.GetInstanceID());
-
+        /*
+                fontRandomizer = GetComponentInChildren<FontRandomizer>();
+                    Debug.Log("Found Font Randomizer with ID: " + fontRandomizer.GetInstanceID());
+        */
         // Initialize UI 
         foreach (Transform child in GetComponentsInChildren<Transform>())
         {  
@@ -201,7 +210,8 @@ public class GameManager : MonoBehaviour
         happinessManager.maxDepressor = maxHappinessLostPerTick;
         happinessManager.timeBetweenHappinessLoss = happinessLossTickSpeed;
         happinessManager.sigmoidFunction = new SigmoidFunction(gracePeriod, timeUntilMaxHappinessLoss);
-
+/*
+        // Deprecated - use Transition Manager
         // Initialize transition text value
         transitionManager.loreText.text = transitionText;
         transitionManager.loreText.text.Replace("\\n", "\n");
@@ -242,32 +252,54 @@ public class GameManager : MonoBehaviour
             default:
                 break;  
         }
-        transitionManager.fadeInDelay = textFadeInDelay;
+        transitionManager.tex = textFadeInDelay;
         transitionManager.fadeOutDelay = textFadeOutDelay;
         transitionManager.sceneSwitchDelay = levelTransitionDelay;
         transitionManager.blackFadeInTime = fadeToBlackTime;
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
-
+*/
         StartCoroutine(AfterStart());
     }
 
     private IEnumerator AfterStart()
     {
+        Debug.Log("Running AfterStart coroutine from Game Manager.");
         yield return new WaitForEndOfFrame();
         if (audioHandler != null)
         {
-            audioHandler.PlayMusic();
+            AudioHandler.AudioState tempAudioState;
+            if (wasFirstGameManager)
+            {
+                tempAudioState = audioHandler.PlayMusic();
+                if (tempAudioState == AudioHandler.AudioState.WasAlreadyPlaying)
+                {
+                    audioHandler.UpdateMainTheme(1.0f, 0.0f);
+                    audioHandler.RestartMusic();
+                } 
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        float timeInLevel = Mathf.Clamp01(happinessManager.sigmoidMultiplier);
-        float happinessPercent = Mathf.Clamp01(happinessManager.happinessCount / MaxHappiness);
+        UpdateMainTheme(HappinessPercent(), TimeInLevelPercent());
+    }
+    private float HappinessPercent()
+    {
+        // Debug.Log("Happiness percent: " + Mathf.Clamp01((float)happinessManager.happinessCount / (float)MaxHappiness));
+        return Mathf.Clamp01((float)happinessManager.happinessCount / (float)MaxHappiness);
+    }
+    private float TimeInLevelPercent()
+    {
+        // Debug.Log("Time in level percent: " + Mathf.Clamp01(happinessManager.sigmoidMultiplier));
+        return Mathf.Clamp01(happinessManager.sigmoidMultiplier);
+    }
+    private void UpdateMainTheme(float happinessPercent = 1.0f, float timeInLevelPercent = 0.0f)
+    {
         if (audioHandler != null) 
         {
-            audioHandler.UpdateMainTheme(happinessPercent, timeInLevel);
+            audioHandler.UpdateMainTheme(happinessPercent, timeInLevelPercent);
         }
     }
 
@@ -328,7 +360,13 @@ public class GameManager : MonoBehaviour
             happinessManager.loseHappiness(objectiveTracker.earlyExitHappinessLoss);
         }
 
-        StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
+        if (transitionManager.sceneIndex < 0)
+        {
+            transitionManager.TransitionToSceneWrapper(SceneManager.GetActiveScene().buildIndex + 1);
+        } else
+        {
+            transitionManager.TransitionToSceneWrapper(transitionManager.sceneIndex);
+        }
     }
 
     // UI Sound
@@ -344,7 +382,7 @@ public class GameManager : MonoBehaviour
 
     private void PlayUISFXMove(InputAction.CallbackContext context, AudioHandler.SFX moveSFX) 
     {
-        if (context.performed && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.1f)
+        if (context.action.phase.IsInProgress() && context.action.WasPressedThisFrame() && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.2f)
         {
             audioHandler.PlaySFX(moveSFX);
         }

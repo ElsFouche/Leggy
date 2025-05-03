@@ -7,18 +7,25 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    //public EventSystem eventSystem;
-    public GameOverManager gameOverManager;
     private ClawControls controls;
-
-    Vector2 directionalInput;
+    private TransitionManager transitionManager;
+    private AudioHandler audioHandler;
 
     private void Awake()
     {
         controls = new ClawControls();
         controls.UI.Cancel.performed += ctx => ReturnToTitle(ctx);
-    }
+        controls.UI.Cancel.started += ctx => ReturnToTitle(ctx);
+        controls.UI.Cancel.canceled += ctx => ReturnToTitle(ctx);
 
+        controls.UI.Navigate.performed += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Navigate.started += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Navigate.canceled += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Move);
+        controls.UI.Submit.started += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Submit.canceled += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Select);
+        controls.UI.Cancel.started += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Back);
+        controls.UI.Cancel.canceled += ctx => PlayUISFX(ctx, AudioHandler.SFX.UI_Back);
+    }
     private void OnEnable()
     {
         controls.UI.Enable();
@@ -28,33 +35,35 @@ public class InputManager : MonoBehaviour
         controls.UI.Disable();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
-        gameOverManager = FindObjectOfType<GameOverManager>();
+        transitionManager = FindObjectOfType<TransitionManager>();
+        audioHandler = AudioHandler._AudioHandlerInstance;
+        StartCoroutine(AfterStart(0.2f));
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator AfterStart(float delay)
     {
-        /*if (EventSystem.current.currentSelectedGameObject == null ||
-            (EventSystem.current.currentSelectedGameObject == null && gameOverManager.gameOverMenu.activeInHierarchy &&
-            SceneManager.GetActiveScene().buildIndex > 1))
-                SetFirstSelectedMainMenu();
-        */
-/*
-        if (Input.GetButtonDown("Cancel") &&
-            (SceneManager.GetActiveScene().buildIndex == 1 ||SceneManager.GetActiveScene().buildIndex == 2))
-        {
-            SceneManager.LoadScene(0);
-        }
-*/
+        yield return new WaitForSeconds(delay);
+        audioHandler.PlayMusic();
     }
 
     private void ReturnToTitle(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && transitionManager != null)
+        {
+            if (transitionManager.loreText != null)
+            {
+                transitionManager.loreText.SetText("");
+            }
+            transitionManager.fadeToBlackTime = 1.0f;
+            transitionManager.displayTextFor = 0.0f;
+            transitionManager.switchSceneAfter = 0.0f;
+            transitionManager.textFadeIn = 0.0f;
+            transitionManager.textFadeOut = 0.0f;
+            transitionManager.TransitionToSceneWrapper(0);
+        } else if (context.started && transitionManager == null)
         {
             SceneManager.LoadScene(0);
         }
@@ -63,5 +72,14 @@ public class InputManager : MonoBehaviour
     public void SetFirstSelectedMainMenu()
     {
         //EventSystem.current.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+    }
+    private void PlayUISFX(InputAction.CallbackContext context, AudioHandler.SFX sfxName)
+    {
+        if (audioHandler == null) { return; }
+
+        if (context.action.WasPressedThisFrame())
+        {
+            audioHandler.PlaySFX(sfxName);
+        }
     }
 }

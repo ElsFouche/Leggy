@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3849285007554134435}
   - component: {fileID: 108635627265447902}
-  - component: {fileID: 6791590893330753685}
   - component: {fileID: 2518866009379423187}
   - component: {fileID: 1495786546589455432}
   m_Layer: 0
@@ -64,29 +63,6 @@ MonoBehaviour:
   viewingTutorial: 0
   sigmoidMultiplier: 0
   timeBetweenHappinessLoss: 0
---- !u!114 &6791590893330753685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2808672951618862201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f89d57a0b22e0b43ad28228449370a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeInDelay: 0
-  fadeOutDelay: 0
-  sceneSwitchDelay: 0
-  blackFadeInTime: 1
-  textFadeInTime: 1
-  textFadeOutTime: 1
-  loreText: {fileID: 8112924860730006839}
-  blackScreen: {fileID: 5674731330699218923}
-  happinessManager: {fileID: 2808672951618862201}
-  isTransitioning: 0
-  sceneToChangeTo: 0
 --- !u!114 &2518866009379423187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6346406767286688292}
   - component: {fileID: 6975970684401223607}
+  - component: {fileID: 3672184552956867271}
   - component: {fileID: 7254736938121586800}
   m_Layer: 0
   m_Name: GameManager
@@ -173,15 +150,29 @@ MonoBehaviour:
   happinessLossTickSpeed: 0
   timeUntilMaxHappinessLoss: 0
   gracePeriod: 0
-  textFadeInDelay: 0
-  textFadeOutDelay: 0
-  fadeToBlackTime: 0
-  textFadeInTime: 0
-  textFadeOutTime: 0
-  levelTransitionDelay: 0
-  nextLevelIndex: 0
-  speakerFont: 0
+--- !u!114 &3672184552956867271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3928341203511379510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f89d57a0b22e0b43ad28228449370a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneIndex: -1
+  blackFadeOutTime: 0
+  fadeToBlackTime: 1
+  textFadeIn: 1
+  textFadeOut: 0.5
+  displayTextFor: 1
+  switchSceneAfter: 0
+  loreText: {fileID: 8112924860730006839}
+  blackScreen: {fileID: 5674731330699218923}
   transitionText: 
+  font: 4
 --- !u!114 &7254736938121586800
 MonoBehaviour:
   m_ObjectHideFlags: 0
