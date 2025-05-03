@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 366702953}
   - component: {fileID: 366702956}
   m_Layer: 5
-  m_Name: Unlocked Level
+  m_Name: Unlocked Level_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1165,8 +1165,9 @@ GameObject:
   - component: {fileID: 582157945}
   - component: {fileID: 582157944}
   - component: {fileID: 582157943}
+  - component: {fileID: 582157946}
   m_Layer: 5
-  m_Name: Locked Level
+  m_Name: Unlocked Level_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1232,11 +1233,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 582157944}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 582157946}
+        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
+        m_MethodName: OnButtonPress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &582157944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1275,6 +1288,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582157941}
   m_CullTransparentMesh: 1
+--- !u!114 &582157946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582157941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneIndex: -1
+  fadeToBlackTime: 1
+  textFadeIn: 1
+  textFadeOut: 0.5
+  displayTextFor: 1
+  switchSceneAfter: 0
+  transitionText: 
+  font: 4
 --- !u!1 &602762250
 GameObject:
   m_ObjectHideFlags: 0

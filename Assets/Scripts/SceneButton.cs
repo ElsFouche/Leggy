@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// This script exposes functionality normally found in the transition
+/// manager in a separate script for UI buttons. 
+/// </summary>
 public class SceneButton : MonoBehaviour
 {
     private TransitionManager transitionManager;
@@ -83,13 +87,15 @@ public class SceneButton : MonoBehaviour
         // Get the TransitionManager and call the method with the scene index
         if (transitionManager != null)
         {
-            transitionManager.fadeInDelay = 0;
-            transitionManager.loreText.SetText(transitionText);
-            transitionManager.blackFadeInTime = fadeToBlackTime;
-            transitionManager.fadeOutDelay = displayTextFor;
-            transitionManager.sceneSwitchDelay = switchSceneAfter;
-            transitionManager.textFadeInTime = textFadeIn;
-            transitionManager.textFadeOutTime = textFadeOut;
+            if (transitionManager.loreText != null) 
+            { 
+                transitionManager.loreText.SetText(transitionText);
+            }
+            transitionManager.fadeToBlackTime = fadeToBlackTime;
+            transitionManager.displayTextFor = displayTextFor;
+            transitionManager.switchSceneAfter = switchSceneAfter;
+            transitionManager.textFadeIn = textFadeIn;
+            transitionManager.textFadeOut = textFadeOut;
 
             if (sceneIndex < 0)
             {

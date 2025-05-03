@@ -5,30 +5,101 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using System;
+using System.Transactions;
 
 public class TransitionManager : MonoBehaviour
 {
-    public float fadeInDelay = 0.0f;
-    public float fadeOutDelay = 0.0f;
-    public float sceneSwitchDelay = 0.0f;
-    public float blackFadeInTime = 1.0f;
+    public enum Speaker
+    {
+        None,
+        Father,
+        Child,
+        Lady,
+        System
+    }
+    [Header("Next Scene")]
+    [Tooltip("Leave as -1 to auto-advance to next scene index.")]
+    public int sceneIndex = -1;  // Scene index to load when button is pressed
+    [Header("Scene Start Transition Settings")]
+    [Tooltip("How long it takes in seconds for the scene to fade in from black")]
     public float blackFadeOutTime = 0.0f;
-    public float textFadeInTime = 1.0f;
-    public float textFadeOutTime = 1.0f;
-    
+    [Header("Scene End Transition Settings")]
+    [Tooltip("How long in seconds it takes for the black screen to fade in.")]
+    public float fadeToBlackTime = 1.0f;
+    [Tooltip("How long it takes in seconds for the text to fade in.")]
+    public float textFadeIn = 1.0f;
+    [Tooltip("How long it takes in seconds for the text to fade out.")]
+    public float textFadeOut = 0.5f;
+    [Tooltip("Display transition text for this long in seconds before fading out.")]
+    public float displayTextFor = 1.0f;
+    [Tooltip("Additional delay before changing scene after text fades all the way out.")]
+    public float switchSceneAfter = 0.0f;
+    [Header("Transition Text Settings")]
+    [Tooltip("Reference to the text display field.")]
     public TMP_Text loreText;
+    [Tooltip("Reference to the black screen image overlay")]
     public Image blackScreen;
-    public GameObject happinessManager;
-    public bool isTransitioning;
-    public int sceneToChangeTo;
+    [TextArea]
+    public string transitionText;
+    public Speaker font = Speaker.System;
 
-    bool loreFadedIn;
+    // Deprecated
+    // public float fadeInDelay = 0.0f;
+    // public float fadeOutDelay;
+    // public float sceneSwitchDelay;
+    // public float textFadeInTime = 1.0f;
+    // public float textFadeOutTime = 1.0f;
+    // public GameObject happinessManager;
+    // public int sceneToChangeTo; 
 
-    // Start is called before the first frame update
+    private bool isTransitioning;
+    private bool loreFadedIn;
+    private FontRandomizer fontRandomizer;
+
     void Start()
     {
-        loreFadedIn = false;
-        isTransitioning = false;
+        switchSceneAfter += textFadeIn + textFadeOut + displayTextFor + fadeToBlackTime;
+
+        loreFadedIn = false;    // Seemingly unused
+        isTransitioning = false; 
+
+        // Load Fonts
+        switch (font)
+        {
+            case Speaker.None:
+                break;
+            case Speaker.Father:
+                // Default Father Font
+                var font = Resources.Load("Fonts & Materials/mansalva-latin-400-normal");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            case Speaker.Child:
+                // Initialize Font Randomizer Script
+                fontRandomizer.textObject = loreText as TextMeshProUGUI;
+                if (fontRandomizer.fonts.Count == 0)
+                {
+                    // Default Child Fonts
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/caveat-latin-500-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/coming-soon-latin-400-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
+                }
+                // Randomize Text
+                fontRandomizer.RandomizeText(transitionText);
+                break;
+            case Speaker.Lady:
+                // Default Lady Font
+                font = Resources.Load("Fonts & Materials/nothing-you-could-do-latin-400-normal SDF");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            case Speaker.System:
+                // Default System Font
+                font = Resources.Load("Fonts & Materials/kode-mono-latin-400-normal");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            default:
+                break;
+        }
 
         if (blackScreen != null)
         {
@@ -44,37 +115,11 @@ public class TransitionManager : MonoBehaviour
             }
         }
 
-
-        // Els: Modified 04/19/2025
-        // Unnecessary check - title screen & level select won't have a
-        // game manager and thus no transition manager.
-        /*
-                if (SceneManager.GetActiveScene().buildIndex > 1)
-                {
-                    StartCoroutine(blackFadeOut());
-                    happinessManager = GameObject.FindGameObjectWithTag("HappyManager");
-                }
-                else
-                {
-                    if (blackScreen != null)
-                    {
-                        blackScreen.gameObject.SetActive(false);
-                        loreText.gameObject.SetActive(false);
-                    }
-                }
-        */
-/*
-        if (blackScreen != null) 
-        { 
-            blackScreen.gameObject.SetActive(false);
-        } else {
-            Debug.Log("Black screen object not found.");
-        }
-*/
         if (loreText != null) 
         { 
             loreText.gameObject.SetActive(false); 
             loreText.color = new Color(1, 1, 1, 0);
+            loreText.SetText(transitionText);
         } else { 
             Debug.Log("Lore text object not found."); 
         }
@@ -175,6 +220,8 @@ public class TransitionManager : MonoBehaviour
             SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
         }
     */
+
+    // Scene Start Transition Functions
     public IEnumerator FadeInFromBlack(float timeToFadeIn)
     {
         if (blackScreen != null)
@@ -200,7 +247,8 @@ public class TransitionManager : MonoBehaviour
         }
     }
 
-        public IEnumerator FadeInText (float fadeTime = 1.0f) 
+    // Scene End Transition Functions
+    public IEnumerator FadeInText (float fadeTime = 1.0f) 
     {
         // Kill coroutine if lore text is empty.
         if (loreText == null) { Debug.Log("Lore text not found.");  yield break; }
@@ -240,6 +288,7 @@ public class TransitionManager : MonoBehaviour
     /// <summary>
     /// Els: Do not call this function. 
     /// </summary>
+/*
     public void PressToStart()
     {
         isTransitioning = true;
@@ -249,20 +298,25 @@ public class TransitionManager : MonoBehaviour
         }
         // StartCoroutine(fadeToBlack(0));
     }
-
+*/
+    
     // General method to start the scene transition
     public IEnumerator TransitionToScene(int sceneIndex)
     {
+        if (isTransitioning)
+        {
+            yield break;
+        }
         isTransitioning = true;
         // StartCoroutine(fadeToBlack(sceneIndex));
-            // Debug.Log("Beginning fade to black.");
-        yield return FadeToBlack(blackFadeInTime);
+        // Debug.Log("Beginning fade to black.");
+        yield return FadeToBlack(fadeToBlackTime);
             // Debug.Log("Beginning text fade in.");
-        yield return FadeInText(textFadeInTime);
+        yield return FadeInText(textFadeIn);
             // Debug.Log("Beginning text fade out.");
-        yield return FadeOutText(fadeOutDelay, textFadeOutTime);
+        yield return FadeOutText(displayTextFor, textFadeOut);
             // Debug.Log("Loading next level at index: " +  sceneIndex);
-        yield return new WaitForSeconds(sceneSwitchDelay);
+        yield return new WaitForSeconds(switchSceneAfter);
         SceneManager.LoadScene(sceneIndex);
     }
 

@@ -53,13 +53,15 @@ public class InputManager : MonoBehaviour
     {
         if (context.started && transitionManager != null)
         {
-            transitionManager.fadeInDelay = 0;
-            transitionManager.loreText.SetText("");
-            transitionManager.blackFadeInTime = 1.0f;
-            transitionManager.fadeOutDelay = 0.0f;
-            transitionManager.sceneSwitchDelay = 0.0f;
-            transitionManager.textFadeInTime = 0.0f;
-            transitionManager.textFadeOutTime = 0.0f;
+            if (transitionManager.loreText != null)
+            {
+                transitionManager.loreText.SetText("");
+            }
+            transitionManager.fadeToBlackTime = 1.0f;
+            transitionManager.displayTextFor = 0.0f;
+            transitionManager.switchSceneAfter = 0.0f;
+            transitionManager.textFadeIn = 0.0f;
+            transitionManager.textFadeOut = 0.0f;
             transitionManager.TransitionToSceneWrapper(0);
         } else if (context.started && transitionManager == null)
         {

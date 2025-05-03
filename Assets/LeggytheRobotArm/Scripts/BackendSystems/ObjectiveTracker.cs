@@ -29,8 +29,10 @@ public class ObjectiveTracker : MonoBehaviour
 
     // Public
     [Header("Level Completion")]
-    [Tooltip("This is the amount of happiness lost if the player exits a level before completing enough objectives.")]
-    [Range(50, 500)]
+    [Tooltip("This is the amount of happiness lost if the player\n" +
+        "exits a level before completing enough objectives.\n" +
+        "Value is multiplied by 500.")]
+    [Range(1, 10)]
     public int earlyExitHappinessLoss;
     [Tooltip("This is the number of goals the player must satisfy to not lose happiness when ending the level early.")]
     public int minNumGoalsCompleted;
@@ -44,6 +46,7 @@ public class ObjectiveTracker : MonoBehaviour
 
     void Start()
     {
+        earlyExitHappinessLoss *= 500;
         // init range slider values if they have not been set. 
         if (earlyExitHappinessLoss <= 0) earlyExitHappinessLoss = 50;
 

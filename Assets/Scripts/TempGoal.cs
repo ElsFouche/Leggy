@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Deprecated
+/// </summary>
 public class TempGoal : MonoBehaviour
 {
     public TransitionManager transitionManager;
@@ -62,7 +65,7 @@ public class TempGoal : MonoBehaviour
     {
         goalCompleted = true;
         Debug.Log("Goal Completed!");
-        transitionManager.PressToStart();
+        // transitionManager.PressToStart();
 
         // Add any completion logic here (e.g., UI update, level progression, etc.)
         gameover.SetActive(true);

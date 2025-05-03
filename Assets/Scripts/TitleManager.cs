@@ -43,7 +43,7 @@ public class TitleManager : MonoBehaviour
     private void OnDestroy()
     {
         controls.Disable();
-        audioHandler.StopAudio();
+        // audioHandler.StopAudio();
     }
     void Start()
     {
@@ -56,6 +56,7 @@ public class TitleManager : MonoBehaviour
         if (transitionManager == null) { return; }
         transitionManager.loreText.SetText(startGameLoreText);
         transitionManager.TransitionToSceneWrapper(firstLevelIndex);
+        audioHandler.StopMusic(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     private IEnumerator AfterStart(float delay)

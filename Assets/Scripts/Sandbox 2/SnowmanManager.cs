@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Transactions;
 using UnityEngine;
 
+/// <summary>
+/// Deprecated
+/// </summary>
 public class SnowmanManager : MonoBehaviour
 {
     public GameObject BotGoal;
@@ -34,7 +37,7 @@ public class SnowmanManager : MonoBehaviour
     private void CompleteGoal()
     {
         Debug.Log("Goal Completed!");
-        transitionManager.PressToStart();
+        // transitionManager.PressToStart();
 
         // Add any completion logic here (e.g., UI update, level progression, etc.)
         gameover.SetActive(true);

@@ -17,6 +17,7 @@ public class AudioHandler : MonoBehaviour
     private FMOD.Studio.PARAMETER_ID gameState;
     
     private bool areBanksLoaded = false;
+    private bool isFirstSingletonInstance;
 
     // Serialized
     [SerializeField] float bankLoadRecheckDelay = 0.1f;
@@ -38,6 +39,17 @@ public class AudioHandler : MonoBehaviour
         HappinessGain,
         HappinessLoss
     }
+    public enum AudioState
+    {
+        Stopped,
+        Stopping,
+        Playing,
+        Starting,
+        Sustaining,
+        BanksNotLoaded,
+        BanksLoaded,
+        WasAlreadyPlaying
+    }
 
     // Singleton
     public static AudioHandler _AudioHandlerInstance { get; private set; }
@@ -48,9 +60,11 @@ public class AudioHandler : MonoBehaviour
         {
             _AudioHandlerInstance = this;
             DontDestroyOnLoad(gameObject);
+            isFirstSingletonInstance = true;
         }
         else
         {
+            isFirstSingletonInstance = false;
             Destroy(gameObject);
         }
     }
@@ -109,9 +123,9 @@ public class AudioHandler : MonoBehaviour
 
     }
 */
-    public void PlayMusic()
+    public AudioState PlayMusic()
     {
-        if (!areBanksLoaded) { return; }
+        if (!areBanksLoaded) { return AudioState.BanksNotLoaded; }
         PLAYBACK_STATE temp;
         if (musicInstance.isValid())
         {
@@ -120,7 +134,7 @@ public class AudioHandler : MonoBehaviour
             temp = PLAYBACK_STATE.STOPPED;
         }
 
-        if (temp == PLAYBACK_STATE.PLAYING || temp == PLAYBACK_STATE.SUSTAINING || temp == PLAYBACK_STATE.STARTING) { return; }
+        if (temp == PLAYBACK_STATE.PLAYING || temp == PLAYBACK_STATE.SUSTAINING || temp == PLAYBACK_STATE.STARTING) { return AudioState.WasAlreadyPlaying; }
 
         musicInstance = FMODUnity.RuntimeManager.CreateInstance(mainTheme);
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, this.transform);
@@ -140,6 +154,7 @@ public class AudioHandler : MonoBehaviour
         FMOD.Studio.PARAMETER_DESCRIPTION gameStateParamDescription;
         musicEventDescription.getParameterDescriptionByName("GameState", out gameStateParamDescription);
         gameState = gameStateParamDescription.id;
+        return AudioState.Playing;
     }
     public void RestartMusic()
     {
@@ -147,6 +162,20 @@ public class AudioHandler : MonoBehaviour
         if (musicInstance.isValid())
         {
             musicInstance.start();
+        }
+    }
+    public void StopMusic(STOP_MODE stopMode = STOP_MODE.ALLOWFADEOUT)
+    {
+        PLAYBACK_STATE tempPlaybackState;
+        if (musicInstance.isValid())
+        {
+            musicInstance.getPlaybackState(out tempPlaybackState);
+            if (tempPlaybackState == PLAYBACK_STATE.PLAYING
+                || tempPlaybackState == PLAYBACK_STATE.SUSTAINING
+                || tempPlaybackState == PLAYBACK_STATE.STARTING)
+            {
+                musicInstance.stop(stopMode);
+            }
         }
     }
 /*
@@ -232,10 +261,10 @@ public class AudioHandler : MonoBehaviour
 
     private void OnDisable()
     {
-        StopAudio();
+        if (isFirstSingletonInstance) { StopAudio(); }
     }
     private void OnDestroy()
     {
-        StopAudio();
+        if (isFirstSingletonInstance) { StopAudio(); }
     }
 }

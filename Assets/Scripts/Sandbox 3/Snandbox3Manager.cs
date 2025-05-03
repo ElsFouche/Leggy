@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Transactions;
 using UnityEngine;
 
+/// <summary>
+/// Deprecated
+/// </summary>
 public class Sandbox3Manager : MonoBehaviour
 {
     public GameObject frontGoal;
@@ -42,7 +45,7 @@ public class Sandbox3Manager : MonoBehaviour
     private void CompleteGoal()
     {
         Debug.Log("Goal Completed!");
-        transitionManager.PressToStart();
+        // transitionManager.PressToStart();
 
         // Add any completion logic here (e.g., UI update, level progression, etc.)
         gameover.SetActive(true);
