@@ -86,8 +86,10 @@ public class GameManager : MonoBehaviour
     public float textFadeInTime;
     public float textFadeOutTime;
     public float levelTransitionDelay;
-    public int nextLevelIndex;
+    [Tooltip("Leave as -1 to automatically move to next level in index.")]
+    public int nextLevelIndex = -1;
     public Speaker speakerFont;
+    [TextArea]
     public string transitionText;
 
     private void Awake()
@@ -328,7 +330,13 @@ public class GameManager : MonoBehaviour
             happinessManager.loseHappiness(objectiveTracker.earlyExitHappinessLoss);
         }
 
-        StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
+        if (nextLevelIndex < 0)
+        {
+            StartCoroutine(transitionManager.TransitionToScene(SceneManager.GetActiveScene().buildIndex + 1));
+        } else
+        {
+            StartCoroutine(transitionManager.TransitionToScene(nextLevelIndex));
+        }
     }
 
     // UI Sound
@@ -344,7 +352,7 @@ public class GameManager : MonoBehaviour
 
     private void PlayUISFXMove(InputAction.CallbackContext context, AudioHandler.SFX moveSFX) 
     {
-        if (context.performed && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.1f)
+        if (context.action.phase.IsInProgress() && context.action.WasPressedThisFrame() && Mathf.Abs(context.ReadValue<Vector2>().y) > 0.2f)
         {
             audioHandler.PlaySFX(moveSFX);
         }

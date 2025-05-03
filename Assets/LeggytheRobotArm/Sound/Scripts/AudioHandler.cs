@@ -67,7 +67,7 @@ public class AudioHandler : MonoBehaviour
 
     private IEnumerator WaitWhileBanksLoad(float recheckDelay)
     {
-        while (!RuntimeManager.HasBankLoaded("Master") || !RuntimeManager.HasBankLoaded("Master.strings"))
+        while (!(RuntimeManager.HasBankLoaded("Master") && RuntimeManager.HasBankLoaded("Master.strings")))
         {
             Debug.Log("Waiting for banks to load.");
             yield return new WaitForSeconds(recheckDelay);
@@ -120,7 +120,7 @@ public class AudioHandler : MonoBehaviour
             temp = PLAYBACK_STATE.STOPPED;
         }
 
-        if (temp == PLAYBACK_STATE.PLAYING) { return; }
+        if (temp == PLAYBACK_STATE.PLAYING || temp == PLAYBACK_STATE.SUSTAINING || temp == PLAYBACK_STATE.STARTING) { return; }
 
         musicInstance = FMODUnity.RuntimeManager.CreateInstance(mainTheme);
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, this.transform);
@@ -141,13 +141,22 @@ public class AudioHandler : MonoBehaviour
         musicEventDescription.getParameterDescriptionByName("GameState", out gameStateParamDescription);
         gameState = gameStateParamDescription.id;
     }
+    public void RestartMusic()
+    {
+        if (!areBanksLoaded) { return; }
+        if (musicInstance.isValid())
+        {
+            musicInstance.start();
+        }
+    }
+/*
     public void PlayMusic(FMODUnity.EventReference musicEvent)
     {
         if (!areBanksLoaded) { return; }
         musicInstance = FMODUnity.RuntimeManager.CreateInstance(musicEvent);
         musicInstance.start();
     }
-
+*/
     public void UpdateMainTheme(float happiness, float timeSpent)
     {
         if (!areBanksLoaded) { return; }

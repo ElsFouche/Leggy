@@ -65,13 +65,16 @@ public class LeggyAudio : MonoBehaviour
     {
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
         cameraController = GetComponent<CameraController>();
+        yield return new WaitForEndOfFrame();
         topDownCamera = cameraController.topDown;
         leftShoulderCamera = cameraController.leftShoulder;
         rightShoulderCamera = cameraController.rightShoulder;
         firstPersonCamera = cameraController.firstPerson;
+        yield return new WaitForEndOfFrame();
         topDownListener = topDownCamera.gameObject.GetComponent<StudioListener>();
         leftListener = topDownCamera.gameObject.GetComponent<StudioListener>();
         rightListener = topDownCamera.gameObject.GetComponent<StudioListener>();

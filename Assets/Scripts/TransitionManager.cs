@@ -8,10 +8,11 @@ using System;
 
 public class TransitionManager : MonoBehaviour
 {
-    public float fadeInDelay;
-    public float fadeOutDelay;
-    public float sceneSwitchDelay;
+    public float fadeInDelay = 0.0f;
+    public float fadeOutDelay = 0.0f;
+    public float sceneSwitchDelay = 0.0f;
     public float blackFadeInTime = 1.0f;
+    public float blackFadeOutTime = 0.0f;
     public float textFadeInTime = 1.0f;
     public float textFadeOutTime = 1.0f;
     
@@ -31,9 +32,18 @@ public class TransitionManager : MonoBehaviour
 
         if (blackScreen != null)
         {
-            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
-            loreText.color = new Color(1, 1, 1, 0);
+            blackScreen.gameObject.SetActive(false);
+            // blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+
+            if (blackFadeOutTime > 0.0f) 
+            {
+                StartCoroutine(FadeInFromBlack(blackFadeOutTime)); 
+            } else
+            {
+                blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            }
         }
+
 
         // Els: Modified 04/19/2025
         // Unnecessary check - title screen & level select won't have a
@@ -53,17 +63,18 @@ public class TransitionManager : MonoBehaviour
                     }
                 }
         */
-
+/*
         if (blackScreen != null) 
         { 
             blackScreen.gameObject.SetActive(false);
         } else {
             Debug.Log("Black screen object not found.");
         }
-
+*/
         if (loreText != null) 
         { 
             loreText.gameObject.SetActive(false); 
+            loreText.color = new Color(1, 1, 1, 0);
         } else { 
             Debug.Log("Lore text object not found."); 
         }
@@ -114,58 +125,82 @@ public class TransitionManager : MonoBehaviour
     /// Fade out the black screen
     /// </summary>
     /// <returns></returns>
-/*
-    public IEnumerator blackFadeOut()
-    {
-        while (fadeTime > 0)
+    /*
+        public IEnumerator blackFadeOut()
         {
-            fadeTime -= Time.deltaTime;
-            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, fadeTime);
+            while (fadeTime > 0)
+            {
+                fadeTime -= Time.deltaTime;
+                blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, fadeTime);
 
-            yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.01f);
+            }
+            happinessManager.GetComponent<HappinessManager>().isVisible = true;
         }
-        happinessManager.GetComponent<HappinessManager>().isVisible = true;
-    }
-*/
+    */
 
 
     // Els: This seems to both fade the text in and out in a single function.
     // Els: Begin break into two functions.
     // Handle the text fade animation
-/*
-    public IEnumerator fadeText(float fadeInDelay, float fadeOutDelay, float sceneSwitchDelay, int sceneIndex)
-    {
-        yield return new WaitForSeconds(fadeInDelay);
-
-        if (loreText != null)
+    /*
+        public IEnumerator fadeText(float fadeInDelay, float fadeOutDelay, float sceneSwitchDelay, int sceneIndex)
         {
-            while (loreText.color.a < 1.0f)
+            yield return new WaitForSeconds(fadeInDelay);
+
+            if (loreText != null)
             {
-                if (!loreFadedIn)
+                while (loreText.color.a < 1.0f)
                 {
-                    loreText.color = new Color(1, 1, 1, loreText.color.a + Time.deltaTime);
+                    if (!loreFadedIn)
+                    {
+                        loreText.color = new Color(1, 1, 1, loreText.color.a + Time.deltaTime);
+
+                        yield return new WaitForSeconds(0.01f);
+                    }
+                }
+                loreFadedIn = true;
+                yield return new WaitForSeconds(fadeOutDelay);
+
+                while (fadeTime > 0)
+                {
+                    fadeTime -= Time.deltaTime;
+                    loreText.color = new Color(fadeTime, fadeTime, fadeTime, 1);
 
                     yield return new WaitForSeconds(0.01f);
                 }
+
+                yield return new WaitForSeconds(sceneSwitchDelay);
             }
-            loreFadedIn = true;
-            yield return new WaitForSeconds(fadeOutDelay);
-
-            while (fadeTime > 0)
-            {
-                fadeTime -= Time.deltaTime;
-                loreText.color = new Color(fadeTime, fadeTime, fadeTime, 1);
-
-                yield return new WaitForSeconds(0.01f);
-            }
-
-            yield return new WaitForSeconds(sceneSwitchDelay);
+            SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
         }
-        SceneManager.LoadScene(sceneIndex);  // Switch to the desired scene
-    }
-*/
+    */
+    public IEnumerator FadeInFromBlack(float timeToFadeIn)
+    {
+        if (blackScreen != null)
+        {
+            blackScreen.gameObject.SetActive(true);
+            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, 1);
+        }
+        else
+        {
+            Debug.Log("Black screen object not found.");
+            // Kill coroutine
+            yield break;
+        }
 
-    public IEnumerator FadeInText (float fadeDelay = 0.0f, float fadeTime = 1.0f) 
+        float tempFadeTime = timeToFadeIn;
+
+        while (tempFadeTime > 0.0f)
+        {
+            tempFadeTime -= Time.deltaTime;
+            blackScreen.GetComponent<Image>().color = new Color(0, 0, 0, tempFadeTime / timeToFadeIn);
+            yield return new WaitForSeconds(Time.deltaTime);
+            Debug.Log("Fading in.");
+        }
+    }
+
+        public IEnumerator FadeInText (float fadeTime = 1.0f) 
     {
         // Kill coroutine if lore text is empty.
         if (loreText == null) { Debug.Log("Lore text not found.");  yield break; }
@@ -223,9 +258,9 @@ public class TransitionManager : MonoBehaviour
             // Debug.Log("Beginning fade to black.");
         yield return FadeToBlack(blackFadeInTime);
             // Debug.Log("Beginning text fade in.");
-        yield return FadeInText(textFadeInTime, textFadeInTime);
+        yield return FadeInText(textFadeInTime);
             // Debug.Log("Beginning text fade out.");
-        yield return FadeOutText(textFadeOutTime, textFadeOutTime);
+        yield return FadeOutText(fadeOutDelay, textFadeOutTime);
             // Debug.Log("Loading next level at index: " +  sceneIndex);
         yield return new WaitForSeconds(sceneSwitchDelay);
         SceneManager.LoadScene(sceneIndex);

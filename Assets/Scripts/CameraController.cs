@@ -35,9 +35,10 @@ public class CameraController : MonoBehaviour
         controls.Player.Dpad.performed += ctx => SwitchCamera(ctx);
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
         leggyAudio = gameObject.GetComponent<LeggyAudio>();
+        yield return new WaitForSeconds(0.5f);
         if (leggyAudio != null) { leggyAudio.SetListener(LeggyAudio.CameraView.FirstPerson); }
     }
 

@@ -7,7 +7,10 @@ using UnityEngine.InputSystem;
 
 public class TitleManager : MonoBehaviour
 {
-    public GameObject transitionManager;
+    public TransitionManager transitionManager;
+    public int firstLevelIndex;
+    [TextArea]
+    [SerializeField] string startGameLoreText;
     [SerializeField] float afterStartDelay = 0.2f;
     private AudioHandler audioHandler;
     private ClawControls controls;
@@ -40,6 +43,7 @@ public class TitleManager : MonoBehaviour
     private void OnDestroy()
     {
         controls.Disable();
+        audioHandler.StopAudio();
     }
     void Start()
     {
@@ -47,9 +51,11 @@ public class TitleManager : MonoBehaviour
         StartCoroutine(AfterStart(afterStartDelay));
     }
 
-    public void startGame()
+    public void StartGame()
     {
-        StartCoroutine(transitionManager.GetComponent<TransitionManager>().TransitionToScene(1));
+        if (transitionManager == null) { return; }
+        transitionManager.loreText.SetText(startGameLoreText);
+        transitionManager.TransitionToSceneWrapper(firstLevelIndex);
     }
 
     private IEnumerator AfterStart(float delay)
@@ -59,7 +65,7 @@ public class TitleManager : MonoBehaviour
         {
             audioHandler.PlayMusic();
             audioHandler.UpdateMainTheme(0.0f, 0.0f);
-            audioHandler.PlayMusic();
+            audioHandler.RestartMusic();
         } else
         {
             ReattemptAfter(0.5f);
@@ -75,7 +81,7 @@ public class TitleManager : MonoBehaviour
         {
             audioHandler.PlayMusic();
             audioHandler.UpdateMainTheme(0.0f, 0.0f);
-            audioHandler.PlayMusic();
+            audioHandler.RestartMusic();
         }
         else if (numAttempts <= MAXNUMREATTEMPTS)
         {
