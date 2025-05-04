@@ -703,7 +703,7 @@ GameObject:
   m_Component:
   - component: {fileID: 208538114}
   - component: {fileID: 208538113}
-  - component: {fileID: 208538112}
+  - component: {fileID: 208538115}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -711,26 +711,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &208538112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208538111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 0
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &208538113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,6 +741,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &208538115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208538111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 0
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &212488620
 GameObject:
   m_ObjectHideFlags: 0
@@ -2366,6 +2376,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1841332012069279937, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841332012069279937, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841332012069279937, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841332012069279937, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2377044783354528662, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2395,6 +2421,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2401298132738767838, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365700979525310616, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365700979525310616, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365700979525310616, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365700979525310616, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -2403,8 +2445,33 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: sceneIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: endEarlyText
+      value: 'That''s not what I asked you to do.
+
+        This thing has been more
+        trouble than it''s worth,
+
+        wonder if they do refunds. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: earlyExitFont
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: displayTextFor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: transitionText
       value: Thank you for fixing my gumball machine!
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672184552956867271, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: blackFadeOutTime
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3928341203511379510, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: m_Name
@@ -2458,13 +2525,49 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -325
       objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: gracePeriod
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: happinessLossTickSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: maxHappinessLostPerTick
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975970684401223607, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: timeUntilMaxHappinessLoss
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7016600191930529982, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7016600191930529982, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7016600191930529982, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7016600191930529982, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7254736938121586800, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: goalZones.Array.size
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7254736938121586800, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: minNumGoalsCompleted
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254736938121586800, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: earlyExitHappinessLoss
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7254736938121586800, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: goalZones.Array.data[0]
@@ -2490,6 +2593,22 @@ PrefabInstance:
       propertyPath: goalZones.Array.data[5]
       value: 
       objectReference: {fileID: 2064085989}
+    - target: {fileID: 8379670589116580687, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8379670589116580687, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8379670589116580687, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8379670589116580687, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8575887108673534833, guid: d5de8325115bcf2448adad4f6e29e2f1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3789,6 +3908,14 @@ PrefabInstance:
     - target: {fileID: 8207544780933824661, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: gantryMaxX
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
+      propertyPath: gantryMinX
+      value: -2.2
       objectReference: {fileID: 0}
     - target: {fileID: 8589296592086170206, guid: ba1c5e801ac7eb546a5080703912acb5, type: 3}
       propertyPath: circleMeter
@@ -45615,9 +45742,7 @@ MonoBehaviour:
   NormalDome: {fileID: 7094984905731126886}
   ShatteredDome: {fileID: 1655981496277977040}
   Hammer: {fileID: 1575512285}
-  endLevelWrongText: "That's not what I asked you to do. \nThis thing has been such
-    a disappointment."
-  font: 1
+  waitToEndLevel: 5
 --- !u!1 &8252158062855040430
 GameObject:
   m_ObjectHideFlags: 0

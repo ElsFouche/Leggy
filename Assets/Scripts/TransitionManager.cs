@@ -40,8 +40,13 @@ public class TransitionManager : MonoBehaviour
     [Tooltip("Reference to the black screen image overlay")]
     public Image blackScreen;
     [TextArea]
+    [Tooltip("This text will be displayed if the player completes the level properly.")]
     public string transitionText;
     public Speaker font = Speaker.System;
+    [TextArea]
+    [Tooltip("This text will be displayed if the player exits early.")]
+    public string endEarlyText;
+    public Speaker earlyExitFont = Speaker.System;
 
     // Deprecated
     // public float fadeInDelay = 0.0f;
@@ -58,48 +63,9 @@ public class TransitionManager : MonoBehaviour
 
     void Start()
     {
-        switchSceneAfter += textFadeIn + textFadeOut + displayTextFor + fadeToBlackTime;
-
         loreFadedIn = false;    // Seemingly unused
         isTransitioning = false; 
-
-        // Load Fonts
-        switch (font)
-        {
-            case Speaker.None:
-                break;
-            case Speaker.Father:
-                // Default Father Font
-                var font = Resources.Load("Fonts & Materials/mansalva-latin-400-normal");
-                loreText.font = font as TMP_FontAsset;
-                break;
-            case Speaker.Child:
-                // Initialize Font Randomizer Script
-                fontRandomizer.textObject = loreText as TextMeshProUGUI;
-                if (fontRandomizer.fonts.Count == 0)
-                {
-                    // Default Child Fonts
-                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/caveat-latin-500-normal") as Font);
-                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/coming-soon-latin-400-normal") as Font);
-                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
-                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
-                }
-                // Randomize Text
-                fontRandomizer.RandomizeText(transitionText);
-                break;
-            case Speaker.Lady:
-                // Default Lady Font
-                font = Resources.Load("Fonts & Materials/nothing-you-could-do-latin-400-normal SDF");
-                loreText.font = font as TMP_FontAsset;
-                break;
-            case Speaker.System:
-                // Default System Font
-                font = Resources.Load("Fonts & Materials/kode-mono-latin-400-normal");
-                loreText.font = font as TMP_FontAsset;
-                break;
-            default:
-                break;
-        }
+        fontRandomizer = GetComponentInChildren<FontRandomizer>();
 
         if (blackScreen != null)
         {
@@ -324,5 +290,59 @@ public class TransitionManager : MonoBehaviour
     public void TransitionToSceneWrapper(int sceneIndex)
     {
         StartCoroutine(TransitionToScene(sceneIndex));
+    }
+
+    public void SetTextFont(bool isEarlyExit = false)
+    {
+        Speaker tempFont;
+        string tempText;
+        if (isEarlyExit)
+        {
+            tempFont = earlyExitFont;
+            tempText = endEarlyText;
+        }
+        else 
+        { 
+            tempFont = font;
+            tempText = transitionText;
+        }
+
+        // Load Fonts
+        switch (tempFont)
+        {
+            case Speaker.None:
+                break;
+            case Speaker.Father:
+                // Default Father Font
+                var font = Resources.Load("Fonts & Materials/mansalva-latin-400-normal");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            case Speaker.Child:
+                // Initialize Font Randomizer Script
+                fontRandomizer.textObject = loreText as TextMeshProUGUI;
+                if (fontRandomizer.fonts.Count == 0)
+                {
+                    // Default Child Fonts
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/caveat-latin-500-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/coming-soon-latin-400-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
+                    fontRandomizer.fonts.Add(Resources.Load("Fonts/Child/schoolbell-latin-400-normal") as Font);
+                }
+                // Randomize Text
+                fontRandomizer.RandomizeText(tempText);
+                break;
+            case Speaker.Lady:
+                // Default Lady Font
+                font = Resources.Load("Fonts & Materials/nothing-you-could-do-latin-400-normal SDF");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            case Speaker.System:
+                // Default System Font
+                font = Resources.Load("Fonts & Materials/kode-mono-latin-400-normal");
+                loreText.font = font as TMP_FontAsset;
+                break;
+            default:
+                break;
+        }
     }
 }

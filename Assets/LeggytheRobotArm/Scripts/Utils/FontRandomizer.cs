@@ -66,6 +66,7 @@ public class FontRandomizer : MonoBehaviour
     /// <param name="text"></param>
     public void RandomizeText(string text)
     {
+        Debug.Log("Randomizing font.");
         if (fonts.Count == 0) { return; }
         string tempText = null; 
 
