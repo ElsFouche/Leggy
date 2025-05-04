@@ -96,7 +96,6 @@ public class RigControls : MonoBehaviour
         controls.Player.ClawVerticalDown.started += ctx => ArmHeightSFX(ctx);
         controls.Player.ClawVerticalDown.canceled += ctx => ArmHeightSFX(ctx);
 
-
         controls.Player.ResetLevel.performed += ctx => StartHoldReset();
         controls.Player.ResetLevel.canceled += ctx => StopHoldReset();
 
@@ -246,6 +245,7 @@ public class RigControls : MonoBehaviour
 
     private void MoveSFX(InputAction.CallbackContext callback)
     {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
 
         Vector2 moveValue = callback.ReadValue<Vector2>();
@@ -269,6 +269,7 @@ public class RigControls : MonoBehaviour
 
     private void WristSFX(InputAction.CallbackContext callback) 
     {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started) 
         {
@@ -281,6 +282,7 @@ public class RigControls : MonoBehaviour
 
     private void ArmHeightSFX(InputAction.CallbackContext callback)
     {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started)
         {
@@ -294,7 +296,8 @@ public class RigControls : MonoBehaviour
     }
 
     private void RotationSFX(InputAction.CallbackContext callback) 
-    { 
+    {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         if (callback.started)
         {

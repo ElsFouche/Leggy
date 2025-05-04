@@ -32,6 +32,7 @@ public class RigClawController : MonoBehaviour
     private InputAction closeClawAction;
 
     private LeggyAudio leggyAudio;
+    private GameManager gameManager;
     private bool isPlayingAudio;
 
     private void Awake()
@@ -57,9 +58,12 @@ public class RigClawController : MonoBehaviour
 
         if (gaugeIndicatorObject != null)
         {
-            float gaugeStartPos = gaugeIndicatorObject.transform.position.x;
+            float gaugeStartPos = gaugeIndicatorObject.transform.localPosition.x;
+            Debug.Log("Gauge start position: " + gaugeStartPos);
             gaugeMin = gaugeStartPos;
-            gaugeMax = gaugeStartPos * 2.264f;
+            gaugeMax = gaugeStartPos * -1.0f;
+            Debug.Log("Gauge min: " + gaugeMin);
+            Debug.Log("Gauge max: " + gaugeMax);
         }
     }
 
@@ -87,6 +91,7 @@ public class RigClawController : MonoBehaviour
         Debug.Log($"Initial Grip Pressure: {gripPreassure}");
 
         leggyAudio = GetComponent<LeggyAudio>();
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -119,13 +124,14 @@ public class RigClawController : MonoBehaviour
         if (gaugeIndicatorObject != null)
         {
             float gaugePosition = Mathf.Lerp(gaugeMax, gaugeMin, gripPreassure);
-            Vector3 newGaugePosition = gaugeIndicatorObject.transform.position;
+            Vector3 newGaugePosition = gaugeIndicatorObject.transform.localPosition;
             newGaugePosition.x = gaugePosition;
-            gaugeIndicatorObject.transform.position = newGaugePosition;
+            gaugeIndicatorObject.transform.localPosition = newGaugePosition;
         }
     }
     private void ClawOpenCloseSFX(InputAction.CallbackContext callback)
     {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
 
         if (callback.started)

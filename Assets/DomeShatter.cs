@@ -13,10 +13,7 @@ public class DomeShatter : MonoBehaviour
     public GameObject ShatteredDome;
 
     public GameObject Hammer;
-
-    [TextArea]
-    public string endLevelWrongText;
-    public TransitionManager.Speaker font;
+    public float waitToEndLevel = 2.0f;
 
     private Rigidbody hammerRigidbody;
     private bool gumballMachineIsBroken = false;
@@ -99,15 +96,13 @@ public class DomeShatter : MonoBehaviour
             ShatteredDome.transform.GetChild(pieces).GetComponent<Rigidbody>().isKinematic = false;
         }
 
-        NormalDome.SetActive(false);
-
-        EndLevel(endLevelWrongText);
+        NormalDome.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
+        StartCoroutine(EndLevel());
     }
 
-    private void EndLevel(string levelEndText)
+    private IEnumerator EndLevel()
     {
-        transitionManager.loreText.SetText(levelEndText);
-        transitionManager.font = font;
+        yield return new WaitForSeconds(waitToEndLevel);
         gameManager.FinishLevel();
     }
 }

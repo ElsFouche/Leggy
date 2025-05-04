@@ -16,6 +16,7 @@ public class GameOverManager : MonoBehaviour
     private float test = 0.0f;
     private EventSystem eventSystem;
     private CanvasGroup gameOverUICG;
+    private GameManager gameManager;
     // private bool fullyDepressed;
     
     // Serialized
@@ -28,22 +29,24 @@ public class GameOverManager : MonoBehaviour
     public GameObject gameOverMenu;
 
     // Start is called before the first frame update
-    void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         gameOverUICG = gameOverMenu.GetComponent<CanvasGroup>();
         // happinessManager = FindObjectOfType<HappinessManager>();
         eventSystem = FindObjectOfType<EventSystem>();
         // test = 0f;
         if (eventSystem == null) { Debug.Log("No event system present in scene."); Destroy(gameObject); }
 
-        if (fadeBlackTop == null) { return; }
+        if (fadeBlackTop == null) { yield break; }
         fadeBlackTop.GetComponent<Image>().fillAmount = 0;
-        if (fadeBlackBottom == null) { return; }
+        if (fadeBlackBottom == null) { yield break; }
         fadeBlackBottom.GetComponent<Image>().fillAmount = 0;
-        if (vignette == null) { return; }
+        if (vignette == null) { yield break; }
         vignette.GetComponent<Image>().color = new Color(1, 0, 0, 0);
-        if (gameOverMenu == null) { return; }
-        if (gameOverUICG == null) { return; }
+        if (gameOverMenu == null) { yield break; }
+        if (gameOverUICG == null) { yield break; }
         gameOverUICG.interactable = false;
         gameOverUICG.blocksRaycasts = false;
         gameOverMenu.SetActive(false);
@@ -92,14 +95,19 @@ public class GameOverManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.25f);
         Debug.Log("Retry?");
-        Time.timeScale = 0.0f;
+        EnableGameOverMenu();
+        // eventSystem.GetComponent<EventSystem>().enabled = true;
+        // eventSystem.GetComponent<StandaloneInputModule>().enabled = true;
+        yield return null;
+    }
+
+    private void EnableGameOverMenu()
+    {
+        gameManager.ToggleControlMode(true);
         gameOverMenu.SetActive(true);
         gameOverUICG.interactable = true;
         gameOverUICG.blocksRaycasts = true;
         EventSystem.current.SetSelectedGameObject(gameOverMenu.GetComponentInChildren<Button>().gameObject);
-        // eventSystem.GetComponent<EventSystem>().enabled = true;
-        // eventSystem.GetComponent<StandaloneInputModule>().enabled = true;
-        yield return null;
     }
 
 /*

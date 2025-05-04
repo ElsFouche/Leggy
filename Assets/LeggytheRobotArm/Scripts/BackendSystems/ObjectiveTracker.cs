@@ -46,9 +46,9 @@ public class ObjectiveTracker : MonoBehaviour
 
     void Start()
     {
+        if (earlyExitHappinessLoss <= 0) earlyExitHappinessLoss = 5;
         earlyExitHappinessLoss *= 500;
         // init range slider values if they have not been set. 
-        if (earlyExitHappinessLoss <= 0) earlyExitHappinessLoss = 50;
 
         gameManager = transform.root.GetComponent<GameManager>();
         if (!gameManager)

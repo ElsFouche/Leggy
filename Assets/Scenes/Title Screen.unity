@@ -152,18 +152,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f89d57a0b22e0b43ad28228449370a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeInDelay: 0
-  fadeOutDelay: 0
-  sceneSwitchDelay: 1
-  blackFadeInTime: 1
+  sceneIndex: -1
   blackFadeOutTime: 0.5
-  textFadeInTime: 1
-  textFadeOutTime: 1
+  fadeToBlackTime: 1
+  textFadeIn: 1
+  textFadeOut: 0.5
+  displayTextFor: 1
+  switchSceneAfter: 0
   loreText: {fileID: 380828522}
   blackScreen: {fileID: 1871516277}
-  happinessManager: {fileID: 0}
-  isTransitioning: 0
-  sceneToChangeTo: 1
+  transitionText: 
+  font: 4
+  endEarlyText: 
+  earlyExitFont: 4
 --- !u!4 &307978476
 Transform:
   m_ObjectHideFlags: 0
@@ -295,6 +296,7 @@ GameObject:
   m_Component:
   - component: {fileID: 319346884}
   - component: {fileID: 319346885}
+  - component: {fileID: 319346886}
   m_Layer: 0
   m_Name: Title Manager
   m_TagString: Untagged
@@ -346,6 +348,18 @@ MonoBehaviour:
 
     [SYS] BEGIN TEST 01: SORTING PROTOCOL'
   afterStartDelay: 0.2
+--- !u!114 &319346886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319346883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885db93da82d4ce47b7e440fe0f5d749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &380828519
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,14 +741,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 693255588}
-        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
+      - m_Target: {fileID: 319346885}
+        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -746,7 +760,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693255584}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
   m_Name: 
@@ -1919,14 +1933,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1552507596}
-        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
+      - m_Target: {fileID: 319346885}
+        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1938,7 +1952,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552507593}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5406514df5697aa46a289a5e0d65f11e, type: 3}
   m_Name: 
@@ -2891,11 +2905,11 @@ RectTransform:
   - {fileID: 972113279}
   m_Father: {fileID: 2084351075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: -197}
-  m_SizeDelta: {x: 586, y: 536}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 567.26, y: -197.32}
+  m_SizeDelta: {x: 580, y: 535}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1880600457
 MonoBehaviour:
   m_ObjectHideFlags: 0

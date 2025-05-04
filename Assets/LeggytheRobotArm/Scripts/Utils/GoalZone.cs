@@ -93,7 +93,7 @@ public class GoalZone : MonoBehaviour
 
     private void AfterDelayLogic()
     {
-        happinessManager = FindObjectOfType<HappinessManager>();
+        happinessManager = GameObject.FindWithTag("GameManager").GetComponentInChildren<HappinessManager>();
         
         if (!tracker)
         {

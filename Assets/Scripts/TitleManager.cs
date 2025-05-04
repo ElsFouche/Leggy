@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Security.Permissions;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class TitleManager : MonoBehaviour
@@ -69,8 +71,9 @@ public class TitleManager : MonoBehaviour
             audioHandler.RestartMusic();
         } else
         {
-            ReattemptAfter(0.5f);
+            StartCoroutine(ReattemptAfter(0.5f));
         }
+        controls.UI.Enable();
     }
 
     private IEnumerator ReattemptAfter(float seconds, int numTries = MAXNUMREATTEMPTS)
@@ -110,5 +113,12 @@ public class TitleManager : MonoBehaviour
         {
             audioHandler.PlaySFX(sfxName);
         }
+    }
+
+    public void LoadScene(int sceneIndex)
+    {
+        if (transitionManager == null) { return; }
+        transitionManager.loreText.SetText("");
+        transitionManager.TransitionToSceneWrapper(sceneIndex);
     }
 }

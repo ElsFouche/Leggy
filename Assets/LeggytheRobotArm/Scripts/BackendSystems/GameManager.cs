@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     private int levelStartHappiness;
         // Pause Function
     private bool paused;
+    private bool inMenu;
     private GameObject mainUIHolder;
     private CanvasGroup mainUICG;
     private GameObject pauseMenuHolder;
@@ -66,9 +67,11 @@ public class GameManager : MonoBehaviour
     }
         // Happiness 
     [Header("Happines Decay")]
-    [Tooltip("Lower values should be used for levels that are expected to take a long time to complete.")]
-    [Range(50,500)]
-    public int maxHappinessLostPerTick = 50;
+    [Tooltip("Lower values should be used for levels that are expected \n" +
+        "to take a long time to complete.\n" +
+        "This value is multiplied by 50.")]
+    [Range(1,100)]
+    public int maxHappinessLostPerTick = 1;
     [Tooltip("The amount of time in seconds between each happiness loss tick.")]
     [Range(1,10)]
     public float happinessLossTickSpeed;
@@ -115,6 +118,8 @@ public class GameManager : MonoBehaviour
         controls.UI.Submit.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Select);
         controls.UI.Cancel.performed += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
         controls.UI.Cancel.started += ctx => PlayUISFXButton(ctx, AudioHandler.SFX.UI_Back);
+        controls.UI.Cancel.performed += ctx => ExitPauseMenu(ctx);
+        controls.UI.Cancel.started += ctx => ExitPauseMenu(ctx);
 
         // Check for pre-existing happiness manager. Update our current happiness with its value.
         currManagers = new List<HappinessManager>(FindObjectsOfType<HappinessManager>());
@@ -186,8 +191,8 @@ public class GameManager : MonoBehaviour
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         // If title screen, unload
-        // CAUTION! Build must index title screen as 0 and level select as 1! 
-        if (arg0.buildIndex == 0 || arg0.buildIndex == 1)
+        // CAUTION! Build must index title screen as 0, level select as 1, and credits as 2! 
+        if (arg0.buildIndex == 0 || arg0.buildIndex == 1 || arg0.buildIndex == 2)
         {
             Destroy(gameObject);
         }
@@ -195,6 +200,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        maxHappinessLostPerTick *= 50;
         pauseMenuHolder.SetActive(false);
         pauseUICG = pauseMenuHolder.GetComponent<CanvasGroup>();
         mainUICG = mainUIHolder.GetComponent<CanvasGroup>();
@@ -259,6 +265,7 @@ public class GameManager : MonoBehaviour
         transitionManager.textFadeInTime = this.textFadeInTime;
         transitionManager.textFadeOutTime = this.textFadeOutTime;
 */
+        Time.timeScale = 1.0f;
         StartCoroutine(AfterStart());
     }
 
@@ -279,6 +286,8 @@ public class GameManager : MonoBehaviour
                 } 
             }
         }
+        controls.Player.Enable();
+        controls.UI.Disable();
     }
 
     private void FixedUpdate()
@@ -319,7 +328,12 @@ public class GameManager : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(pauseMenuHolder.GetComponentInChildren<UnityEngine.UI.Button>().gameObject);
         }
-        switch (paused)
+        ToggleControlMode(paused);
+        audioHandler.SetPauseMusic(paused);
+    }
+    public void ToggleControlMode(bool isInMenu)
+    {
+        switch (isInMenu)
         {
             case true:
                 controls.Player.Disable();
@@ -330,6 +344,34 @@ public class GameManager : MonoBehaviour
                 controls.UI.Disable();
                 break;
         }
+        inMenu = isInMenu;
+    }
+    public bool IsInMenu()
+    {
+        return inMenu; 
+    }
+    public void ExitPauseMenu(InputAction.CallbackContext context) 
+    { 
+        if (paused && context.action.WasPerformedThisFrame())
+        {
+            TogglePause();
+        }
+    }
+    public void SetPaused(bool inPaused)
+    {
+        paused = inPaused;
+        Time.timeScale = paused ? 0 : 1;
+        pauseUICG.interactable = paused;
+        pauseUICG.blocksRaycasts = paused;
+        pauseMenuHolder.SetActive(paused);
+        mainUICG.interactable = !paused;
+        mainUICG.blocksRaycasts = !paused;
+        mainUIHolder.SetActive(!paused);
+        if (paused)
+        {
+            EventSystem.current.SetSelectedGameObject(pauseMenuHolder.GetComponentInChildren<UnityEngine.UI.Button>().gameObject);
+        }
+        ToggleControlMode(paused);
         audioHandler.SetPauseMusic(paused);
     }
 
@@ -342,7 +384,9 @@ public class GameManager : MonoBehaviour
 
     public void RestartTask()
     {
-        TogglePause();
+        SetPaused(false);
+        controls.Player.Enable();
+        controls.UI.Disable();
         happinessManager.happinessCount = levelStartHappiness;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -358,6 +402,12 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Losing happiness due to early level exit.");
             happinessManager.loseHappiness(objectiveTracker.earlyExitHappinessLoss);
+            transitionManager.loreText.SetText(transitionManager.endEarlyText);
+            transitionManager.SetTextFont(true);
+        } else
+        {
+            transitionManager.loreText.SetText(transitionManager.transitionText);
+            transitionManager.SetTextFont(false);
         }
 
         if (transitionManager.sceneIndex < 0)

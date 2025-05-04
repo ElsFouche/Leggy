@@ -23,10 +23,12 @@ public class RigClawParrent : MonoBehaviour
     private Rigidbody preGrabRigid;
 
     private LeggyAudio leggyAudio;
+    private GameManager gameManager;
 
     private void Start()
     {
         leggyAudio = GetComponent<LeggyAudio>();
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     private void Update()
@@ -156,6 +158,7 @@ public class RigClawParrent : MonoBehaviour
 
     private void PlayGrabSFX()
     {
+        if (gameManager.IsInMenu()) { return; }
         if (leggyAudio == null) { Debug.Log("Audio component not found."); return; }
         leggyAudio.LeggyGrabSFX();
     }
